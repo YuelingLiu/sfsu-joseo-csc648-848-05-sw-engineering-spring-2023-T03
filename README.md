@@ -14,7 +14,7 @@
 
 | Student Name | Student Email | GitHub Username |        Role         |
 |    :---:     |     :---:     |     :---:       |        :---:        | 
-| member1      |               |                 |   Team Lead         |
+| member1      |  Yueling Liu             |                 |   Team Lead         |
 | member2      |  Priya             |                 |   Frontend Lead     |
 | member3      |   Duncan          |                 |   Backend Lead      |
 | member4      |   Nathan            |                 |   Github Master     |
