@@ -14,12 +14,12 @@
 
 | Student Name | Student Email | GitHub Username |        Role         |
 |    :---:     |     :---:     |     :---:       |        :---:        | 
-|   Yueling Liu     |              | YuelingLiu                |   Team Lead         |
-|    Priya     |             |                 |   Frontend Lead     |
-|   Duncan Herington    |             |Dherington1                 |   Backend Lead      |
-|     Nathan  |               |   NateyLB              |   Github Master     |
-|    Samuel   |               |   samfikre13              |   Database Master   |
-|    Yasson   |               |                 |   Document Editor   |
+|   Yueling Liu     |     yliu50@sfsu.edu         |               |   Team Lead         |
+|    Priya   Pradeep  |      ppradeep@mail.sfsu.edu        |                |   Frontend Lead     |
+|   Duncan Herington    |    dherington@mail.sfsu.edu         |Dherington1                 |   Backend Lead      |
+|     Nathan Le Howland  |     nhowland@sfsu.edu          |   NateyLB              |   Github Master     |
+|    Samuel Elias   |     selias3@sfsu.edu          |   samfikre13              |   Database Master   |
+|    Yasson Haddish   |    yhaddish@sfsu.edu           |       Yassonh          |   Document Editor   |
 
 
 4. All the team members must sign the team contract found [here](https://forms.gle/PoTXjTmPGGKKZjsT6). Missing signatures from students will result in these students being dropped from the course since this means that they disagree with the policies and terms needed to work in a term environment. 
