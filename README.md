@@ -14,7 +14,7 @@
 
 | Student Name | Student Email | GitHub Username |        Role         |
 |    :---:     |     :---:     |     :---:       |        :---:        | 
-|   Yueling Liu     |     yliu50@sfsu.edu         |               |   Team Lead         |
+|   Yueling Liu     |     yliu50@sfsu.edu         |    YuelingLiu           |   Team Lead         |
 |    Priya   Pradeep  |      ppradeep@mail.sfsu.edu        |                |   Frontend Lead     |
 |   Duncan Herington    |    dherington@mail.sfsu.edu         |Dherington1                 |   Backend Lead      |
 |     Nathan Le Howland  |     nhowland@sfsu.edu          |   NateyLB              |   Github Master     |
