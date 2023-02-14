@@ -14,12 +14,12 @@
 
 | Student Name | Student Email | GitHub Username |        Role         |
 |    :---:     |     :---:     |     :---:       |        :---:        | 
-| member1  Yueling Liu     |              | YuelingLiu                |   Team Lead         |
-| member2   Priya     |             |                 |   Frontend Lead     |
-| member3  Duncan Herington    |             |Dherington1                 |   Backend Lead      |
-| member4    Nathan  |               |   NateyLB              |   Github Master     |
-| member5   Samuel   |               |   samfikre13              |   Database Master   |
-| member6   Yasson   |               |                 |   Document Editor   |
+|   Yueling Liu     |              | YuelingLiu                |   Team Lead         |
+|    Priya     |             |                 |   Frontend Lead     |
+|   Duncan Herington    |             |Dherington1                 |   Backend Lead      |
+|     Nathan  |               |   NateyLB              |   Github Master     |
+|    Samuel   |               |   samfikre13              |   Database Master   |
+|    Yasson   |               |                 |   Document Editor   |
 
 
 4. All the team members must sign the team contract found [here](https://forms.gle/PoTXjTmPGGKKZjsT6). Missing signatures from students will result in these students being dropped from the course since this means that they disagree with the policies and terms needed to work in a term environment. 
