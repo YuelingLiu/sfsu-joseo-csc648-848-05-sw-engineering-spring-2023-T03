@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "a webserver for Recipes-03 tream project",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfsu-joseo/csc648-848-05-sw-engineering-spring-2023-T03.git"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "team03",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sfsu-joseo/csc648-848-05-sw-engineering-spring-2023-T03/issues"
+  },
+  "homepage": "https://github.com/sfsu-joseo/csc648-848-05-sw-engineering-spring-2023-T03#readme"
+}
