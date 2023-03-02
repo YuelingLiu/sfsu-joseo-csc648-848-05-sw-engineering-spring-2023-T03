@@ -19,6 +19,18 @@
 6. Database password team0303
 7. Database name (basically the name that contains all your tables)
 8. Clear instructions with examples on how to use all the above information.
+    To access from the web server
+    From the project directory 
+    cd credentials
+    ch mod 400 key.pem
+    ssh -i credentials/key.pem ubuntu@ec2-13-52-216-25.us-west-1.compute.amazonaws.com
+
+    To access the database, download pgadmin4
+    Set up a new server
+    Name: recipes-03
+    Username: postgres 
+    Port: 5432
+    Password:team0303
 
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
