@@ -6,7 +6,7 @@ function SamuelElias() {
       <Link to="/">
         Home page
       </Link>
-      <h2> Samuel Elias</h2>
+      <h2 className="names"Samuel Elias</h2>
       <h4 className="introduce"> 
       Welcome to the about me page for our webapp development project RecipeReel. My name is Samuel Elias I am a senior computer science student with a passion for software engineering. 
       Throughout my academic journey, I have developed a wide range of skills in both front-end and back-end development, with as well as on database management. As I am very determined  to be the database master for this project. 
