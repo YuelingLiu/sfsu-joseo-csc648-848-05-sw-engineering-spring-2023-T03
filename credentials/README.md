@@ -19,7 +19,7 @@
 6. Database password team0303
 7. Database name (basically the name that contains all your tables)
 8. Clear instructions with examples on how to use all the above information.
-    To access from the web server
+    To access from the web server: 
     From the project directory 
     cd credentials
     ch mod 400 key.pem
