@@ -18,6 +18,7 @@
 5. Database username postgres
 6. Database password team0303
 7. Database name (basically the name that contains all your tables)
+    recipe-03
 8. Clear instructions with examples on how to use all the above information.
     
     To access from the web server
