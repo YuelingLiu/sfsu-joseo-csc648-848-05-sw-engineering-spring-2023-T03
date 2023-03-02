@@ -1,3 +1,10 @@
 .names {
-    text-align: center;
+  text-align: center;
+}
+
+.info h1 {
+  text-align: center;
+}
+.infobox {
+  margin-left: 75px;
 }
