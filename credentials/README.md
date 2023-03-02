@@ -15,8 +15,8 @@
     to connect to EC2 instance ssh -i credentials/key.pem ubuntu@ec2-13-52-216-25.us-west-1.compute.amazonaws.com
 4. Database URL or IP and port used.
     <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
-5. Database username
-6. Database password
+5. Database username postgres
+6. Database password team0303
 7. Database name (basically the name that contains all your tables)
 8. Clear instructions with examples on how to use all the above information.
 
