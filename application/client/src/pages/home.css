@@ -1,10 +1,10 @@
 .names {
   text-align: center;
+  margin-top: 50px;
 }
 
-.info h1 {
-  text-align: center;
-}
-.infobox {
-  margin-left: 75px;
+.introduce {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
 }
