@@ -7,7 +7,7 @@ function NathanLeHowland() {
         Home page
       </Link>
       
-      <h2>Nathan Le Howland</h2>
+      <h2 className="names">Nathan Le Howland</h2>
       <h4 className="introduce">
         Hello! I am a senior CS major. I am Vietnamese.
         This is my last semester, I hope that I am able to make it through. I am looking
