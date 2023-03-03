@@ -15,10 +15,24 @@
     to connect to EC2 instance ssh -i credentials/key.pem ubuntu@ec2-13-52-216-25.us-west-1.compute.amazonaws.com
 4. Database URL or IP and port used.
     <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
-5. Database username
-6. Database password
+5. Database username postgres
+6. Database password team0303
 7. Database name (basically the name that contains all your tables)
+    recipe-03
 8. Clear instructions with examples on how to use all the above information.
+    
+    To access from the web server
+    From the project directory 
+    cd credentials
+    ch mod 400 key.pem
+    ssh -i credentials/key.pem ubuntu@ec2-13-52-216-25.us-west-1.compute.amazonaws.com
+
+    To access the database, download pgadmin4
+    Set up a new server
+    Name: recipes-03
+    Username: postgres 
+    Port: 5432
+    Password:team0303
 
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
