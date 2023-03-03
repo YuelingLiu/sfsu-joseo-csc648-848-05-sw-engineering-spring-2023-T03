@@ -4,7 +4,6 @@ function SamuelElias() {
   return (
     <div>
       <Link to="/">Home page</Link>
-
       <h2 className="names">Samuel Elias</h2>
       <h4 className="introduce">
       Welcome to the about me page for our webapp development project RecipeReel. My name is Samuel Elias I am a senior computer science student with a passion for software engineering. 
