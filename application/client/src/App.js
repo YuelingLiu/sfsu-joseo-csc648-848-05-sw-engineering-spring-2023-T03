@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import PostRecipe from "./pages/PostRecipe";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
+        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/post-recipe" component={PostRecipe} />
       </Switch>
     </Router>
    </>

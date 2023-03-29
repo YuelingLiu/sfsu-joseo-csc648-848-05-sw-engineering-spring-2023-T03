@@ -96,7 +96,11 @@ function Nav() {
                         </Link>
 
                         <Link className="list-group-item list-group-item-action py-2 ripple" to="profile">
-                        <i className="fas fa-users fa-fw me-3"></i><span>Profile</span>
+                            <span>Profile</span>
+                        </Link>
+
+                        <Link className="list-group-item list-group-item-action py-2 ripple" to="post-recipe">
+                            <span>Post Recipe</span>
                         </Link>
                     
                     </div>
@@ -154,7 +158,7 @@ function Nav() {
                 /> 
                 </Col>
                 <Col xs={3} sm={3} xl={4}>
-                    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" /><i class="fa-light fa-magnifying-glass" />
+                <i class="fa-light fa-magnifying-glass" /> <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" /><i class="fa-light fa-magnifying-glass" />
                 </Col>
             </Row>
         </Container>
