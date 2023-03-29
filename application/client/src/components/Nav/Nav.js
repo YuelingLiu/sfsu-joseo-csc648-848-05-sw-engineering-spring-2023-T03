@@ -37,7 +37,10 @@ function Nav() {
                 {isOpen && (
                     <ul className="menu-list">
                     <li>
-                        <a href="/login">Login</a>
+                        <Link>
+                            Login
+                        </Link>
+                        {/* <a href="/login">Login</a> */}
                     </li>
                     <li>
                         <a href="/home">Home</a>
@@ -72,26 +75,27 @@ function Nav() {
                                 <h1>Recipe Reels</h1>
                     </button>
                                             
-                        <Link className="list-group-item list-group-item-action py-2 ripple active">
+                        <Link className="list-group-item list-group-item-action py-2 ripple active" to="/">
                             <span>Home</span>
                         </Link>
                         <Link
                             className="list-group-item list-group-item-action py-2 ripple"
                             aria-current="true"
+                            to="/login"
                         >
                             <span>Login</span>
                         </Link>
 
 
-                        <Link className="list-group-item list-group-item-action py-2 ripple">
+                        <Link className="list-group-item list-group-item-action py-2 ripple" to="recipes">
                             <span>Recipes</span>
                         </Link>
 
-                        <Link className="list-group-item list-group-item-action py-2 ripple">
+                        <Link className="list-group-item list-group-item-action py-2 ripple" to="top-rated">
                             <span>Top Rated Recipes</span>
                         </Link>
 
-                        <Link className="list-group-item list-group-item-action py-2 ripple">
+                        <Link className="list-group-item list-group-item-action py-2 ripple" to="profile">
                         <i className="fas fa-users fa-fw me-3"></i><span>Profile</span>
                         </Link>
                     
