@@ -7,6 +7,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+// drop down
+import Multiselect from 'multiselect-react-dropdown';
+
 function Nav() {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -21,8 +24,8 @@ function Nav() {
         setScreenWidth(window.innerWidth);
         console.log('Screen width:', screenWidth);
       });
-  }, )
-
+  })
+  
   return (
     <>
     {(screenWidth < 990) ? (
@@ -102,10 +105,52 @@ function Nav() {
         <Container className='searchRow'>
             <Row>
                 <Col xs={3} sm={3} xl={4}></Col>
-                <Col xs={3} sm={3} xl={2}>Search By:</Col>
-                <Col xs={3} sm={3} xl={2}>Filter Drop Down</Col>
+                <Col xs={1} sm={2} xl={2}>Search By:</Col>
+                <Col xs={3} sm={3} xl={2}>
+                    {/* Filter Drop Down */}
+                
+                <Multiselect
+                    disablePreSelectedValues
+                    displayValue="key"
+                    onKeyPressFn={function noRefCheck(){}}
+                    onRemove={function noRefCheck(){}}
+                    onSearch={function noRefCheck(){}}
+                    onSelect={function noRefCheck(){}}
+                    // will be our filters
+                    options={[
+                        {
+                        cat: 'Group 1',
+                        key: 'Option 1'
+                        },
+                        {
+                        cat: 'Group 1',
+                        key: 'Option 2'
+                        },
+                        {
+                        cat: 'Group 1',
+                        key: 'Option 3'
+                        },
+                        {
+                        cat: 'Group 2',
+                        key: 'Option 4'
+                        },
+                        {
+                        cat: 'Group 2',
+                        key: 'Option 5'
+                        },
+                        {
+                        cat: 'Group 2',
+                        key: 'Option 6'
+                        },
+                        {
+                        cat: 'Group 2',
+                        key: 'Option 7'
+                        }
+                    ]}
+                /> 
+                </Col>
                 <Col xs={3} sm={3} xl={4}>
-                    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" /><span></span>
+                    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" /><i class="fa-light fa-magnifying-glass" />
                 </Col>
             </Row>
         </Container>
