@@ -1,4 +1,4 @@
-import './Styling/login.css';
+import './Styling/login.scss';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
