@@ -6,11 +6,13 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Recipe from "./pages/Recipe";
 import PostRecipe from "./pages/PostRecipe";
+import Navbar from "./components/Nav/Navbarmenu";
 
 function App() {
   return (
    <>
     <Router basename="/">
+      <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
