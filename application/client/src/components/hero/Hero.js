@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
+import { Link } from 'react-router-dom';
 
 function Hero() {
   return (
@@ -23,10 +23,14 @@ function Hero() {
 
             <Row >
               <Col xs={12} sm={5} md={6} lg={4} xl={4}>
-                <Button style={{marginBottom: '10px'}} size="md" variant="success">Get Started</Button>
+                <Link to="/login" style={{ textDecoration: 'none' }}>
+                  <Button style={{marginBottom: '10px'}} size="md" variant="success">Get Started</Button>
+                </Link>
               </Col>
               <Col xs={12} sm={5} md={6} xl={5}>
-                <Button size="md" variant="outline-success">Explore Now</Button>{' '}
+                <Link to="/">
+                  <Button size="md" variant="outline-success">Explore Now</Button>{' '}
+                </Link>
               </Col>
             </Row>
           </Col>

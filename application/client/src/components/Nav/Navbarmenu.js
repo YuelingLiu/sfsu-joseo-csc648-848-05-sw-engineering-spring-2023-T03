@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 
 // MUI Components 
 import AppBar from '@mui/material/AppBar';
@@ -11,19 +11,34 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { styled, alpha } from '@mui/material/styles';
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import StarIcon from '@mui/icons-material/Star';
+import HomeIcon from '@mui/icons-material/Home';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import PersonIcon from '@mui/icons-material/Person';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import Tooltip from '@mui/material/Tooltip';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 // used like LINK
-import { useHistory, Link } from 'react-router-dom'
+import {Link } from 'react-router-dom'
 
 // Drop down items
 const NavChoicesLoggedIn = ['Categories', 'My Feed', 'Top Rated' ];
 const NavChoicesLoggedOut = ['Categories', 'Top Rated' ];
-const profileLoggedOut = ['Sign Up', 'Login'];
-const profileLoggedIn = ['Profile', 'Following', 'Favorites', 'Logout'];
 
 // for MUI 
 const Search = styled('div')(({ theme }) => ({
@@ -68,43 +83,50 @@ color: 'blackit',
 },
 })); 
 
+
+
 function Navbar () {
     // for MUI
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
-
+    
     // used for search bar to go to icon on smaller screens
     const [screenSize, setScreenSize] = useState(true);
     // placement code until we have logged in working 
     const [loggedin, setLoggedIn] = useState(true);
+    
+    // Category menu
+    const [anchorElCategory, setAnchorElCategory] = useState(null);
+    
+    
+    // Category menu
+    const handleCategoryMenu = (event) => {
+        setAnchorElCategory(event.currentTarget);
+    };
+    const handleCategoryClose = () => {
+        setAnchorElCategory(null);
+    };
 
-    // for MUI
+
+
+    // Left side burger menu
     const  handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-    // for MUI
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-    // for MUI
+
+    // ride side profile icon menu
     const handleCloseNavMenu = (e) => {
         setAnchorElNav(null);
-
-        let id = e.target.id;
-        console.log(id);
+        console.log('clicked closed');
     };
-    // for MUI
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
 
-    // take user to profile page with icon click in logged in
-    let history = useHistory()
-    const switchPage = (e) => {
-        let id = e.target.id;
-        console.log(id);
-        history.push('/Profile')
-    }
+
 
   return (
     <>
@@ -129,15 +151,16 @@ function Navbar () {
                     >
                         RecipeReel
                     </Typography>
-            
+                    
+                    {/* Burger menu */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleOpenNavMenu}
-                        color="black"
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleOpenNavMenu}
+                            color="black"
                         >
                         <MenuIcon />
                         </IconButton>
@@ -162,32 +185,96 @@ function Navbar () {
                     
                         {(loggedin) ? (
                             <>
-                                {NavChoicesLoggedIn.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Link to={`/${page}`}>
-                                            <Typography textAlign="center">{page}</Typography>
-                                        </Link>
-                                    </MenuItem>
-                                ))}
+                                <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
+                                    <nav aria-label="main mailbox folders">
+                                        <List>
+                                            <Link to='/recipes' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <HomeIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="My Feed" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/post-recipe' style={{ textDecoration: 'none',  }} onClick={handleCloseNavMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <AddBoxIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Create Post" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/categories' style={{ textDecoration: 'none',  }} onClick={handleCloseNavMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <FormatListBulletedIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Categories" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/top-rated' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <StarIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Top Rated" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+                                        </List>
+                                    </nav>
+                                </Box>
                             </>
                         ) : (
                             <>
-                                 {NavChoicesLoggedOut.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Link to={`/${page}`}>
-                                            <Typography textAlign="center">{page}</Typography>
-                                        </Link>
-                                    </MenuItem>
-                                ))}
+                                <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
+                                    <nav aria-label="main mailbox folders">
+                                        <List>
+                                            <Link to='/categories' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <FormatListBulletedIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Categories" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/top-rated' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <StarIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Top Rated" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+                                        </List>
+                                    </nav>
+                                </Box>
                             </>
                         )}
                         </Menu>
                     </Box>
+
+                    {/* Smaller screen Title */}
                     <Typography
                         variant="h5"
                         noWrap
                         component="a"
-                        href=""
+                        href="/"
                         sx={{
                         mr: 2,
                         display: { xs: 'flex', md: 'none' },
@@ -201,27 +288,82 @@ function Navbar () {
                     >
                         RecipeReel
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 
+                    {/* next to website name */}
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {(loggedin) ? (
                             <>
-                                {NavChoicesLoggedIn.map((page) => (
-                                    <Button
-                                        key={page}
-                                        onClick={handleCloseNavMenu}
-                                        sx={{ my: 2, color: 'black', display: 'block' }}
-                                        id={page}
+                                    <Toolbar>
+                                        <IconButton
+                                            size="large"
+                                            aria-label="Categories"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            onClick={handleCategoryMenu}
+                                            color="black"
+                                        >
+                                        <Button 
+                                            sx={{ my: 2, color: 'black', display: 'block' }} 
+                                        >
+                                            Categories 
+                                            <KeyboardArrowDownIcon />
+                                        </Button>
+                                        </IconButton>
+                                    </Toolbar>
+
+                                    <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElCategory}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElCategory)}
+                                    onClose={handleCategoryClose}
                                     >
-                                        {page}
-                                    </Button>
-                                ))}
+                                    <>
+                                        <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
+                                            <nav aria-label="main mailbox folders">
+                                                <List>
+                                                    <Link to='/profile' style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                        <ListItem disablePadding>
+                                                            <ListItemButton>
+                                                                <ListItemIcon>
+                                                                    <PersonIcon  />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Profile" />
+                                                            </ListItemButton>
+                                                        </ListItem>
+                                                    </Link>
+
+                                                    <Link to='/following' style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                        <ListItem disablePadding>
+                                                            <ListItemButton>
+                                                                <ListItemIcon>
+                                                                    <DirectionsWalkIcon />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Following" />
+                                                            </ListItemButton>
+                                                        </ListItem>
+                                                    </Link>
+                                                </List>
+                                            </nav>
+                                        </Box>
+                                    </>
+                                    </Menu>
                             </>
                         ) : (
                             <>
                                 {NavChoicesLoggedOut.map((page) => (
                                     <Button
                                         key={page}
-                                        onClick={handleCloseNavMenu}
+                                        onClick={handleCategoryClose}
                                         sx={{ my: 2, color: 'black', display: 'block' }}
                                     >
                                         {page}
@@ -230,12 +372,53 @@ function Navbar () {
                             </>
                         )}
                     </Box>
+
+                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     
 
                     {/* Right side of nav */}
                     <Box sx={{ flexGrow: 0 }}>
                         <Toolbar>
-                            <Search>
+                            <Search >
                                 <SearchIconWrapper>
                                 <SearchIcon />
                                 </SearchIconWrapper>
@@ -244,9 +427,11 @@ function Navbar () {
                                 inputProps={{ 'aria-label': 'search' }}
                                 />
                             </Search>
+                            <Tooltip title="Account">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="" src="/static/images/avatar/2.jpg" />
                             </IconButton>
+                            </Tooltip>
                         </Toolbar>
                         <Menu
                         sx={{ mt: '45px' }}
@@ -267,19 +452,85 @@ function Navbar () {
                         {/* Later on for login */}
                         {(loggedin) ? (
                             <>
-                                {profileLoggedIn.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
+                                <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
+                                    <nav aria-label="main mailbox folders">
+                                        <List>
+                                            <Link to='/profile' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <PersonIcon  />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Profile" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/following' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <DirectionsWalkIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Following" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/favorites' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <FavoriteIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Favorites" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/logout' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <LogoutIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Logout" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+                                        </List>
+                                    </nav>
+                                </Box>
                             </>
                         ) : (
                             <>
-                                {profileLoggedOut.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
+                                <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
+                                    <nav aria-label="main mailbox folders">
+                                        <List>
+                                            <Link to='/login' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <LoginIcon  />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Login" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+
+                                            <Link to='/register' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                                <ListItem disablePadding>
+                                                    <ListItemButton>
+                                                        <ListItemIcon>
+                                                            <HowToRegIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Register" />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </Link>
+                                        </List>
+                                    </nav>
+                                </Box>
                             </>
                         )}
                         </Menu>
