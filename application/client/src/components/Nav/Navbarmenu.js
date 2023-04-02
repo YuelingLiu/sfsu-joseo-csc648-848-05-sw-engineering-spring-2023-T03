@@ -83,8 +83,6 @@ color: 'blackit',
 },
 })); 
 
-
-
 function Navbar () {
     // for MUI
     const [anchorElNav, setAnchorElNav] = useState(null);
@@ -98,7 +96,6 @@ function Navbar () {
     // Category menu
     const [anchorElCategory, setAnchorElCategory] = useState(null);
     
-    
     // Category menu
     const handleCategoryMenu = (event) => {
         setAnchorElCategory(event.currentTarget);
@@ -106,8 +103,6 @@ function Navbar () {
     const handleCategoryClose = () => {
         setAnchorElCategory(null);
     };
-
-
 
     // Left side burger menu
     const  handleOpenNavMenu = (event) => {
@@ -125,8 +120,6 @@ function Navbar () {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-
-
 
   return (
     <>
@@ -294,21 +287,20 @@ function Navbar () {
                         {(loggedin) ? (
                             <>
                                     <Toolbar>
-                                        <IconButton
-                                            size="large"
-                                            aria-label="Categories"
-                                            aria-controls="menu-appbar"
-                                            aria-haspopup="true"
-                                            onClick={handleCategoryMenu}
-                                            color="black"
-                                        >
-                                        <Button 
-                                            sx={{ my: 2, color: 'black', display: 'block' }} 
-                                        >
+                                        <Button sx={{ my: 2, color: 'black', display: 'block' }}  onClick={handleCategoryMenu}>
                                             Categories 
                                             <KeyboardArrowDownIcon />
                                         </Button>
-                                        </IconButton>
+                                        <Link to="/top-rated" style={{ textDecoration: 'none' }}>
+                                            <Button sx={{ my: 2, color: 'black', display: 'block' }} >
+                                                Top Rated
+                                            </Button>
+                                        </Link>
+                                        <Link to="/post-recipe" style={{ textDecoration: 'none' }}>
+                                            <Button sx={{ my: 2, color: 'black', display: 'block' }} >
+                                                Create Post
+                                            </Button>
+                                        </Link>
                                     </Toolbar>
 
                                     <Menu
@@ -356,7 +348,7 @@ function Navbar () {
                                             </nav>
                                         </Box>
                                     </>
-                                    </Menu>
+                                </Menu>
                             </>
                         ) : (
                             <>
@@ -372,48 +364,6 @@ function Navbar () {
                             </>
                         )}
                     </Box>
-
-                   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
 
                     {/* Right side of nav */}
                     <Box sx={{ flexGrow: 0 }}>
