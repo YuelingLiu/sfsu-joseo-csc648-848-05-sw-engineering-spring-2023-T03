@@ -19,7 +19,7 @@ const connectDb = async () => {
       },
     });
 
-    const res = await db.select().table("public.\"Users\"");
+    const res = await db.select().table("public.\"Recipe\"");
     console.log(res);
     await db.destroy();
   } catch (error) {
