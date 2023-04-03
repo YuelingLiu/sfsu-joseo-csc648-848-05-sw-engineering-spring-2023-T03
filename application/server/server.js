@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const { Client } = require("pg");
+const knex = require("knex");
 
 const app = express();
 
@@ -8,17 +8,20 @@ const PORT = process.env.PORT || 3000;
 
 const connectDb = async () => {
   try {
-    const client = new Client({
-      user: process.env.PGUSER,
-      host: process.env.PGHOST,
-      database: process.env.PGDATABASE,
-      password: process.env.PGPASSWORD,
-      port: process.env.PGPORT,
+    const db = knex({
+      client: "pg",
+      connection: {
+        user: process.env.PGUSER,
+        host: process.env.PGHOST,
+        database: process.env.PGDATABASE,
+        password: process.env.PGPASSWORD,
+        port: process.env.PGPORT,
+      },
     });
-    await client.connect();
-    const res = await client.query("SELECT * FROM public.\"Users\"");
+
+    const res = await db.select().table("public.\"Users\"");
     console.log(res);
-    await client.end();
+    await db.destroy();
   } catch (error) {
     console.log(error);
   }
