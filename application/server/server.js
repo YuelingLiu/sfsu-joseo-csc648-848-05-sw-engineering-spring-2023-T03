@@ -16,7 +16,7 @@ const connectDb = async () => {
       port: process.env.PGPORT,
     });
     await client.connect();
-    const res = await client.query("SELECT * FROM public.\"Users\"");
+    const res = await client.query("SELECT * FROM public.\"users\"");
     console.log(res);
     await client.end();
   } catch (error) {
