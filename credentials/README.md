@@ -25,7 +25,7 @@
     From the project directory 
     cd credentials
     ch mod 400 key.pem
-    ssh -i credentials/key.pem ubuntu@ec2-13-52-216-25.us-west-1.compute.amazonaws.com
+    ssh -i credentials/key.pem ubuntu@ec2-13-52-100-63.us-west-1.compute.amazonaws.com
 
     To access the database, download pgadmin4
     Set up a new server
