@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Recipe from "./pages/Recipe";
 import PostRecipe from "./pages/PostRecipe";
 import Navbar from "./components/Nav/Navbarmenu";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route exact path="/recipes" component={Recipe} />
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/post-recipe" component={PostRecipe} />
+        <Route exact path="/search" component={Search} />
       </Switch>
     </Router>
    </>

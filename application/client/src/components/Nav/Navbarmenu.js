@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 
 // MUI Components 
 import AppBar from '@mui/material/AppBar';
@@ -34,7 +34,7 @@ import Tooltip from '@mui/material/Tooltip';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 // used like LINK
-import {Link } from 'react-router-dom'
+import {Link, useHistory } from 'react-router-dom'
 
 // Drop down items
 const NavChoicesLoggedIn = ['Categories', 'My Feed', 'Top Rated' ];
@@ -95,7 +95,9 @@ function Navbar () {
     
     // Category menu
     const [anchorElCategory, setAnchorElCategory] = useState(null);
-    
+    const [query, setQuery] = useState('');
+    const history = useHistory();   
+
     // Category menu
     const handleCategoryMenu = (event) => {
         setAnchorElCategory(event.currentTarget);
@@ -119,6 +121,12 @@ function Navbar () {
     };
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    // takes user to search page with results
+    const handleSearch = async (event) => {
+        event.preventDefault();
+        history.push(`search?q=${query}`);
     };
 
   return (
@@ -368,15 +376,19 @@ function Navbar () {
                     {/* Right side of nav */}
                     <Box sx={{ flexGrow: 0 }}>
                         <Toolbar>
-                            <Search >
-                                <SearchIconWrapper>
-                                <SearchIcon />
-                                </SearchIconWrapper>
-                                <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                                />
-                            </Search>
+                            <form onSubmit={handleSearch}>
+                                <Search>
+                                    <SearchIconWrapper>
+                                        <SearchIcon />
+                                    </SearchIconWrapper>
+                                    <StyledInputBase
+                                        value={query}
+                                        onChange={(e) => setQuery(e.target.value)}
+                                        placeholder="Search…"
+                                        inputProps={{ 'aria-label': 'search' }}
+                                    />
+                                </Search>
+                            </form>
                             <Tooltip title="Account">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="" src="/static/images/avatar/2.jpg" />
