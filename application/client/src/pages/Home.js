@@ -1,14 +1,15 @@
 import React from 'react'
 
 // import components
-import Nav from '../components/Nav/Nav'
-import Cards from '../components/Cards/Cards'
+import Nav from '../components/Nav/Navbarmenu'
+import Hero from '../components/hero/Hero'
+import Catergories from '../components/categories/Categories'
 
 function Home() {
   return (
     <>
-      <Nav />
-      <Cards />
+      <Hero />
+      <Catergories />
     </>
   )
 }
