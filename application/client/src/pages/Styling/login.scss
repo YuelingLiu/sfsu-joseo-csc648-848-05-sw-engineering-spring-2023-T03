@@ -1,0 +1,81 @@
+.login {
+    height: 100vh;
+    background-color: #f4fffb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  
+    .card {
+      width: 50%;
+      display: flex;
+      background-color: white;
+      border-radius: 10px;
+      min-height: 600px;
+  
+      .left {
+        flex: 1;
+        background: url('https://images.unsplash.com/photo-1594964643411-aacab76a7c0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80')
+          center;
+        opacity: 0.9;
+        background-size: cover;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        color: white;
+  
+        h1 {
+          font-size: 80px;
+          line-height: 90px;
+        }
+        p {
+        }
+        span {
+          font-size: 14px;
+        }
+        button {
+          width: 50%;
+          background-color: #f4fffb;
+          border: none;
+          margin-top: 10px;
+          padding: 10px;
+          font-weight: bold;
+          cursor: pointer;
+          opacity: 0.8;
+        }
+      }
+  
+      .right {
+        flex: 1;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 50px;
+  
+        h1 {
+          color: #555;
+        }
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+  
+          input {
+            border: none;
+            border-bottom: 1px solid lightgray;
+            padding: 20px 10px;
+          }
+          button {
+            width: 50%;
+            padding: 10px;
+            border: none;
+            background-color: #f4fffb;
+            font-weight: bold;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }

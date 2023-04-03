@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const express = require("express");
 const knex = require("knex");
@@ -18,10 +19,10 @@ const connectDb = async () => {
         port: process.env.PGPORT,
       },
     });
-
-    // const res = await db.select().table("public.\"Recipe\"");
-    // console.log(res);
-    await db.destroy();
+    await client.connect();
+    const res = await client.query("SELECT * FROM public.\"users\"");
+    console.log(res);
+    await client.end();
   } catch (error) {
     console.log(error);
   }
