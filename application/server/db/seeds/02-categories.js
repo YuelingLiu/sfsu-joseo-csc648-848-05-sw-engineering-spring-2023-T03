@@ -11,6 +11,7 @@ exports.seed = function(knex) {
         {category:"Greek"},
         {category:"Middle-Eastern"},
         {category:"Spanish"},
+        {category:"Mexican"},
         {category:"Italian"},
         {category:"Japanese"},
         {category:"Snacks"},
