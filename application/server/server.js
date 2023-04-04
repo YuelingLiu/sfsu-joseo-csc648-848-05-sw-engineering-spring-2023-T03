@@ -29,7 +29,7 @@ const connectDb = async () => {
 };
 connectDb();
 
-server.use(cors());
+app.use(cors());
 // app.use("/api", apiRoutes);
 app.use("/search", searchRoutes);
 // app.use("/createPost", newPostRoutes);
