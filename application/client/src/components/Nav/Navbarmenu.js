@@ -126,7 +126,7 @@ function Navbar () {
     // takes user to search page with results
     const handleSearch = async (event) => {
         event.preventDefault();
-        history.push(`search?q=${query}`);
+        history.push(`search?query=${query}`);
     };
 
   return (

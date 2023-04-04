@@ -6,10 +6,10 @@ const Search = ({ location }) => {
   
     useEffect(() => {
       const fetchResults = async () => {
-        const query = new URLSearchParams(location.search).get('q');
+        const query = new URLSearchParams(location.search).get('query');
         try {
-          const response = await fetch(`https://ec2-13-52-100-63.us-west-1.compute.amazonaws.com:3000/search?query=${query}`);
           console.log("query in search: " + query);
+          const response = await fetch(`http://ec2-54-183-83-77.us-west-1.compute.amazonaws.com:3000/search?query=${query}`);
           const data = await response.json();
   
           if (response.ok) {
