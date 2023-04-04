@@ -8,6 +8,7 @@ const searchRoutes = require("./controllers/search-routes");
 const newPostRoutes = require("./controllers/newPost-routes");
 
 const app = express();
+const cors = require('cors');
 
 const PORT = process.env.PORT || 3000;
 
@@ -28,6 +29,7 @@ const connectDb = async () => {
 };
 connectDb();
 
+server.use(cors());
 // app.use("/api", apiRoutes);
 app.use("/search", searchRoutes);
 // app.use("/createPost", newPostRoutes);
