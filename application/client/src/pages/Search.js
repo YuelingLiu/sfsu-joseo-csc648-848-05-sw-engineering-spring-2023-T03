@@ -8,7 +8,7 @@ const Search = ({ location }) => {
       const fetchResults = async () => {
         const query = new URLSearchParams(location.search).get('q');
         try {
-          const response = await fetch(`http://ec2-13-52-100-63.us-west-1.compute.amazonaws.com:3000/search?query=${query}`);
+          const response = await fetch(`https://ec2-13-52-100-63.us-west-1.compute.amazonaws.com:3000/search?query=${query}`);
           console.log("query in search: " + query);
           const data = await response.json();
   
