@@ -4,7 +4,7 @@ const Recipe = require('../models/Recipe');
 // search 
 router.get('/', async (req, res) => {
   try {
-    const query = req.query.q;
+    const query = req.query.query;
     const results = await Recipe.search(query);
     res.json(results);
   } catch (err) {
