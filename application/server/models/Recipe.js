@@ -25,7 +25,9 @@ class Recipe {
 
   static async search(query) {
     return await knex('recipes')
-    .where("title", query);
+    // .where("title", query);
+    .where('title', 'ilike', `%${query}%`)
+    .orWhere('category', 'ilike', `%${query}%`);
   }
 }
 
