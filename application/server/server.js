@@ -3,6 +3,10 @@ require("dotenv").config();
 const express = require("express");
 const { Client } = require("pg");
 
+// const apiRoutes = require("./controllers/api");
+const searchRoutes = require("./controllers/search-routes");
+const newPostRoutes = require("./controllers/newPost-routes");
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -17,14 +21,16 @@ const connectDb = async () => {
       port: process.env.PGPORT,
     });
     await client.connect();
-    const res = await client.query("SELECT * FROM public.\"users\"");
-    console.log(res);
     await client.end();
   } catch (error) {
     console.log(error);
   }
 };
 connectDb();
+
+// app.use("/api", apiRoutes);
+app.use("/search", searchRoutes);
+// app.use("/createPost", newPostRoutes);
 
 app.get("/", (req, res) => res.send("Hello World"));
 

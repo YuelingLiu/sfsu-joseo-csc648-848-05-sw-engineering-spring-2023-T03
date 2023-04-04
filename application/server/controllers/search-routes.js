@@ -1,10 +1,10 @@
 const router = require("express").Router();
-const Recipe = require('./models/Recipe');
+const Recipe = require('../models/Recipe');
 
 // search 
-router.get('/search', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const query = req.query.q;
+    const query = req.query.query;
     const results = await Recipe.search(query);
     res.json(results);
   } catch (err) {
@@ -12,5 +12,7 @@ router.get('/search', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while searching.' });
   }
 });
+
+module.exports = router;
 
 
