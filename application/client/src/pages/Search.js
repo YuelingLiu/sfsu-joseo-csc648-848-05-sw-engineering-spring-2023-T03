@@ -9,7 +9,7 @@ const Search = ({ location }) => {
         const query = new URLSearchParams(location.search).get('query');
         try {
           console.log("query in search: " + query);
-          const response = await fetch(`http://ec2-54-183-83-77.us-west-1.compute.amazonaws.com:3000/search?query=${query}`);
+          const response = await fetch(`https://recipereel.me:3000/search?query=${query}`);
           const data = await response.json();
   
           if (response.ok) {
