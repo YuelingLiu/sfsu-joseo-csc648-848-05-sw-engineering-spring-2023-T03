@@ -2,15 +2,18 @@ import React, {useEffect, useState} from 'react'
 
 const Search = ({ location }) => {
     const [results, setResults] = useState([]);
+    
   
     useEffect(() => {
       const fetchResults = async () => {
         const query = new URLSearchParams(location.search).get('q');
         try {
-          const response = await fetch(`/search?q=${query}`);
+          const response = await fetch(`http://ec2-13-52-100-63.us-west-1.compute.amazonaws.com:3000/search?query=${query}`);
+          console.log("query in search: " + query);
           const data = await response.json();
   
           if (response.ok) {
+            console.log("response" + response.json);
             setResults(data);
           } else {
             throw new Error(data.error);
