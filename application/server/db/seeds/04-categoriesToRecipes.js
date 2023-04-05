@@ -1,7 +1,7 @@
 
 exports.seed = function(knex) {
   
-    return knex("categoriesToRecipe").insert([
+    return knex("categories_to_recipe").insert([
       {recipeID:"1", categoryID:"2"},
       {recipeID:"1", categoryID:"17"},
       {recipeID:"1", categoryID:"21"},
