@@ -10,7 +10,7 @@ const Register = () => {
           <h2> Welcome to RecipeReel</h2>
           <p>You already have an account?</p>
           <Link to="/login">
-            <button>Login</button>
+            <button>Login here</button>
           </Link>
         </div>
 
