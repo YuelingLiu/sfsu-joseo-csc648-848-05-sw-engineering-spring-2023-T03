@@ -12,10 +12,12 @@
     border-radius: 10px;
     min-height: 600px;
     flex-direction: row;
+    max-height: 100vh;
     .left {
       flex: 1;
       background: url('https://images.unsplash.com/photo-1594964643411-aacab76a7c0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80')
         center;
+      max-height: 100%;
       opacity: 0.9;
       background-size: cover;
       padding: 50px;
@@ -75,6 +77,16 @@
           cursor: pointer;
         }
       }
+    }
+  }
+
+  /* use @media to change flex-direction to column when screen width is less than 600px */
+  @media screen and (max-width: 650px) {
+    .card {
+      flex-direction: column;
+    }
+    .login {
+      flex-direction: column;
     }
   }
 }
