@@ -1,9 +1,15 @@
 const router = require("express").Router();
+const { client } = require("../db/db"); 
 
-// search 
 router.get('/', async (req, res) => {
   try {
     const searchTerm = req.query.query; 
+
+    if (!searchTerm) {
+      res.status(400).json({ error: 'Missing search query.' });
+      return;
+    }
+
     const searchQuery = `
       WITH search_result AS (
         SELECT DISTINCT r."ID" AS recipe_id, r."title" AS recipe_title
@@ -28,10 +34,10 @@ router.get('/', async (req, res) => {
       SELECT * FROM search_result
       ORDER BY recipe_id ASC;
   `;
-
-    const results = await db.any(searchQuery, [`%${searchTerm}%`]);
-    res.json(results);
+    const { rows } = await client.query(searchQuery);
+    res.json(rows);
   } catch (err) {
+    console.log('error in search-routes: ' + err.message);
     console.error(err);
     res.status(500).json({ error: 'An error occurred while searching.' });
   }
