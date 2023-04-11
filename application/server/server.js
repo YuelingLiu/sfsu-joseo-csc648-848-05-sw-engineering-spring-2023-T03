@@ -1,9 +1,8 @@
-
+// server.js
 require("dotenv").config();
 const express = require("express");
-const { Client } = require("pg");
+const { client } = require("./db/db"); 
 
-// const apiRoutes = require("./controllers/api");
 const searchRoutes = require("./controllers/search-routes");
 const newPostRoutes = require("./controllers/newPost-routes");
 
@@ -32,8 +31,6 @@ connectDb();
 app.use(cors());
 // app.use("/api", apiRoutes);
 app.use("/search", searchRoutes);
-// app.use("/createPost", newPostRoutes);
-
 app.get("/", (req, res) => res.send("Hello World"));
 
 app.listen(PORT, () => console.log(`Server listening in port ${PORT}`));
