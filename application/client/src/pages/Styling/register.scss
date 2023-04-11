@@ -81,6 +81,15 @@
   }
 }
 
+@media screen and (max-width: 650px) {
+  .card {
+    flex-direction: column;
+  }
+  .register {
+    flex-direction: column;
+  }
+}
+
 .toast-message {
   width: 80%;
   height: 80px;

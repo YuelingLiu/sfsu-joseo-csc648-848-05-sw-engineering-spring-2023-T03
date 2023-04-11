@@ -82,11 +82,11 @@
 
   /* use @media to change flex-direction to column when screen width is less than 600px */
   @media screen and (max-width: 650px) {
-    .card {
-      flex-direction: column;
-    }
     .login {
       flex-direction: column;
     }
+    // .card {
+    //   flex-direction: column;
+    // }
   }
 }

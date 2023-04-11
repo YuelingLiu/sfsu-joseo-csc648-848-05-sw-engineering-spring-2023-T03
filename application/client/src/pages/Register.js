@@ -62,10 +62,10 @@ const Register = () => {
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      toast.error('Invalid Input', {
-        position: toast.POSITION.TOP_CENTER,
-        className: 'toast-message',
-      });
+      // toast.error('Invalid Input', {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   className: 'toast-message',
+      // });
     }
 
     // submit form
