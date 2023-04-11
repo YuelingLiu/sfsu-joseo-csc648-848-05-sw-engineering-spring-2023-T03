@@ -35,10 +35,20 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 // used like LINK
 import {Link, useHistory } from 'react-router-dom'
+import Container1 from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 // Drop down items
 const NavChoicesLoggedIn = ['Categories', 'My Feed', 'Top Rated' ];
 const NavChoicesLoggedOut = ['Categories', 'Top Rated' ];
+
+
+const navCategoryCol1 = ['African', 'American', 'Asian', 'Breakfast', 'Chinese', 'Comfort Food']
+const navCategoryCol2 = ['Dinner', 'Entrees', 'French', 'Greek', 'Handheld', 'Indian']
+const navCategoryCol3 = ['Italian', 'Japanese', 'Latin-American', 'Lunch', 'Mexican', 'Middle-Eastern']
+const navCategoryCol4 = ['Quick', 'Sandwhich','Seafood', 'Snacks', 'Spanish', 'Special Occasion']
+
 
 // for MUI 
 const Search = styled('div')(({ theme }) => ({
@@ -91,7 +101,7 @@ function Navbar () {
     // used for search bar to go to icon on smaller screens
     const [screenSize, setScreenSize] = useState(true);
     // placement code until we have logged in working 
-    const [loggedin, setLoggedIn] = useState(true);
+    const [loggedin, setLoggedIn] = useState(false);
     
     // Category menu
     const [anchorElCategory, setAnchorElCategory] = useState(null);
@@ -328,47 +338,167 @@ function Navbar () {
                                     onClose={handleCategoryClose}
                                     >
                                     <>
-                                        <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
-                                            <nav aria-label="main mailbox folders">
-                                                <List>
-                                                    <Link to='/profile' style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
-                                                        <ListItem disablePadding>
-                                                            <ListItemButton>
-                                                                <ListItemIcon>
-                                                                    <PersonIcon  />
-                                                                </ListItemIcon>
-                                                                <ListItemText primary="Profile" />
-                                                            </ListItemButton>
-                                                        </ListItem>
-                                                    </Link>
+                                        <Box sx={{ width: '100%', maxWidth: 600, minWidth: 210 ,bgcolor: 'background.paper' }}>
+                                                <Container1 fluid>
+                                                    <Row>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol1.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
 
-                                                    <Link to='/following' style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
-                                                        <ListItem disablePadding>
-                                                            <ListItemButton>
-                                                                <ListItemIcon>
-                                                                    <DirectionsWalkIcon />
-                                                                </ListItemIcon>
-                                                                <ListItemText primary="Following" />
-                                                            </ListItemButton>
-                                                        </ListItem>
-                                                    </Link>
-                                                </List>
-                                            </nav>
+                                                            </Row>
+                                                        </Col>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol2.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
+
+                                                            </Row>
+                                                        </Col>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol3.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
+
+                                                            </Row>
+                                                        </Col>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol4.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
+
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </Container1>
                                         </Box>
                                     </>
                                 </Menu>
                             </>
                         ) : (
                             <>
-                                {NavChoicesLoggedOut.map((page) => (
-                                    <Button
-                                        key={page}
-                                        onClick={handleCategoryClose}
-                                        sx={{ my: 2, color: 'black', display: 'block' }}
+                                 <Toolbar>
+                                        <Button sx={{ my: 2, color: 'black', display: 'block' }}  onClick={handleCategoryMenu}>
+                                            Categories 
+                                            <KeyboardArrowDownIcon />
+                                        </Button>
+                                        <Link to="/top-rated" style={{ textDecoration: 'none' }}>
+                                            <Button sx={{ my: 2, color: 'black', display: 'block' }} >
+                                                Top Rated
+                                            </Button>
+                                        </Link>
+                                        
+                                    </Toolbar>
+
+                                    <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElCategory}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElCategory)}
+                                    onClose={handleCategoryClose}
                                     >
-                                        {page}
-                                    </Button>
-                                ))}
+                                    <>
+                                        <Box sx={{ width: '100%', maxWidth: 600, minWidth: 210 ,bgcolor: 'background.paper' }}>
+                                                <Container1 fluid>
+                                                    <Row>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol1.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
+
+                                                            </Row>
+                                                        </Col>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol2.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
+
+                                                            </Row>
+                                                        </Col>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol3.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
+
+                                                            </Row>
+                                                        </Col>
+                                                        <Col>
+                                                            <Row>
+                                                                {navCategoryCol4.map((category) => (
+                                                                    <Link to={`/${category}`} style={{ textDecoration: 'none' }} onClick={handleCategoryClose}> 
+                                                                        <ListItem disablePadding>
+                                                                            <ListItemButton>
+                                                                                <ListItemText primary={category} />
+                                                                            </ListItemButton>
+                                                                        </ListItem>
+                                                                    </Link>
+                                                                ))}
+
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </Container1>
+                                        </Box>
+                                    </>
+                                </Menu>
                             </>
                         )}
                     </Box>
