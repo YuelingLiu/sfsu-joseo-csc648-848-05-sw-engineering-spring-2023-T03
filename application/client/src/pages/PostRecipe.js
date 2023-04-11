@@ -12,7 +12,7 @@ const PostRecipe = () => {
     <>
         <Container>
             <h3 align="center" class="w3-border-bottom w3-border-light-grey w3-padding-16 fa-2x">New Recipe</h3>
-            <img src='image5.jpg' text-align='center' width='1120'> </img>
+            <img src='image5.jpg' text-align='center' width='1120' /> 
 
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -41,10 +41,9 @@ const PostRecipe = () => {
                 </Form.Group>
         
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Image</Form.Label>
                     <input type="file" id="imageUpload" name="imageUpload" accept="image/*"></input>
                     <Form.Control type="text" />
-                </Form.Group>s
+                </Form.Group>
 
                 <button class="w3-button w3-black w3-section " id="createBtn" type="submit">
                     <i class="fa fa-paper-plane"></i> Post Recipe!
