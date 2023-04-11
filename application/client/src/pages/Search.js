@@ -2,15 +2,18 @@ import React, {useEffect, useState} from 'react'
 
 const Search = ({ location }) => {
     const [results, setResults] = useState([]);
+    
   
     useEffect(() => {
       const fetchResults = async () => {
-        const query = new URLSearchParams(location.search).get('q');
+        const query = new URLSearchParams(location.search).get('query');
         try {
-          const response = await fetch(`/search?q=${query}`);
+          console.log("query in search: " + query);
+          const response = await fetch(`https://recipereel.me/search?query=${query}`);
           const data = await response.json();
   
           if (response.ok) {
+            console.log("response" + response.json);
             setResults(data);
           } else {
             throw new Error(data.error);
