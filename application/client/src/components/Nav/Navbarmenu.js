@@ -52,6 +52,7 @@ const navCategoryCol3 = ['Breakfast', 'Lunch', 'Dinner', 'Snacks' ]
 // const navCategoryCol4 = ['Quick', 'Sandwhich','Seafood', 'Snacks', 'Spanish', 'Special Occasion']
 
 
+
 // for MUI 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -351,6 +352,7 @@ function Navbar () {
                                     <>
                                         <Box sx={{ width: '100%', maxWidth: 600, minWidth: 210 ,bgcolor: 'background.paper' }}>
                                                 <Container1 fluid>
+
                                                     <Row >
                                                         <Col xs={8}>
                                                             <h3>Cuisines</h3>
@@ -359,6 +361,7 @@ function Navbar () {
                                                             <h3>Time of Day</h3>
                                                         </Col>
                                                     </Row>
+
                                                     <Row>
                                                         <Col>
                                                             <Row>

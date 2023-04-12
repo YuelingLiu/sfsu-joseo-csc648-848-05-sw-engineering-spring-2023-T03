@@ -43,7 +43,7 @@ exports.up = function(knex) {
       table.increments('ID').primary();
       table.string('category').notNullable();
     })
-    .createTable('categoriesToRecipe', (table) => {
+    .createTable('categories_to_recipe', (table) => {
       table.increments('ID').primary();
       table.integer('recipeID').unsigned().notNullable();
       table.foreign('recipeID').references('recipes.ID');
@@ -65,7 +65,7 @@ exports.up = function(knex) {
   exports.down = function(knex) {
     return (knex.schema
         .dropTableIfExists('comments')
-      .dropTable('categoriesToRecipe')
+      .dropTable('categories_to_recipe')
       .dropTable('categories')
       .dropTable('ratings')
       .dropTable('instructions')
