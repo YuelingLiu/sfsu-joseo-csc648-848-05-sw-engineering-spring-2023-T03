@@ -22,14 +22,17 @@
       padding: 50px;
       display: flex;
       flex-direction: column;
-      gap: 30px;
+
+      //gap: 150px;
 
       h2 {
         font-size: 30px;
         line-height: 40px;
+        gap: 50px;
       }
       p {
         color: black;
+        gap: 20px;
       }
       span {
         font-size: 16px;
@@ -39,7 +42,6 @@
         width: 50%;
         background-color: #f4fffb;
         border: none;
-
         margin-right: 20px;
         padding: 10px;
         font-weight: bold;
@@ -77,4 +79,24 @@
       }
     }
   }
+}
+
+@media screen and (max-width: 650px) {
+  .card {
+    flex-direction: column;
+  }
+  .register {
+    flex-direction: column;
+  }
+}
+
+.toast-message {
+  width: 80%;
+  height: 80px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 7px;
+  display: grid;
+  grid-template-columns: 1.3fr 6fr 0.5fr;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
 }

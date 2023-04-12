@@ -23,7 +23,7 @@ function Hero() {
 
             <Row >
               <Col xs={12} sm={5} md={6} lg={4} xl={4}>
-                <Link to="/login" style={{ textDecoration: 'none' }}>
+                <Link to="/register" style={{ textDecoration: 'none' }}>
                   <Button style={{marginBottom: '10px'}} size="md" variant="success">Get Started</Button>
                 </Link>
               </Col>

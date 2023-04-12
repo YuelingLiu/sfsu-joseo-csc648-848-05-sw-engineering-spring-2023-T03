@@ -25,7 +25,10 @@ class Recipe {
 
   static async search(query) {
     return await knex('recipes')
-    .where("title", query);
+    .join('categoriesToRecipe','categoriesToRecipe.recipeID', 'recipes.ID')
+    .join('categories', 'categories.ID', 'categoriesToRecipe.categoryID')
+    .where('category', 'like', `%${query}%`)
+    .orWhere('title', 'like', `%${query}%`);
   }
 }
 
