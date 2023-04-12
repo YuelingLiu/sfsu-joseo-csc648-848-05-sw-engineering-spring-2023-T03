@@ -1,0 +1,102 @@
+.register {
+  height: 100vh;
+  background-color: #f4fffb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card {
+    width: 50%;
+    display: flex;
+    flex-direction: row-reverse;
+    background-color: white;
+    border-radius: 10px;
+    min-height: 600px;
+
+    .left {
+      flex: 1;
+      background: url('https://images.unsplash.com/photo-1606787364406-a3cdf06c6d0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80')
+        center;
+      opacity: 0.86;
+      background-size: cover;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+
+      //gap: 150px;
+
+      h2 {
+        font-size: 30px;
+        line-height: 40px;
+        gap: 50px;
+      }
+      p {
+        color: black;
+        gap: 20px;
+      }
+      span {
+        font-size: 16px;
+        color: f4fffb;
+      }
+      button {
+        width: 50%;
+        background-color: #f4fffb;
+        border: none;
+        margin-right: 20px;
+        padding: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        opacity: 0.8;
+      }
+    }
+
+    .right {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 50px;
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        input {
+          border: none;
+          border-bottom: 1px solid lightgray;
+          padding: 20px 10px;
+        }
+        button {
+          width: 50%;
+          padding: 10px;
+          border: none;
+          background-color: #f4fffb;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .card {
+    flex-direction: column;
+  }
+  .register {
+    flex-direction: column;
+  }
+}
+
+.toast-message {
+  width: 80%;
+  height: 80px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 7px;
+  display: grid;
+  grid-template-columns: 1.3fr 6fr 0.5fr;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
