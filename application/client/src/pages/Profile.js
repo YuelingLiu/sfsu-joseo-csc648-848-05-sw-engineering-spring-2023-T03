@@ -1,42 +1,37 @@
-import React from 'react'
+import React from 'react';
+import { useHistory } from "react-router-dom";
+import ProfileCard from '../components/ProfileCard/ProfileCard';
+import Cards from '../components/Cards/Cards';
+import { Typography } from '@mui/material';
+import { PostsData } from '../PostsData';
 
-import Cards from '../components/Cards/Cards'
+
 
 const Profile = () => {
+  const history = useHistory()
   return (
     <div>
-      <body>
-        <div class="container-fluid">
-          <div class="row extra_margin">
-
-            <div class="col-md-4 col-sm-12 col-xs-12">
-
-              <div class="text-center">
-                <h2 align="float-left">Username</h2>
-                <img src="user.ico" class="img-rounded" />
-
-              </div>
-
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-4 col-sm-12 col-xs-12">
+            <div class="mt-5 d-flex justify-content-center" data-aos="fade-up-right">
+              <ProfileCard />
             </div>
-
-            <div class="col-md-8 col-sm-* col-xs-*">
-              <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac purus lacus. Curabitur lobortis iaculis porta. Nullam vel condimentum dolor. Etiam tempor arcu ut urna mattis, at tristique sapien fringilla. Fusce viverra, odio sed efficitur dapibus, turpis orci posuere tellus, sed gravida dui risus at sapien. Duis faucibus non elit et interdum. Nam placerat nunc id massa placerat efficitur. Maecenas ac felis et elit vulputate posuere a non urna. Suspendisse mattis vitae nisl sed scelerisque. Duis eu risus varius, laoreet est nec, maximus dolor.</p>
-
-              <hr />
-              <div class>
-                <h1> Posts </h1>
-                <Cards />
-                <Cards />
-              </div>
-            </div>
-
           </div>
-
+          <div class="col-md-8 col-sm-12 col-xs-12 mt-5 text-center text-md-start">
+            <Typography variant='h5' >All Posts</Typography>
+            <div className='row'>
+              {
+                PostsData.map((data, key) =>
+                  <div onClick={()=> history.push(`post/${data.id}`)} role='button' className='col-xxl-3 col-lg-4 col-md-6 col-12 my-3 d-flex justify-content-center'  data-aos="zoom-in" data-aos-duration={1500} key={key}>
+                    <Cards data={data} />
+                  </div>
+                )
+              }
+            </div>
+          </div>
         </div>
-
-
-
-      </body>
+      </div>
     </div>
 
   )

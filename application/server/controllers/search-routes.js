@@ -1,13 +1,43 @@
 const router = require("express").Router();
-const Recipe = require('../models/Recipe');
+const { client } = require("../db/db"); 
 
-// search 
 router.get('/', async (req, res) => {
   try {
-    const query = req.query.query;
-    const results = await Recipe.search(query);
-    res.json(results);
+    const searchTerm = req.query.query; 
+
+    if (!searchTerm) {
+      res.status(400).json({ error: 'Missing search query.' });
+      return;
+    }
+
+    const searchQuery = `
+      WITH search_result AS (
+        SELECT DISTINCT r."ID" AS recipe_id, r."title" AS recipe_title
+        FROM public.recipes r
+        JOIN public.users u ON r."userID" = u."ID"
+        LEFT JOIN public.categories_to_recipe ctr ON r."ID" = ctr."recipeID"
+        LEFT JOIN public.categories c ON ctr."categoryID" = c."ID"
+        LEFT JOIN public.comments cm ON r."ID" = cm."recipeID"
+        LEFT JOIN public.ingredients i ON r."ID" = i."recipeID"
+        LEFT JOIN public.instructions ins ON r."ID" = ins."recipeID"
+        LEFT JOIN public.ratings rt ON r."ID" = rt."recipeID"
+        WHERE (
+            r.title ILIKE '%${searchTerm}%' 
+            OR r.description ILIKE '%${searchTerm}%' 
+            OR c.category ILIKE '%${searchTerm}%' 
+            OR u.username ILIKE '%${searchTerm}%' 
+            OR cm.comment ILIKE '%${searchTerm}%' 
+            OR i.ingredient ILIKE '%${searchTerm}%' 
+            OR ins.instruction ILIKE '%${searchTerm}%'
+        )
+      )
+      SELECT * FROM search_result
+      ORDER BY recipe_id ASC;
+  `;
+    const { rows } = await client.query(searchQuery);
+    res.json(rows);
   } catch (err) {
+    console.log('error in search-routes: ' + err.message);
     console.error(err);
     res.status(500).json({ error: 'An error occurred while searching.' });
   }
