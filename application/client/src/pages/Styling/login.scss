@@ -60,38 +60,6 @@
       }
     }
 
-    // .right {
-    //   flex: 1;
-    //   padding: 50px;
-    //   display: flex;
-    //   flex-direction: column;
-    //   justify-content: center;
-    //   gap: 50px;
-    //   width: 50%;
-
-    //   h1 {
-    //     color: #555;
-    //   }
-    //   form {
-    //     display: flex;
-    //     flex-direction: column;
-    //     gap: 30px;
-
-    //     input {
-    //       border: none;
-    //       border-bottom: 1px solid lightgray;
-    //       padding: 20px 10px;
-    //     }
-    //     button {
-    //       width: 50%;
-    //       padding: 10px;
-    //       border: none;
-    //       background-color: #f4fffb;
-    //       font-weight: bold;
-    //       cursor: pointer;
-    //     }
-    //   }
-    // }
     .right {
       flex: 1;
       padding: 50px;
@@ -120,14 +88,14 @@
         }
 
         button {
-          width: 50%;
+          width: 0%;
           padding: 10px;
           border: none;
           background-color: #f4fffb;
           font-size: 18px;
           font-weight: bold;
           cursor: pointer;
-          transition: opacity 0.5s ease-in-out;
+          transition: opacity 0.3s ease-in-out;
 
           &:hover {
             opacity: 0.8;
@@ -137,42 +105,6 @@
     }
   }
 }
-
-/* use @media to change flex-direction to column when screen width is less than 600px */
-// @media screen and (max-width: 850) {
-//   .login {
-//     background-color: red;
-
-//     .card {
-//       flex-direction: column;
-//       width: 100%;
-//       background-color: green;
-//     }
-//   }
-// }
-
-// /* use @media to change flex-direction to column when screen width is less than 600px */
-// @media screen and (max-width: 600) {
-//   .login {
-//     // flex-direction: column;
-//     // width: 100%;
-//     background-color: red;
-
-//     .card {
-//       flex-direction: column;
-//       width: 100%;
-//       background-color: green;
-//       .left {
-//       }
-//     }
-//   }
-// }
-
-// /* use @media to change flex-direction to column when screen width is less than 600px */
-// @media screen and (max-width: 1024px) {
-//   .login {
-//   }
-// }
 
 @media screen and (max-width: 800px) {
   .login {
