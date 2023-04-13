@@ -1,8 +1,26 @@
 const router = require("express").Router();
 const { client } = require("../db/db"); 
 const User = require("../models/User");
+
+// user session logging
 const session = require("express-session");
+// password hashing 
 const bcrypt = require('bcrypt');
+
+// image storing 
+const multer = require('multer');
+const path = require('path');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+// Initialize Multer with the storage options
+const upload = multer({ storage: storage });
+
 
 router.get('/followers', async (req, res) => {
     const userID = req.query.id
@@ -37,13 +55,13 @@ router.get('/following', async (req, res) => {
 });
 
 // register route
-router.post('/register', async (req, res) => {
+router.post('/register', upload.single('profile_picture'), async (req, res) => {
   try {
     // take input from website
     const username = req.body.username
     const email = req.body.email;
     const password = req.body.password;
-
+    console.log('Received email:', email);
     // check if email is in db
     const existingUser = await User.getByEmail(email);
     if (existingUser) {
@@ -58,7 +76,8 @@ router.post('/register', async (req, res) => {
     const newUser = await User.create({
       username: username,
       email: email,
-      password: hashedPassword
+      password: hashedPassword,
+      profile_picture: req.file.path, 
     });
 
     console.log('user created');
