@@ -1,6 +1,6 @@
 // models/Users.js
 
-// const knex = require('knex')(require('../knexfile').development);
+const knex = require('knex')(require('../knexfile').development);
 
 class User {
   static async create(data) {
@@ -24,11 +24,15 @@ class User {
   }
 
   static async getFollowers(user_id) {
-    return await knex('followers').where({user_id});
+    return await knex('followers')
+    .join('users', 'followers.follower_user', 'users.id')
+    .where({user_id});
   }
 
   static async getFollowing(user_id) {
-    return await knex('following').where({user_id});
+    return await knex('following')
+    .join('users', 'following.following_user', 'users.id')
+    .where({user_id});
   }
 }
 
