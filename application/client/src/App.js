@@ -9,6 +9,7 @@ import PostRecipe from "./pages/PostRecipe";
 import Navbar from "./components/Nav/Navbarmenu";
 import Search from "./pages/Search";
 import PostDetails from "./pages/PostDetails";
+import Follows from "./pages/Follows";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route exact path="/post/:postId" component={PostDetails} />
         <Route exact path="/post-recipe" component={PostRecipe} />
         <Route exact path="/search" component={Search} />
+        <Route exact path="/follows/:userID" component={Follows} />
       </Switch>
     </Router>
    </>
