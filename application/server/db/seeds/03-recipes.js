@@ -1,10 +1,9 @@
-
 exports.seed = function(knex) {
   
     return knex("recipes").insert([
-      {userID: "1", title:"chicken pot pie", description:"a creamy, flacky chicken pot pie.",
-        cookingTime:"90", difficulty:"3"},
-        {userID: "2", title:"biscuits", description:"a flaky, soft, buttery biscuits",
-        cookingTime:"45", difficulty:"2"}
+      {user_id: "1", title:"chicken pot pie", description:"a creamy, flacky chicken pot pie.",
+        cooking_time:"90", difficulty:"3"},
+        {user_id: "2", title:"biscuits", description:"a flaky, soft, buttery biscuits",
+        cooking_time:"45", difficulty:"2"}
     ])
 };
