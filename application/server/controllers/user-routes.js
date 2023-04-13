@@ -21,7 +21,9 @@ const storage = multer.diskStorage({
   }
 });
 // Initialize Multer with the storage options
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
+
 //s3 bucket connection
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -79,25 +81,37 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    let profilePic;
     //upload the photo to s3 and wait for the URL
     const file = req.file;
+    console.log(file);
     const uploadImg = (file) => {
-      const uploadParams = { Bucket: process.env.AWS_BUCKET_NAME, Key: uuidv4() + '-' + file.originalname, Body: file.buffer, ContentEncoding: 'base64', ContentType: file.mimetype, ACL: 'public-read' };
+      console.log("this is file: " + file);
+      if (!file || !file.buffer) {
+        return Promise.reject(new Error('File buffer is not available'));
+      }
+      const uploadParams = { 
+        Bucket: process.env.AWS_BUCKET_NAME, 
+        Key: uuidv4() + '-' + file.originalname, 
+        Body: file.buffer, 
+        ContentEncoding: 'base64', 
+        ContentType: file.mimetype, 
+        // ACL: 'public-read' 
+      };
       return new Promise(async (resolve, reject) => {
         await s3.upload(uploadParams, async function (err, data) {
           if (err) {
-            console.log("Error", err);
+            console.log("Upload error: ", err);
             reject(err)
           } else {
-            console.log("Upload Success", data.Location);
-            resolve(await Product.addImage({ product_id: product.id, img_url: data.Location }))
+            console.log("Upload Success: ", data.Location);
+            res.status(204).end();
           }
         });
       })
     }
     const imgURL = await uploadImg(file);
 
-    // Create the user
     const newUser = await User.create({
       username: username,
       email: email,
@@ -115,7 +129,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
   } catch (err) {
     console.error(err);
     console.log(err.message);
-    res.status(500).json({ message: 'An error occurred during register.' });
+    res.status(500).json({ message: 'An error occurred during register.', error: err.message  });
   }
 })
 
