@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/sfsu-joseo/csc648-848-05-sw-engineering-spring-2023-T03#readme",
   "dependencies": {
+    "aws-sdk": "^2.1357.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

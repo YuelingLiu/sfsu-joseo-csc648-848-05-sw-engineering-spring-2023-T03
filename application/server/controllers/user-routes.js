@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const AWS = require('aws-sdk');
 const { client } = require("../db/db"); 
 const User = require("../models/User");
 
@@ -20,6 +21,11 @@ const storage = multer.diskStorage({
 });
 // Initialize Multer with the storage options
 const upload = multer({ storage: storage });
+//s3 bucket connection
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
 
 
 router.get('/followers', async (req, res) => {
@@ -72,12 +78,30 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    //upload the photo to s3 and wait for the URL
+    const file = req.file.path;
+    const uploadImg = (file) => {
+      const uploadParams = { Bucket: process.env.AWS_BUCKET_NAME, Key: uuidv4() + '-' + file.originalname, Body: file.buffer, ContentEncoding: 'base64', ContentType: file.mimetype, ACL: 'public-read' };
+      return new Promise(async (resolve, reject) => {
+        await s3.upload(uploadParams, async function (err, data) {
+          if (err) {
+            console.log("Error", err);
+            reject(err)
+          } else {
+            console.log("Upload Success", data.Location);
+            resolve(await Product.addImage({ product_id: product.id, img_url: data.Location }))
+          }
+        });
+      })
+    }
+    const imgURL = await uploadImg();
+
     // Create the user
     const newUser = await User.create({
       username: username,
       email: email,
       password: hashedPassword,
-      profile_picture: req.file.path, 
+      profile_picture: imgURL, 
     });
 
     console.log('user created');
