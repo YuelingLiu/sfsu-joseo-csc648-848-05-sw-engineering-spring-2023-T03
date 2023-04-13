@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import './Styling/login.scss';
 import { Link } from 'react-router-dom';
 
@@ -9,13 +9,20 @@ const Login = () => {
         <div className="left">
           <h1>Recipe Reel</h1>
           <span>
-            Cooking is more than just preparing food.
+            Cooking is more than just preparing food
             <br />
             Sharing a meal with others
             <br />
-            <br /> Building a healthier and happier lifestyle.
+            Building a healthier and happier lifestyle
+            <br />
+            <br />
           </span>
-          <p>Don't you have an account?</p>
+          <br />
+
+          <span>
+            <br />
+            Don't you have an account?
+          </span>
           <Link to="/register">
             <button>Register</button>
           </Link>
