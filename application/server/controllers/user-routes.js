@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const AWS = require('aws-sdk');
+const { v4: uuidv4 } = require('uuid');
 const { client } = require("../db/db"); 
 const User = require("../models/User");
 
@@ -19,7 +21,14 @@ const storage = multer.diskStorage({
   }
 });
 // Initialize Multer with the storage options
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
+
+//s3 bucket connection
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
 
 
 router.get('/followers', async (req, res) => {
@@ -61,7 +70,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     const username = req.body.username
     const email = req.body.email;
     const password = req.body.password;
-    console.log('Received email:', email);
+
     // check if email is in db
     const existingUser = await User.getByEmail(email);
     if (existingUser) {
@@ -69,18 +78,42 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     }
     
     // Hash the password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user
+    //upload the photo to s3 and wait for the URL
+    const file = req.file;
+    const uploadImg = (file) => {
+      // check if buffer is working 
+      if (!file || !file.buffer) {
+        return Promise.reject(new Error('File buffer is not available'));
+      }
+      const uploadParams = { 
+        Bucket: process.env.AWS_BUCKET_NAME, 
+        Key: uuidv4() + '-' + file.originalname, 
+        Body: file.buffer, 
+        ContentEncoding: 'base64', 
+        ContentType: file.mimetype, 
+      };
+      return new Promise(async (resolve, reject) => {
+        await s3.upload(uploadParams, async function (err, data) {
+          if (err) {
+            console.log("Upload error: ", err);
+            reject(err)
+          } else {
+            console.log("Upload Success: ", data.Location);
+            res.status(204).end();
+          }
+        });
+      })
+    }
+    const imgURL = await uploadImg(file);
+
     const newUser = await User.create({
       username: username,
       email: email,
       password: hashedPassword,
-      profile_picture: req.file.path, 
+      profile_picture: imgURL, 
     });
-
-    console.log('user created');
 
     // Create a session and return a success message
     req.session.user = newUser;
@@ -90,7 +123,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
   } catch (err) {
     console.error(err);
     console.log(err.message);
-    res.status(500).json({ message: 'An error occurred during register.' });
+    res.status(500).json({ message: 'An error occurred during register.', error: err.message  });
   }
 })
 
@@ -142,5 +175,10 @@ router.post('/logout', (req, res) => {
     res.status(404).end();
   }
 });
+
+//upload profile pic
+router.post('/profilepic', (req, res) =>{
+
+}) 
 
 module.exports = router;
