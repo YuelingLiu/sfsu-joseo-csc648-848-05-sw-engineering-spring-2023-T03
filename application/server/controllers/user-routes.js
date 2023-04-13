@@ -143,4 +143,9 @@ router.post('/logout', (req, res) => {
   }
 });
 
+//upload profile pic
+router.post('/profilepic', (req, res) =>{
+
+}) 
+
 module.exports = router;
