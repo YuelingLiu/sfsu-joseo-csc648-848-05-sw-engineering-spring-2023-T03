@@ -70,7 +70,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     const username = req.body.username
     const email = req.body.email;
     const password = req.body.password;
-    console.log('Received email:', email);
+
     // check if email is in db
     const existingUser = await User.getByEmail(email);
     if (existingUser) {
@@ -78,15 +78,12 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     }
     
     // Hash the password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    let profilePic;
     //upload the photo to s3 and wait for the URL
     const file = req.file;
-    console.log(file);
     const uploadImg = (file) => {
-      console.log("this is file: " + file);
+      // check if buffer is working 
       if (!file || !file.buffer) {
         return Promise.reject(new Error('File buffer is not available'));
       }
@@ -96,7 +93,6 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
         Body: file.buffer, 
         ContentEncoding: 'base64', 
         ContentType: file.mimetype, 
-        // ACL: 'public-read' 
       };
       return new Promise(async (resolve, reject) => {
         await s3.upload(uploadParams, async function (err, data) {
@@ -118,8 +114,6 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
       password: hashedPassword,
       profile_picture: imgURL, 
     });
-
-    console.log('user created');
 
     // Create a session and return a success message
     req.session.user = newUser;
