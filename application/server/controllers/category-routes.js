@@ -7,15 +7,16 @@ const { client } = require('../db/db'); // Adjust the path if necessary
 router.get('/African', async (req, res) => {
     try {
         const query = `
-        SELECT r.*
-        FROM public.recipes r
-        LEFT JOIN public.categories_to_recipe ctr ON r."id" = ctr."recipe_id"
-        LEFT JOIN public.categories c ON ctr."category_id" = c."id"
-        WHERE c.category = $1;
+            SELECT r.*
+            FROM public.recipes r
+            LEFT JOIN public.categories_to_recipe ctr ON r."id" = ctr."recipe_id"
+            LEFT JOIN public.categories c ON ctr."category_id" = c."id"
+            WHERE c.category = $1;
         `;
         const values = ['African'];
         
         const { rows } = await client.query(query, values);
+        console.log("africa end point");
         res.status(200).json(rows);
     } catch (error) {
         console.error(error);
