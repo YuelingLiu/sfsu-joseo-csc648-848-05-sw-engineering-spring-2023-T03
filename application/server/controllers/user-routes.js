@@ -39,8 +39,8 @@ router.get('/following', async (req, res) => {
 // register route
 router.post('/register', async (req, res) => {
   try {
-
     // take input from website
+    const username = req.body.username
     const email = req.body.email;
     const password = req.body.password;
 
@@ -56,15 +56,21 @@ router.post('/register', async (req, res) => {
 
     // Create the user
     const newUser = await User.create({
+      username: username,
       email: email,
       password: hashedPassword
     });
 
+    console.log('user created');
+
     // Create a session and return a success message
     req.session.user = newUser;
-    res.status(201).json({ message: 'User created successfully', user: newUser });
-
+    req.session.save(() => {
+      res.status(201).json({ message: 'User created successfully', user: newUser });
+    });
   } catch (err) {
+    console.error(err);
+    console.log(err.message);
     res.status(500).json({ message: 'An error occurred during register.' });
   }
 })
