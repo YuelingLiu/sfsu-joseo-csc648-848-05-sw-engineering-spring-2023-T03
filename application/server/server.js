@@ -4,15 +4,16 @@ const express = require("express");
 const { client } = require("./db/db"); 
 
 const searchRoutes = require("./controllers/search-routes");
-const newPostRoutes = require("./controllers/newPost-routes");
+const categoriesRoutes = require('./controllers/category-routes');
 
 const app = express();
 const cors = require('cors');
 
-
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
+
+app.use('/category', categoriesRoutes);
 app.use("/search", searchRoutes);
 app.get("/", (req, res) => res.send("Hello World"));
 
