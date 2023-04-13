@@ -15,7 +15,7 @@ function FavouriteCard(){
       <Container>
         <Row>
             <Col xl={12}>
-              <h2 className='title'> My Favourite Dishes! </h2>
+              <h2 className='title'> My Favourite Dishes</h2>
             </Col>
         </Row>
 
@@ -24,7 +24,6 @@ function FavouriteCard(){
                 <CategoryCard  category={category} />
             ))}
         </Row>
-        
       </Container>
 
     </>
