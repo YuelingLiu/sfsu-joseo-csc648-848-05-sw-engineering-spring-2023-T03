@@ -1,6 +1,6 @@
 // models/Users.js
 
-const knex = require('knex')(require('../knexfile').development);
+// const knex = require('knex')(require('../knexfile').development);
 
 class User {
   static async create(data) {

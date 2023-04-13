@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "a webserver for Recipes-03 tream project",
+  "description": "a webserver for Recipes-03 team project",
   "main": "server.js",
   "scripts": {
     "test": "test",
