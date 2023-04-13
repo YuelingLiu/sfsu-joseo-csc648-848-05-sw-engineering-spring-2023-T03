@@ -80,6 +80,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     //upload the photo to s3 and wait for the URL
+    const file = req.file;
     const uploadImg = (file) => {
       const uploadParams = { Bucket: process.env.AWS_BUCKET_NAME, Key: uuidv4() + '-' + file.originalname, Body: file.buffer, ContentEncoding: 'base64', ContentType: file.mimetype, ACL: 'public-read' };
       return new Promise(async (resolve, reject) => {
@@ -94,7 +95,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
         });
       })
     }
-    const imgURL = await uploadImg();
+    const imgURL = await uploadImg(file);
 
     // Create the user
     const newUser = await User.create({
