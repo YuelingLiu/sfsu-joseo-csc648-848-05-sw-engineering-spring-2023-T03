@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-export default function ProfileCard() {
+function ProfileCard() {
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardHeader
@@ -42,3 +42,4 @@ export default function ProfileCard() {
         </Card>
     );
 }
+export default ProfileCard;
