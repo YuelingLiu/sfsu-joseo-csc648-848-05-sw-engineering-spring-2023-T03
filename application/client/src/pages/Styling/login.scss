@@ -7,43 +7,56 @@
 
   .card {
     width: 50%;
+    min-width: 760px;
+
     display: flex;
     background-color: white;
     border-radius: 10px;
     min-height: 600px;
     flex-direction: row;
-    max-height: 100vh;
+    // max-height: 100vh;
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+
     .left {
       flex: 1;
       background: url('https://images.unsplash.com/photo-1594964643411-aacab76a7c0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80')
         center;
-      max-height: 100%;
-      opacity: 0.9;
+      // max-height: 100%;
+      opacity: 1;
       background-size: cover;
       padding: 50px;
       display: flex;
       flex-direction: column;
       gap: 30px;
       color: white;
+      width: 50%;
+      @media (min-width: 768px) {
+        width: 50%;
+      }
 
       h1 {
         font-size: 80px;
         line-height: 90px;
+        font-weight: bold;
       }
       p {
+        padding: 0;
       }
       span {
-        font-size: 14px;
+        font-size: 16px;
+        font-weight: bold;
       }
       button {
-        width: 50%;
+        width: 30%;
         background-color: #f4fffb;
         border: none;
         margin-top: 10px;
-        padding: 10px;
+        padding: 5px;
         font-weight: bold;
         cursor: pointer;
-        opacity: 0.8;
+        opacity: 0.4;
       }
     }
 
@@ -54,10 +67,14 @@
       flex-direction: column;
       justify-content: center;
       gap: 50px;
+      width: 50%;
 
       h1 {
         color: #555;
+        font-size: 30px;
+        margin-bottom: 20px;
       }
+
       form {
         display: flex;
         flex-direction: column;
@@ -66,27 +83,96 @@
         input {
           border: none;
           border-bottom: 1px solid lightgray;
-          padding: 20px 10px;
+          padding: 10px;
+          font-size: 16px;
         }
+
         button {
-          width: 50%;
+          width: 100%;
           padding: 10px;
           border: none;
           background-color: #f4fffb;
+          font-size: 18px;
           font-weight: bold;
           cursor: pointer;
+          transition: opacity 0.3s ease-in-out;
+
+          &:hover {
+            opacity: 0.8;
+          }
         }
       }
     }
   }
+}
 
-  /* use @media to change flex-direction to column when screen width is less than 600px */
-  @media screen and (max-width: 650px) {
-    .login {
+@media screen and (max-width: 800px) {
+  .login {
+    height: fit-content;
+    .card {
       flex-direction: column;
+      width: 90%;
+      margin: 0 auto;
+      min-height: unset;
+      height: fit-content;
+      min-width: 90%;
+      .left,
+      .right {
+        width: 100%;
+      }
+      .left {
+        height: 300px;
+        order: 1;
+        margin-top: 50px;
+      }
+      .right {
+        order: 2;
+      }
     }
-    // .card {
-    //   flex-direction: column;
-    // }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .login {
+    .card {
+      .left {
+        height: 200px;
+        margin-top: 30px;
+        padding: 20px;
+        h1 {
+          font-size: 40px;
+          line-height: 50px;
+        }
+        p {
+          font-size: 14px;
+        }
+        span {
+          font-size: 14px;
+        }
+        button {
+          width: 80%;
+          padding: 8px;
+          font-size: 16px;
+        }
+      }
+      .right {
+        padding: 20px;
+        h1 {
+          font-size: 24px;
+          line-height: 30px;
+        }
+        form {
+          input {
+            padding: 10px;
+            font-size: 14px;
+          }
+          button {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+          }
+        }
+      }
+    }
   }
 }
