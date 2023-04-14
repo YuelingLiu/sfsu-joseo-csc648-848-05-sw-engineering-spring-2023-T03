@@ -82,6 +82,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
 
     //upload the photo to s3 and wait for the URL
     const file = req.file;
+    var newUser;
     const uploadImg = (file) => {
       // check if buffer is working 
       if (!file || !file.buffer) {
@@ -101,19 +102,18 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
             reject(err)
           } else {
             console.log("Upload Success: ", data.Location);
-            res.status(204).end();
+            newUser = resolve(await User.create({
+              username: username,
+              email: email,
+              password: hashedPassword,
+              profile_picture: imgURL, 
+            }));
           }
         });
       })
     }
     const imgURL = await uploadImg(file);
 
-    const newUser = await User.create({
-      username: username,
-      email: email,
-      password: hashedPassword,
-      profile_picture: imgURL, 
-    });
 
     // Create a session and return a success message
     req.session.user = newUser;
