@@ -109,6 +109,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
               password: hashedPassword,
               profile_picture: data.Location, 
             });
+            res.status(201).json({ message: 'User created successfully', user: newUser });
           }
         });
       })
@@ -120,7 +121,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     // Create a session and return a success message
     req.session.user = newUser;
     req.session.save(() => {
-      res.status(201).json({ message: 'User created successfully', user: newUser });
+      // res.status(201).json({ message: 'User created successfully', user: newUser });
     });
   } catch (err) {
     console.error(err);
