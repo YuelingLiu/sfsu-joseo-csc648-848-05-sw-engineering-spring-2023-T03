@@ -21,8 +21,8 @@ function Follows() {
         const fetchResults = async () => {
           console.log("in FOLLOWS: " + userID);
           try {
-            const followersRes = await fetch(`http://localhost:8080/user/followers?id=${userID}`);
-            const followingRes = await fetch(`http://localhost:8080/user/following?id=${userID}`);
+            const followersRes = await fetch(`https://recipereel.me/user/followers?id=${userID}`);
+            const followingRes = await fetch(`https://recipereel.me/user/following?id=${userID}`);
             const followersData = await followersRes.json();
             const followingData = await followingRes.json();
     
