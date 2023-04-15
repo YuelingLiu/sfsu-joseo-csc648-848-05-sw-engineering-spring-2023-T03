@@ -69,6 +69,10 @@
       justify-content: center;
       gap: 50px;
       width: 50%;
+      h1 {
+        text-align: center;
+        color: black;
+      }
       form {
         display: flex;
         flex-direction: column;
@@ -179,4 +183,58 @@
   display: grid;
   grid-template-columns: 1.3fr 6fr 0.5fr;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.profile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.default-image {
+  width: 100%;
+  height: 100%;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.default-image i {
+  font-size: 60px;
+  color: #fff;
+}
+
+.default-image i span {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5em;
+  line-height: 1;
+  text-align: center;
+  color: white;
+}
+
+.default-image input[type='file'] {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }

@@ -13,14 +13,23 @@ const Register = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [image, setImage] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
   // toast.configure();
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
 
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = {};
-
     if (userName.length < 6 || userName.length > 20) {
       errors.username = 'Username must be between 6 and 20 characters';
 
@@ -44,16 +53,6 @@ const Register = () => {
       //   className: 'toast-message',
       // });
       console.log('Invalid password');
-    }
-
-    if (password !== confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-      // toast.error(errors.confirmPassword, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-
-      console.log('Passwords do not match');
     }
 
     if (
@@ -94,6 +93,23 @@ const Register = () => {
         <div className="right">
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
+            <div className="profile-image">
+              {image ? (
+                <img src={image} alt="Profile" />
+              ) : (
+                <div className="default-image">
+                  <i className="fa fa-user-circle" aria-hidden="true" />
+                  <span>Upload your profile</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onC
+                    hange={(e) => handleImageUpload(e)}
+                  />
+                </div>
+              )}
+            </div>
+
             <input
               type="text"
               placeholder="Username"
@@ -109,13 +125,7 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               id="password"
             />
-            <input
-              type="password"
-              placeholder="Confirm password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              id="confirmPassword"
-            />
+
             <input
               type="email"
               placeholder="Email@address.com"
