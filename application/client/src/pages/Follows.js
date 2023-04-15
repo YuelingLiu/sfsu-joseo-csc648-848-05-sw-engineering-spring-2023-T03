@@ -15,11 +15,11 @@ function Follows() {
     const { userID } = useParams();
     const [followingRes, setFollowingRes] = useState([]);
     const [followersRes, setFollowersRes] = useState([]);
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+    const [gottenData, setGottenData] = useState(false);
 
     useEffect(() => {
         const fetchResults = async () => {
-          console.log("in FOLLOWS: " + userID);
           try {
             const followersRes = await fetch(`https://recipereel.me/user/followers?id=${userID}`);
             const followingRes = await fetch(`https://recipereel.me/user/following?id=${userID}`);
@@ -30,6 +30,7 @@ function Follows() {
             //   console.log("response" + response.json);
               setFollowersRes(followersData);
               setFollowingRes(followingData);
+              setGottenData(true);
             } else {
               
             }
@@ -43,7 +44,6 @@ function Follows() {
 
       function createFollowingCards(){
         return followingRes.users.map((user) => {
-          console.log(user)
             return <UserFollowsCard/>
         })
       }
@@ -97,11 +97,10 @@ function Follows() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        hell
-        {createFollowersCards()}
+        {gottenData?createFollowersCards(): <h6>loading</h6> }
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {createFollowingCards()}
+        {gottenData?createFollowingCards(): <h6>loading</h6>}
       </TabPanel>
     </Box>
     </Box>
