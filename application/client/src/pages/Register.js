@@ -4,9 +4,12 @@ import './Styling/register.scss';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useHistory } from 'react-router-dom';
 
 // import { useNavigate } from 'react-router-dom';
 const Register = () => {
+  const history = useHistory();
+
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -21,11 +24,12 @@ const Register = () => {
     if (userName.length < 6 || userName.length > 20) {
       errors.username = 'Username must be between 6 and 20 characters';
 
-      toast.error('Username must be between 6 and 20 characters', {
-        position: toast.POSITION.TOP_CENTER,
-        className: 'toast-message',
-      });
+      // toast.error('Username must be between 6 and 20 characters', {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   className: 'toast-message',
+      // });
       console.log('Invalid Username');
+      console.log(userName);
     }
 
     if (
@@ -48,6 +52,8 @@ const Register = () => {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: 'toast-message',
       // });
+
+      console.log('Passwords do not match');
     }
 
     if (
@@ -66,9 +72,10 @@ const Register = () => {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: 'toast-message',
       // });
+    } else {
+      console.log('created account successful');
+      history.push('/login');
     }
-
-    // submit form
   };
 
   return (
