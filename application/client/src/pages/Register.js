@@ -82,6 +82,7 @@ const Register = () => {
       <div className="card">
         <div className="left">
           <h2> Welcome to RecipeReel</h2>
+
           <div>
             <p>You already have an account?</p>
             <Link to="/login">
@@ -99,13 +100,14 @@ const Register = () => {
               ) : (
                 <div className="default-image">
                   <i className="fa fa-user-circle" aria-hidden="true" />
-                  <span>Upload your profile</span>
                   <input
                     type="file"
                     accept="image/*"
                     onC
-                    hange={(e) => handleImageUpload(e)}
+                    hang
+                    e={(e) => handleImageUpload(e)}
                   />
+                  <span>Upload your profile</span>
                 </div>
               )}
             </div>
