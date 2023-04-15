@@ -81,7 +81,9 @@ const Register = () => {
     <div className="register">
       <div className="card">
         <div className="left">
-          <h2> Welcome to RecipeReel</h2>
+          <Link className="welcome" to="/">
+            <h2> Welcome to RecipeReel</h2>
+          </Link>
 
           <div>
             <p>You already have an account?</p>

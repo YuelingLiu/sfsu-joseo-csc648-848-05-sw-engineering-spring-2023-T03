@@ -35,12 +35,18 @@
 
       //gap: 150px;
 
-      h2 {
-        font-size: 40px;
-        line-height: 50px;
-
+      .welcome {
+        text-decoration: none !important;
         font-weight: bolder;
+        cursor: pointer;
+        color: white;
+
+        h2 {
+          font-size: 40px;
+          font-weight: bolder;
+        }
       }
+
       p {
         position: relative;
         padding: 0;
