@@ -126,7 +126,6 @@
         margin-top: 50px;
       }
       .right {
-        order: 2;
       }
     }
   }
@@ -136,9 +135,9 @@
   .login {
     .card {
       .left {
-        height: 200px;
-        margin-top: 30px;
-        padding: 20px;
+        height: 300px;
+        order: 1;
+        margin-top: 50px;
         h1 {
           font-size: 40px;
           line-height: 50px;
