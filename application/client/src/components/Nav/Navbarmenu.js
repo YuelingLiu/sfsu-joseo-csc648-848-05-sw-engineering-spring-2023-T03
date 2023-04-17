@@ -145,7 +145,7 @@ function Navbar () {
     // used for search bar to go to icon on smaller screens
     const [screenSize, setScreenSize] = useState(true);
     // placement code until we have logged in working 
-    const [loggedin, setLoggedIn] = useState(true);
+    const [loggedin, setLoggedIn] = useState(false);
     
     // Category menu
     const [anchorElCategory, setAnchorElCategory] = useState(null);
