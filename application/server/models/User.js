@@ -15,6 +15,10 @@ class User {
     return await knex('user').select('*');
   }
 
+  static async getByEmail(email) {
+    return await knex('users').where({ email }).first();
+  }
+  
   static async update(id, data) {
     return await knex('users').where({ id }).update(data).returning('*');
   }
