@@ -24,12 +24,12 @@ function Hero() {
             <Row >
               <Col xs={12} sm={5} md={6} lg={4} xl={4}>
                 <Link to="/register" style={{ textDecoration: 'none' }}>
-                  <Button style={{marginBottom: '10px'}} size="md" variant="success">Sign up</Button>
+                  <Button style={{marginBottom: '10px'}} size="md" variant="success">Get Started</Button>
                 </Link>
               </Col>
               <Col xs={12} sm={5} md={6} xl={5}>
                 <Link to="/">
-                  <Button size="md" variant="outline-success">Explore Latest</Button>{' '}
+                  <Button size="md" variant="outline-success">Explore Now</Button>{' '}
                 </Link>
               </Col>
             </Row>

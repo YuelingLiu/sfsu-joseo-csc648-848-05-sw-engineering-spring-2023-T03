@@ -4,41 +4,28 @@ import './Styling/register.scss';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useHistory } from 'react-router-dom';
 
 // import { useNavigate } from 'react-router-dom';
 const Register = () => {
-  const history = useHistory();
-
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [validationErrors, setValidationErrors] = useState({});
   // toast.configure();
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = {};
+
     if (userName.length < 6 || userName.length > 20) {
       errors.username = 'Username must be between 6 and 20 characters';
 
-      // toast.error('Username must be between 6 and 20 characters', {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
+      toast.error('Username must be between 6 and 20 characters', {
+        position: toast.POSITION.TOP_CENTER,
+        className: 'toast-message',
+      });
       console.log('Invalid Username');
-      console.log(userName);
     }
 
     if (
@@ -53,6 +40,14 @@ const Register = () => {
       //   className: 'toast-message',
       // });
       console.log('Invalid password');
+    }
+
+    if (password !== confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+      // toast.error(errors.confirmPassword, {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   className: 'toast-message',
+      // });
     }
 
     if (
@@ -71,20 +66,16 @@ const Register = () => {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: 'toast-message',
       // });
-    } else {
-      console.log('created account successful');
-      history.push('/login');
     }
+
+    // submit form
   };
 
   return (
     <div className="register">
       <div className="card">
         <div className="left">
-          <Link className="welcome" to="/">
-            <h2> Welcome to RecipeReel</h2>
-          </Link>
-
+          <h2> Welcome to RecipeReel</h2>
           <div>
             <p>You already have an account?</p>
             <Link to="/login">
@@ -96,24 +87,6 @@ const Register = () => {
         <div className="right">
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
-            <div className="profile-image">
-              {image ? (
-                <img src={image} alt="Profile" />
-              ) : (
-                <div className="default-image">
-                  <i className="fa fa-user-circle" aria-hidden="true" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onC
-                    hang
-                    e={(e) => handleImageUpload(e)}
-                  />
-                  <span>Upload your profile</span>
-                </div>
-              )}
-            </div>
-
             <input
               type="text"
               placeholder="Username"
@@ -129,7 +102,13 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               id="password"
             />
-
+            <input
+              type="password"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              id="confirmPassword"
+            />
             <input
               type="email"
               placeholder="Email@address.com"
