@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import PostDetails from "./pages/PostDetails";
 import Follows from "./pages/Follows";
 
+
 function App() {
   return (
    <>

@@ -85,43 +85,41 @@ const Register = () => {
         email: email,
         // profile_picture: image
       };
-     
+
       registerUser(userData)
-        .then((userData) => console.log("DATA: " + userData))
-        .then((err) => console.log("ERROR: " + err))
-
-  } catch (error) {
-      console.log("Error message: " + error.message);
-  }
-};
-
-// register user api call
-const registerUser = async (userData) => {
-  try {
-    const response = await fetch('/user/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData)
-    });
-
-    console.log(response);
-
-    if (!response.ok) {
-      console.log('response not ok');
-      throw new Error('ERRRORRRR')
+        .then((userData) => console.log('DATA: ' + userData))
+        .then((err) => console.log('ERROR: ' + err));
+    } catch (error) {
+      console.log('Error message: ' + error.message);
     }
+  };
 
-    const data = await response.json()
-    console.log("This is data after response: " + data);
-    return data;
+  // register user api call
+  const registerUser = async (userData) => {
+    try {
+      const response = await fetch('/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
 
-  } catch (error) {
-    console.error('Error while registering user:', error);
-    throw error;
-  }
-};
+      console.log(response);
+
+      if (!response.ok) {
+        console.log('response not ok');
+        throw new Error('ERRRORRRR');
+      }
+
+      const data = await response.json();
+      console.log('This is data after response: ' + data);
+      return data;
+    } catch (error) {
+      console.error('Error while registering user:', error);
+      throw error;
+    }
+  };
 
   return (
     <div className="register">
