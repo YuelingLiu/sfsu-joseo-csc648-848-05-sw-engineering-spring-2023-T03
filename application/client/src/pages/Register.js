@@ -4,6 +4,11 @@ import './Styling/register.scss';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+<<<<<<< HEAD
+=======
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+>>>>>>> development/server
 
 // import { useNavigate } from 'react-router-dom';
 const Register = () => {
@@ -13,6 +18,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [validationErrors, setValidationErrors] = useState({});
   // toast.configure();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,21 +32,101 @@ const Register = () => {
         className: 'toast-message',
       });
       console.log('Invalid Username');
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleSubmit = async (e) => {
+    // e.preventDefault();
+    // const errors = {};
+    // if (userName.length < 6 || userName.length > 20) {
+    //   errors.username = 'Username must be between 6 and 20 characters';
+
+    //   // toast.error('Username must be between 6 and 20 characters', {
+    //   //   position: toast.POSITION.TOP_CENTER,
+    //   //   className: 'toast-message',
+    //   // });
+    //   console.log('Invalid Username');
+    //   console.log(userName);
+    // }
+
+    // if (
+    //   !password.match(
+    //     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+~`|}{\[\]\\:;'<>,.?/])[a-zA-Z\d!@#$%^&*()_+~`|}{\[\]\\:;'<>,.?/]{8,20}$/
+    //   )
+    // ) {
+    //   errors.password =
+    //     'Password must be a combination letters, numbers, and special  with a maximum of 20 length';
+    //   // toast.error(errors.password, {
+    //   //   position: toast.POSITION.TOP_CENTER,
+    //   //   className: 'toast-message',
+    //   // });
+    //   console.log('Invalid password');
+    // }
+
+    // if (
+    //   !email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/)
+    // ) {
+    //   errors.email = 'Please enter a valid email address';
+    //   // toast.error(errors.email, {
+    //   //   position: toast.POSITION.TOP_CENTER,
+    //   //   className: 'toast-message',
+    //   // });
+    // }
+
+    // if (Object.keys(errors).length > 0) {
+    //   setValidationErrors(errors);
+    //   // toast.error('Invalid Input', {
+    //   //   position: toast.POSITION.TOP_CENTER,
+    //   //   className: 'toast-message',
+    //   // });
+    // } else {
+    //   console.log('created account successful');
+    //   history.push('/login');
+    // }
+
+    try {
+      e.preventDefault();
+      const userData = {
+        username: userName,
+        password: password,
+        email: email,
+        // profile_picture: image
+      };
+     
+      registerUser(userData)
+        .then((userData) => console.log("DATA: " + userData))
+        .then((err) => console.log("ERROR: " + err))
+
+  } catch (error) {
+      console.log("Error message: " + error.message);
+  }
+};
+
+// register user api call
+const registerUser = async (userData) => {
+  try {
+    const response = await fetch('/user/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData)
+    });
+
+    console.log(response);
+
+    if (!response.ok) {
+      console.log('response not ok');
+      throw new Error('ERRRORRRR')
+
     }
 
-    if (
-      !password.match(
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+~`|}{\[\]\\:;'<>,.?/])[a-zA-Z\d!@#$%^&*()_+~`|}{\[\]\\:;'<>,.?/]{8,20}$/
-      )
-    ) {
-      errors.password =
-        'Password must be a combination letters, numbers, and special  with a maximum of 20 length';
-      // toast.error(errors.password, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-      console.log('Invalid password');
-    }
+    const data = await response.json()
+    console.log("This is data after response: " + data);
+    return data;
+
 
     if (password !== confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';
@@ -70,6 +156,13 @@ const Register = () => {
 
     // submit form
   };
+
+  } catch (error) {
+    console.error('Error while registering user:', error);
+    throw error;
+  }
+};
+
 
   return (
     <div className="register">

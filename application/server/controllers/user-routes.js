@@ -65,6 +65,7 @@ router.get('/following', async (req, res) => {
 
 // register route
 router.post('/register', upload.single('profile_picture'), async (req, res) => {
+  console.log(req.body.username);
   try {
     // take input from website
     const username = req.body.username
