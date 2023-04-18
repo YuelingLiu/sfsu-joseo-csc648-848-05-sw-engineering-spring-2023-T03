@@ -21,8 +21,8 @@ function Follows() {
     useEffect(() => {
         const fetchResults = async () => {
           try {
-            const followersRes = await fetch(`https://recipereel.me/user/followers?id=${userID}`);
-            const followingRes = await fetch(`https://recipereel.me/user/following?id=${userID}`);
+            const followersRes = await fetch(`${process.env.REACT_APP_REQ_URL}/user/followers?id=${userID}`);
+            const followingRes = await fetch(`${process.env.REACT_APP_REQ_URL}/user/following?id=${userID}`);
             const followersData = await followersRes.json();
             const followingData = await followingRes.json();
     

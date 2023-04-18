@@ -8,8 +8,7 @@ const Search = ({ location }) => {
       const fetchResults = async () => {
         const query = new URLSearchParams(location.search).get('query');
         try {
-          console.log("query in search: " + query);
-          const response = await fetch(`https://recipereel.me/search?query=${query}`);
+          const response = await fetch(`${process.env.REACT_APP_REQ_URL}/search?query=${query}`);
           const data = await response.json();
   
           if (response.ok) {

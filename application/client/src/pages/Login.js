@@ -20,7 +20,7 @@ const Login = () => {
     }
 
     //set request to backend
-    fetch('/api/login', {
+    fetch(`${process.env.REACT_APP_REQ_URL}/api/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
