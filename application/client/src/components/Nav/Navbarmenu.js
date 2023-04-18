@@ -33,14 +33,6 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import Tooltip from '@mui/material/Tooltip';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-// small search icon
-import PropTypes from 'prop-types';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import AddIcon from '@mui/icons-material/Add';
-import { blue } from '@mui/material/colors';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-
 // used like LINK
 import {Link, useHistory } from 'react-router-dom'
 import Container1 from 'react-bootstrap/Container';
@@ -51,48 +43,15 @@ import Col from 'react-bootstrap/Col';
 const NavChoicesLoggedIn = ['Categories', 'My Feed', 'Top Rated' ];
 const NavChoicesLoggedOut = ['Categories', 'Top Rated' ];
 
-// category drop down
+
 const navCategoryCol1 = ['African', 'American', 'Asian',  'Chinese','French', 'Greek',  'Indian' ]
 const navCategoryCol2 = ['Italian', 'Japanese', 'Latin-American',  'Mexican', 'Middle-Eastern', 'Spanish']
+
+
 const navCategoryCol3 = ['Breakfast', 'Lunch', 'Dinner', 'Snacks' ]
+// const navCategoryCol4 = ['Quick', 'Sandwhich','Seafood', 'Snacks', 'Spanish', 'Special Occasion']
 
 
-
-const emails = ['username@gmail.com', 'user02@gmail.com'];
-
-function SimpleDialog(props) {
-  const { onClose, selectedValue, open, setQuery, query } = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <Search>
-            <SearchIconWrapper>
-                <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-            />
-        </Search>
-    </Dialog>
-  );
-}
-
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
 
 // for MUI 
 const Search = styled('div')(({ theme }) => ({
@@ -145,7 +104,7 @@ function Navbar () {
     // used for search bar to go to icon on smaller screens
     const [screenSize, setScreenSize] = useState(true);
     // placement code until we have logged in working 
-    const [loggedin, setLoggedIn] = useState(true);
+    const [loggedin, setLoggedIn] = useState(false);
     
     // Category menu
     const [anchorElCategory, setAnchorElCategory] = useState(null);
@@ -191,19 +150,6 @@ function Navbar () {
             setScreenSize(false)
         }
     }, []);
-
-
-    const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = (value) => {
-      setOpen(false);
-      setSelectedValue(value);
-    };
 
   return (
     <>
@@ -1039,30 +985,23 @@ function Navbar () {
                     {/* Right side of nav */}
                     <Box sx={{ flexGrow: 0 }}>
                         <Toolbar>
-                                <SearchIcon 
-                                    sx= { { color: 'grey'}}
-                                    selectedValue={selectedValue}
-                                    open={open}
-                                    onClick={handleClickOpen}
-                                    onClose={handleClose}
-                                    fontSize='large'
-                                    // style={{paddingLeft:' 20px', fontSize:"large"}}                                        
-                                />
-                                <form onSubmit={handleSearch}>
-                                    <SimpleDialog
-                                        selectedValue={selectedValue}
-                                        open={open}
-                                        onClose={handleClose}
+                            <form onSubmit={handleSearch}>
+                                <Search>
+                                    <SearchIconWrapper>
+                                        <SearchIcon />
+                                    </SearchIconWrapper>
+                                    <StyledInputBase
                                         value={query}
                                         onChange={(e) => setQuery(e.target.value)}
                                         placeholder="Search…"
                                         inputProps={{ 'aria-label': 'search' }}
                                     />
-                                </form>
+                                </Search>
+                            </form>
                             <Tooltip title="Account">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="" src="/static/images/avatar/2.jpg" />
-                                </IconButton>
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Avatar alt="" src="/static/images/avatar/2.jpg" />
+                            </IconButton>
                             </Tooltip>
                         </Toolbar>
                         <Menu
