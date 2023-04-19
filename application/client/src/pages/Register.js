@@ -86,7 +86,7 @@ const Register = () => {
           console.log('DATA: ', userData);
         })
         .catch((error) => {
-          console.log('ERROR: ', error);
+          console.log('ERROR: ', error.message);
         });
     } catch (error) {
       console.log('Error message: ' + error.message);
@@ -96,7 +96,7 @@ const Register = () => {
   const registerUser = async (formData) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/user/register`,
+        `${process.env.REACT_APP_REQ_URL}user/register`,
         {
           method: 'POST',
           body: formData,
@@ -109,10 +109,10 @@ const Register = () => {
       }
 
       const data = await response.json();
-      console.log('This is data after response: ' + data);
+      // history.push('/')
       return data;
     } catch (error) {
-      console.error('Error while registering user:', error);
+      console.error('Error while registering user:', error.message);
       throw error;
     }
   };

@@ -64,20 +64,11 @@ router.get('/following', async (req, res) => {
 
 // register route
 router.post('/register', upload.single('profile_picture'), async (req, res) => {
-<<<<<<< HEAD
-  console.log(req.body.username);
-  console.log(process.env / PGHOST);
-=======
->>>>>>> origin/development/client
   try {
     console.log('in register route');
     // take input from website
-<<<<<<< HEAD
-    const username = req.body.username;
-=======
     const username = req.body.username
     console.log("this is username:" + username);
->>>>>>> origin/development/client
     const email = req.body.email;
     const password = req.body.password;
 
@@ -96,29 +87,16 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     const file = req.file;
     var newUser;
     const uploadImg = (file) => {
-<<<<<<< HEAD
-      // check if buffer is working
-      if (!file || !file.buffer) {
+      // check if buffer is working 
+      if (!file.buffer) {
         return Promise.reject(new Error('File buffer is not available'));
       }
-      const uploadParams = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: uuidv4() + '-' + file.originalname,
-        Body: file.buffer,
-        ContentEncoding: 'base64',
-        ContentType: file.mimetype,
-=======
-      // check if buffer is working 
-      // if (!file.buffer) {
-      //   return Promise.reject(new Error('File buffer is not available'));
-      // }
       const uploadParams = { 
         Bucket: process.env.AWS_BUCKET_NAME, 
         Key: uuidv4() + '-' + file.originalname, 
         Body: file.buffer, 
         ContentEncoding: 'base64', 
         ContentType: file.mimetype, 
->>>>>>> origin/development/client
       };
       return new Promise(async (resolve, reject) => {
         await s3.upload(uploadParams, async function (err, data) {
@@ -127,7 +105,6 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
             reject(err);
           } else {
             console.log('Upload Success: ', data.Location);
-            // res.status(204).end();
             newUser = await User.create({
               username: username,
               email: email,
@@ -145,9 +122,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
 
     // Create a session and return a success message
     req.session.user = newUser;
-    req.session.save(() => {
-      // res.status(201).json({ message: 'User created successfully', user: newUser });
-    });
+    res.redirect('/');
   } catch (err) {
     console.error(err);
     console.log(err.message);
