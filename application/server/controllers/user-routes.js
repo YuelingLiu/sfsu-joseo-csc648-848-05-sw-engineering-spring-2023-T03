@@ -122,7 +122,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
 
     // Create a session and return a success message
     req.session.user = newUser;
-    res.redirect('/');
+    //res.redirect('/');
   } catch (err) {
     console.error(err);
     console.log(err.message);
