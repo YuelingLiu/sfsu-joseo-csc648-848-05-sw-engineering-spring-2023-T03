@@ -19,17 +19,10 @@ const Register = () => {
   // toast.configure();
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    setImage(file)
   };
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     // const errors = {};
     // if (userName.length < 6 || userName.length > 20) {
     //   errors.username = 'Username must be between 6 and 20 characters';
@@ -79,39 +72,35 @@ const Register = () => {
 
     try {
       e.preventDefault();
-      const userData = {
-        username: userName,
-        password: password,
-        email: email,
-        // profile_picture: image
-      };
-
-      registerUser(userData)
-        .then((userData) => console.log('DATA: ' + userData))
-        .then((err) => console.log('ERROR: ' + err));
+  
+      const formData = new FormData();
+      formData.append('username', userName);
+      formData.append('password', password);
+      formData.append('email', email);
+      formData.append('profile_picture', image);
+  
+      console.log("This is image: " + image);
+  
+      registerUser(formData)
+        .then((userData) => {console.log('DATA: ', userData);})
+        .catch((error) => {console.log('ERROR: ', error);});
     } catch (error) {
       console.log('Error message: ' + error.message);
     }
   };
-
-  // register user api call
-  const registerUser = async (userData) => {
+  
+  const registerUser = async (formData) => {
     try {
-      const response = await fetch('/user/register', {
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
+        body: formData,
       });
-
-      console.log(response);
-
+  
       if (!response.ok) {
         console.log('response not ok');
-        throw new Error('ERRRORRRR');
+        throw new Error('Response ERROR');
       }
-
+  
       const data = await response.json();
       console.log('This is data after response: ' + data);
       return data;
@@ -120,7 +109,7 @@ const Register = () => {
       throw error;
     }
   };
-
+  
   return (
     <div className="register">
       <div className="card">
@@ -140,24 +129,19 @@ const Register = () => {
         <div className="right">
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
-            <div className="profile-image">
-              {image ? (
-                <img src={image} alt="Profile" />
-              ) : (
-                <div className="default-image">
-                  <i className="fa fa-user-circle" aria-hidden="true" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onC
-                    hang
-                    e={(e) => handleImageUpload(e)}
-                  />
-                  <span>Upload your profile</span>
-                </div>
-              )}
+          {image === null ? (
+              <div className="default-image">
+              <i className="fa fa-user-circle" aria-hidden="true" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e)}
+              />
+              <span>Upload your profile</span>
             </div>
-
+            ) : (
+              <img src={URL.createObjectURL(image)} alt="Uploaded profile" />
+            )}
             <input
               type="text"
               placeholder="Username"
@@ -188,6 +172,21 @@ const Register = () => {
         </div>
       </div>
     </div>
+    // <div className="default-image">
+    //   <i className="fa fa-user-circle" aria-hidden="true" />
+    //   <input
+    //     type="file"
+    //     accept="image/*"
+    //     onChange={(e) => handleImageUpload(e)}
+    //   />
+    //   <span>Upload your profile</span> 
+    //   {image === null ? (
+    //     <i className="fa fa-user-circle" aria-hidden="true" />
+    //   ) : (
+    //     <img src={URL.createObjectURL(image)} alt="Uploaded profile" />
+    //   )}
+     
+    // </div>
   );
 };
 
