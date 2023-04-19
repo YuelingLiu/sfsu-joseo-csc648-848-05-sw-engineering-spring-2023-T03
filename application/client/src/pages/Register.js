@@ -19,7 +19,7 @@ const Register = () => {
   // toast.configure();
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    setImage(file)
+    setImage(file);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,35 +72,42 @@ const Register = () => {
 
     try {
       e.preventDefault();
-  
+
       const formData = new FormData();
       formData.append('username', userName);
       formData.append('password', password);
       formData.append('email', email);
       formData.append('profile_picture', image);
-  
-      console.log("This is image: " + image);
-  
+
+      console.log('This is image: ' + image);
+
       registerUser(formData)
-        .then((userData) => {console.log('DATA: ', userData);})
-        .catch((error) => {console.log('ERROR: ', error);});
+        .then((userData) => {
+          console.log('DATA: ', userData);
+        })
+        .catch((error) => {
+          console.log('ERROR: ', error);
+        });
     } catch (error) {
       console.log('Error message: ' + error.message);
     }
   };
-  
+
   const registerUser = async (formData) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/register`, {
-        method: 'POST',
-        body: formData,
-      });
-  
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/register`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
       if (!response.ok) {
         console.log('response not ok');
         throw new Error('Response ERROR');
       }
-  
+
       const data = await response.json();
       console.log('This is data after response: ' + data);
       return data;
@@ -109,7 +116,7 @@ const Register = () => {
       throw error;
     }
   };
-  
+
   return (
     <div className="register">
       <div className="card">
@@ -129,19 +136,21 @@ const Register = () => {
         <div className="right">
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
-          {image === null ? (
-              <div className="default-image">
-              <i className="fa fa-user-circle" aria-hidden="true" />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleImageUpload(e)}
-              />
-              <span>Upload your profile</span>
+            <div className="profile-image">
+              {image === null ? (
+                <div className="default-image">
+                  <i className="fa fa-user-circle" aria-hidden="true" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e)}
+                  />
+                  <span>Upload your profile</span>
+                </div>
+              ) : (
+                <img src={URL.createObjectURL(image)} alt="Uploaded profile" />
+              )}
             </div>
-            ) : (
-              <img src={URL.createObjectURL(image)} alt="Uploaded profile" />
-            )}
             <input
               type="text"
               placeholder="Username"
@@ -179,13 +188,13 @@ const Register = () => {
     //     accept="image/*"
     //     onChange={(e) => handleImageUpload(e)}
     //   />
-    //   <span>Upload your profile</span> 
+    //   <span>Upload your profile</span>
     //   {image === null ? (
     //     <i className="fa fa-user-circle" aria-hidden="true" />
     //   ) : (
     //     <img src={URL.createObjectURL(image)} alt="Uploaded profile" />
     //   )}
-     
+
     // </div>
   );
 };
