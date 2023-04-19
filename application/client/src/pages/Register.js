@@ -109,7 +109,8 @@ const Register = () => {
       }
 
       const data = await response.json();
-      // history.push('/')
+      // this is direct to home page
+      history.push('/');
       return data;
     } catch (error) {
       console.error('Error while registering user:', error.message);
