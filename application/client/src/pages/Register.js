@@ -96,7 +96,7 @@ const Register = () => {
   const registerUser = async (formData) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}user/register`,
+        `${process.env.REACT_APP_REQ_URL}/user/register`,
         {
           method: 'POST',
           body: formData,
