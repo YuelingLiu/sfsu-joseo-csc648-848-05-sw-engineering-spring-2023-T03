@@ -12,7 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function CategoryCard({category}) {
+function PopularDIshesCards() {
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
 
@@ -98,4 +98,4 @@ function CategoryCard({category}) {
   )
 }
 
-export default CategoryCard
+export default PopularDIshesCards

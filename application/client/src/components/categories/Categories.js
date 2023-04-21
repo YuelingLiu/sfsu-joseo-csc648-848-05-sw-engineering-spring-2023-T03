@@ -1,5 +1,5 @@
 import React from 'react'
-import CategoryCard from '../categoryCard/CategoryCard'
+import PopularDIshesCards from '../Cards/PopularDIshesCards'
 import './Categories.css'
 
 // boostrap
@@ -20,7 +20,7 @@ function Categories() {
 
         <Row className="d-flex justify-content-center">
             {categoryList.map(category => (
-                <CategoryCard  category={category} />
+                <PopularDIshesCards  category={category} />
             ))}
         </Row>
       </Container>

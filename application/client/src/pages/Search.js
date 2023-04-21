@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import DashboardCard from '../components/Cards/DashboardCard'
 
 const Search = ({ location }) => {
     const [results, setResults] = useState([]);
@@ -28,9 +29,10 @@ const Search = ({ location }) => {
         <h1>Search Results</h1>
         {results.length > 0 ? (
           results.map((result) => (
-            <div key={result.recipe_id}>
-              <h2>{result.recipe_title}</h2>
-            </div>
+            <DashboardCard 
+              result={result}
+            />
+          
           ))
         ) : (
           <p>No results found.</p>
