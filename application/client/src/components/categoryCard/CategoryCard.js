@@ -23,53 +23,76 @@ function CategoryCard({category}) {
     setFavorite(false);
   }
 
+  // for description
+  function ScrollableParagraph({text}) {
+    return (
+      <div style={{ overflow: 'auto', maxHeight: '170px' }}>
+        <p>{text}</p>
+      </div>
+    );
+  }
+
   return (
       <>
-        <Card style={{ width: '18rem', margin: '20px 20px 15px 22px', padding: '0px' }} >
-          <Card.Img variant="top" src="hero.jpg" />
-          <Card.Body>
+        <Card style={{ width: '33rem', margin: '20px 20px 15px 22px', padding: '0px' }} >
             <Container fluid>
               <Row>
                 {/* Title and number of hearts */}
-                <Col>
-                  <Row>
-                    <Card.Title>Pizza</Card.Title>
-                  </Row>
-                  <Row xs={11}>
-                    <div>
-                      {/* 3 will be replaced by number up favorites */}
-                      <FavoriteIcon color="error"/> 3
-                    </div>
-                  </Row>
-                </Col>
+                <Col md={7}>
+                    <Row>
+                      <img src='hero.jpg' alt='pic' className='cardImg'/>
+                    </Row>
+                    <Row>
+                      <Col xs={6} >
+                        <h4>
+                        Chicken Tikka Masala
+                        </h4>
+                      </Col>
 
-                {/* Stars and able to favorite item */}
-                <Col>
-                  <Row>
-                    <Box
-                      sx={{
-                        '& > legend': { mt: 2 },
-                      }}
-                    >
-                      <Rating name="read-only" value={value} readOnly />
-                    </Box>
+                      <Col xs={6}>
+                          <Box
+                            sx={{
+                              '& > legend': { mt: 2 },
+                            }}
+                          >
+                            <Rating name="read-only" value={value} readOnly />
+                          </Box>
+                      </Col>
+                    </Row>
+
+                    <Row >
+                      {(favorite) ? (
+                        <div onClick={FavoriteToFalse} >
+                          <FavoriteIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '5px' }} color="error"/> 4
+                        </div>
+                      ) : (
+                        <div onClick={FavoriteToTrue} >
+                          <FavoriteBorderIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '5px' }} color="error"/> 3
+                        </div>
+                      )}
+                    </Row>
+                </Col>
+                
+                {/* Right side */}
+                <Col md={5}>
+                  <Row style={{padding: '5px 0px'}}>
+                    <Col xs={4}>
+                        <img src='user.ico' alt='user-icon' className='userImg'/>
+                    </Col>
+                    <Col xs={8}>
+                        <h5>TestingUser3</h5>
+                    </Col>
                   </Row>
-                  <Row xs={1}>
-                    {(favorite) ? (
-                      <div onClick={FavoriteToFalse} >
-                        <FavoriteIcon className="float-end" style={{ marginLeft: 'auto', marginRight: 0 }} color="error"/> 
-                      </div>
-                    ) : (
-                      <div onClick={FavoriteToTrue} >
-                        <FavoriteBorderIcon className="float-end" style={{ marginLeft: 'auto', marginRight: 0 }} color="error"/>
-                      </div>
-                    )}
+                  <Row>
+                    Description:
+                  </Row>
+                  <Row>
+                    <ScrollableParagraph text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries" />
                   </Row>
                 </Col>
 
               </Row>
             </Container>
-          </Card.Body>
         </Card>
       </>
   )

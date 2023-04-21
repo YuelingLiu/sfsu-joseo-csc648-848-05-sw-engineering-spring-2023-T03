@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
-
+import React, {useState, useEffect, useContext} from 'react';
+import jwtDecode from 'jwt-decode';
+import { AuthContext } from '../../AuthContext';
 // MUI Components 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -39,19 +40,9 @@ import Container1 from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-// Drop down items
-const NavChoicesLoggedIn = ['Categories', 'My Feed', 'Top Rated' ];
-const NavChoicesLoggedOut = ['Categories', 'Top Rated' ];
-
-
 const navCategoryCol1 = ['African', 'American', 'Asian',  'Chinese','French', 'Greek',  'Indian' ]
 const navCategoryCol2 = ['Italian', 'Japanese', 'Latin-American',  'Mexican', 'Middle-Eastern', 'Spanish']
-
-
 const navCategoryCol3 = ['Breakfast', 'Lunch', 'Dinner', 'Snacks' ]
-// const navCategoryCol4 = ['Quick', 'Sandwhich','Seafood', 'Snacks', 'Spanish', 'Special Occasion']
-
-
 
 // for MUI 
 const Search = styled('div')(({ theme }) => ({
@@ -97,14 +88,15 @@ color: 'blackit',
 })); 
 
 function Navbar () {
-    // for MUI
+    // for drop downs 
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     
     // used for search bar to go to icon on smaller screens
     const [screenSize, setScreenSize] = useState(true);
-    // placement code until we have logged in working 
-    const [loggedin, setLoggedIn] = useState(false);
+
+    // login status 
+    const { loggedIn, setLoggedIn } = useContext(AuthContext);
     
     // Category menu
     const [anchorElCategory, setAnchorElCategory] = useState(null);
@@ -141,7 +133,8 @@ function Navbar () {
         history.push(`search?query=${query}`);
     };
 
-
+    // get screen size at all time
+    // want this to change look of nav bar if mobile
     useEffect(() => {
         let widthSize = window.innerWidth
 
@@ -150,6 +143,12 @@ function Navbar () {
             setScreenSize(false)
         }
     }, []);
+
+
+    const logoutHandler = () => {
+        localStorage.removeItem('token');
+        setLoggedIn(false);
+    };
 
   return (
     <>
@@ -206,7 +205,7 @@ function Navbar () {
                         }}
                         >
                     
-                        {(loggedin) ? (
+                        {(loggedIn) ? (
                             <>
                                 <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
                                     <nav aria-label="main mailbox folders">
@@ -336,7 +335,7 @@ function Navbar () {
 
                     {/* next to website name */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {(loggedin) ? (
+                        {(loggedIn) ? (
                             <>
                                     <Toolbar>
                                         <Button sx={{ my: 2, color: 'black', display: 'block' }}  onClick={handleCategoryMenu}>
@@ -571,7 +570,7 @@ function Navbar () {
                         onClose={handleCloseUserMenu}
                         >
                         {/* Later on for login */}
-                        {(loggedin) ? (
+                        {(loggedIn) ? (
                             <>
                                 <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
                                     <nav aria-label="main mailbox folders">
@@ -608,9 +607,9 @@ function Navbar () {
                                                 </ListItem>
                                             </Link>
 
-                                            <Link to='/logout' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                            <Link to='/' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
                                                 <ListItem disablePadding>
-                                                    <ListItemButton>
+                                                    <ListItemButton onClick={logoutHandler}>
                                                         <ListItemIcon>
                                                             <LogoutIcon />
                                                         </ListItemIcon>
@@ -712,7 +711,7 @@ function Navbar () {
                         }}
                         >
                     
-                        {(loggedin) ? (
+                        {(loggedIn) ? (
                             <>
                                 <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
                                     <nav aria-label="main mailbox folders">
@@ -842,7 +841,7 @@ function Navbar () {
 
                     {/* next to website name */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {(loggedin) ? (
+                        {(loggedIn) ? (
                             <>
                                     <Toolbar>
                                         <Button sx={{ my: 2, color: 'black', display: 'block' }}  onClick={handleCategoryMenu}>
@@ -1075,7 +1074,7 @@ function Navbar () {
                         onClose={handleCloseUserMenu}
                         >
                         {/* Later on for login */}
-                        {(loggedin) ? (
+                        {(loggedIn) ? (
                             <>
                                 <Box sx={{ width: '100%', maxWidth: 360, minWidth: 210 ,bgcolor: 'background.paper' }}>
                                     <nav aria-label="main mailbox folders">
@@ -1113,9 +1112,9 @@ function Navbar () {
                                                 </ListItem>
                                             </Link>
 
-                                            <Link to='/logout' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                            <Link to='/' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
                                                 <ListItem disablePadding>
-                                                    <ListItemButton>
+                                                    <ListItemButton onClick={logoutHandler}>
                                                         <ListItemIcon>
                                                             <LogoutIcon />
                                                         </ListItemIcon>

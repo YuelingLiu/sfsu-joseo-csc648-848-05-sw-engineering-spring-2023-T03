@@ -2,12 +2,20 @@ import React from 'react';
 import './Styling/login.scss';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthContext';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const history = useHistory();  
+  const { setLoggedIn } = useContext(AuthContext);
+
   const loginHandler = (e) => {
     e.preventDefault();
+
     // Perform validation
     if (email.trim() === '') {
       setError('Please enter your username');
@@ -20,7 +28,7 @@ const Login = () => {
     }
 
     //set request to backend
-    fetch(`${process.env.REACT_APP_REQ_URL}user/login`, {
+    fetch(`${process.env.REACT_APP_REQ_URL}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,6 +46,9 @@ const Login = () => {
       })
       .then((data) => {
         // Handle successful login
+        localStorage.setItem('token', data.token);
+        setLoggedIn(true);
+        history.push('/');
         console.log(data);
       })
       .catch((error) => {

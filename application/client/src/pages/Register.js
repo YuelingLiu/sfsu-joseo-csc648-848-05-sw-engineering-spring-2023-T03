@@ -96,7 +96,7 @@ const Register = () => {
   const registerUser = async (formData) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}user/register`,
+        `${process.env.REACT_APP_REQ_URL}/user/register`,
         {
           method: 'POST',
           body: formData,
@@ -109,7 +109,6 @@ const Register = () => {
       }
 
       const data = await response.json();
-      // this is direct to home page
       history.push('/');
       return data;
     } catch (error) {
@@ -182,21 +181,6 @@ const Register = () => {
         </div>
       </div>
     </div>
-    // <div className="default-image">
-    //   <i className="fa fa-user-circle" aria-hidden="true" />
-    //   <input
-    //     type="file"
-    //     accept="image/*"
-    //     onChange={(e) => handleImageUpload(e)}
-    //   />
-    //   <span>Upload your profile</span>
-    //   {image === null ? (
-    //     <i className="fa fa-user-circle" aria-hidden="true" />
-    //   ) : (
-    //     <img src={URL.createObjectURL(image)} alt="Uploaded profile" />
-    //   )}
-
-    // </div>
   );
 };
 

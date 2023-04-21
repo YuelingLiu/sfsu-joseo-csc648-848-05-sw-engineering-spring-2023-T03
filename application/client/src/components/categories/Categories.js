@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 function Categories() {
-  const categoryList = ['Mexican', 'Italian', 'American', 'Chinese', 'India', 'Arabic', 'Japanese', 'Mediterranean']
+  const categoryList = ['Mexican', 'Italian', 'American', 'Chinese']
   return (
     <>
       <Container>
