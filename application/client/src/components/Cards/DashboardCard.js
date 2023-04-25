@@ -64,11 +64,11 @@ function CategoryCard({result}) {
                     <Row >
                       {(favorite) ? (
                         <div onClick={FavoriteToFalse} >
-                          <FavoriteIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '5px' }} color="error"/> 4
+                          <FavoriteIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 4
                         </div>
                       ) : (
                         <div onClick={FavoriteToTrue} >
-                          <FavoriteBorderIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '5px' }} color="error"/> 3
+                          <FavoriteBorderIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 3
                         </div>
                       )}
                     </Row>
@@ -81,14 +81,14 @@ function CategoryCard({result}) {
                         <img src='user.ico' alt='user-icon' className='userImg'/>
                     </Col>
                     <Col xs={8}>
-                        <h5>TestingUser3</h5>
+                        <h5>{result.username}</h5>
                     </Col>
                   </Row>
                   <Row>
                     Description:
                   </Row>
                   <Row>
-                    <ScrollableParagraph text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries" />
+                    <ScrollableParagraph text={result.recipe_description} />
                   </Row>
                 </Col>
 

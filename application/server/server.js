@@ -32,8 +32,8 @@ const jwtCheck = expressJwt({
 // routes
 // Add this line before your routes
 app.use(express.json());
-app.use('/category', jwtCheck, categoriesRoutes);
-app.use('/search', jwtCheck, searchRoutes);
+app.use('/category',  categoriesRoutes);
+app.use('/search',  searchRoutes);
 app.use('/user', userRoutes);
 app.get('/', (req, res) => res.send('Hello World'));
 

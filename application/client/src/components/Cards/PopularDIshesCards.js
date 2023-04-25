@@ -44,9 +44,7 @@ function PopularDIshesCards() {
                     </Row>
                     <Row>
                       <Col xs={6} >
-                        <h4>
-                        Chicken Tikka Masala
-                        </h4>
+                        <h4>Chicken Tikka Masala</h4>
                       </Col>
 
                       <Col xs={6}>
@@ -54,6 +52,7 @@ function PopularDIshesCards() {
                             sx={{
                               '& > legend': { mt: 2 },
                             }}
+                            style={{paddingTop: '10px'}}
                           >
                             <Rating name="read-only" value={value} readOnly />
                           </Box>
@@ -63,11 +62,11 @@ function PopularDIshesCards() {
                     <Row >
                       {(favorite) ? (
                         <div onClick={FavoriteToFalse} >
-                          <FavoriteIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '5px' }} color="error"/> 4
+                          <FavoriteIcon className="float-start" sx={{ fontSize: "80px" }}  style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 4
                         </div>
                       ) : (
                         <div onClick={FavoriteToTrue} >
-                          <FavoriteBorderIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '5px' }} color="error"/> 3
+                          <FavoriteBorderIcon className="float-start"  sx={{ fontSize: "30px" }}  style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> <h4 style={{paddingBottom: '5px'}}>3</h4>
                         </div>
                       )}
                     </Row>
