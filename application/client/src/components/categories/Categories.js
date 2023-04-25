@@ -1,5 +1,5 @@
 import React from 'react'
-import CategoryCard from '../categoryCard/CategoryCard'
+import PopularDIshesCards from '../Cards/PopularDIshesCards'
 import './Categories.css'
 
 // boostrap
@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 function Categories() {
-  const categoryList = ['Mexican', 'Italian', 'American', 'Chinese', 'India', 'Arabic', 'Japanese', 'Mediterranean']
+  const categoryList = ['Mexican', 'Italian', 'American', 'Chinese']
   return (
     <>
       <Container>
@@ -20,7 +20,7 @@ function Categories() {
 
         <Row className="d-flex justify-content-center">
             {categoryList.map(category => (
-                <CategoryCard  category={category} />
+                <PopularDIshesCards  category={category} />
             ))}
         </Row>
       </Container>

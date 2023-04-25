@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -13,13 +13,14 @@ import Follows from "./pages/Follows";
 
 
 function App() {
+
   return (
    <>
     <Router basename="/">
       <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
+        <Route exact path="/login" component={Login}/>
         <Route exact path="/register" component={Register} />
         <Route exact path="/recipes" component={Recipe} />
         <Route exact path="/profile" component={Profile} />
