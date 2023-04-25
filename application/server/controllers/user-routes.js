@@ -1,5 +1,10 @@
 const router = require("express").Router();
-const AWS = require("aws-sdk");
+const {
+        Upload
+      } = require("@aws-sdk/lib-storage"),
+      {
+        S3
+      } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
 const { client } = require("../db/db");
 const User = require("../models/User");
@@ -24,7 +29,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: multer.memoryStorage() });
 
 //s3 bucket connection
-const s3 = new AWS.S3({
+const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
@@ -85,31 +90,18 @@ router.post("/register", upload.single("profile_picture"), async (req, res) => {
     //upload the photo to s3 and wait for the URL
     const file = req.file;
     var newUser;
-    const uploadImg = (file) => {
-      // check if buffer is working
-      if (!file.buffer) {
-        return Promise.reject(new Error("File buffer is not available"));
-      }
-      const uploadParams = {
+    const uploadParams = {
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: uuidv4() + "-" + file.originalname,
         Body: file.buffer,
         ContentEncoding: "base64",
         ContentType: file.mimetype,
       };
-      return new Promise(async (resolve, reject) => {
-        await s3.upload(uploadParams, async function (err, data) {
-          if (err) {
-            console.log("Upload error: ", err);
-            reject(err);
-          } else{
-            console.log("Upload Success: ", data.Location);
-            resolve(data.Location)
-          }
-        });
-      });
-    };
-    const imgURL = await uploadImg(file);
+    const imgURL = (await new Upload({
+      client: s3,
+      params: uploadParams
+    }).done()).Location;
+    console.log
     newUser = await User.create({
       username: username,
       email: email,
