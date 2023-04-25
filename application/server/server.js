@@ -3,9 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const { client } = require('./db/db');
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
-// sessions
-const session = require('express-session');
-const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 
 const searchRoutes = require('./controllers/search-routes');
 const userRoutes = require('./controllers/user-routes');
@@ -14,26 +13,27 @@ const categoriesRoutes = require('./controllers/category-routes');
 const app = express();
 const cors = require('cors');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // cores
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200,
+};
 
-// sessions
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }, // Set to 'true' for production in a HTTPS environment
-  })
-);
+app.use(cors(corsOptions));
+
+// jwt middleware
+const jwtCheck = expressJwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ['HS256'],
+});
 
 // routes
-app.use('/category', categoriesRoutes);
-app.use('/search', searchRoutes);
+// Add this line before your routes
+app.use(express.json());
+app.use('/category',  categoriesRoutes);
+app.use('/search',  searchRoutes);
 app.use('/user', userRoutes);
 app.get('/', (req, res) => res.send('Hello World'));
 

@@ -109,7 +109,7 @@ const Register = () => {
       }
 
       const data = await response.json();
-      // history.push('/')
+      history.push('/');
       return data;
     } catch (error) {
       console.error('Error while registering user:', error.message);
@@ -181,21 +181,6 @@ const Register = () => {
         </div>
       </div>
     </div>
-    // <div className="default-image">
-    //   <i className="fa fa-user-circle" aria-hidden="true" />
-    //   <input
-    //     type="file"
-    //     accept="image/*"
-    //     onChange={(e) => handleImageUpload(e)}
-    //   />
-    //   <span>Upload your profile</span>
-    //   {image === null ? (
-    //     <i className="fa fa-user-circle" aria-hidden="true" />
-    //   ) : (
-    //     <img src={URL.createObjectURL(image)} alt="Uploaded profile" />
-    //   )}
-
-    // </div>
   );
 };
 

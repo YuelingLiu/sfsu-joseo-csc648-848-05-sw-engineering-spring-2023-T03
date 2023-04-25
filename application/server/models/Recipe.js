@@ -32,7 +32,7 @@ class Recipe {
     // .orWhere('title', 'like', `%${query}%`);
     const searchQuery = `
     WITH search_result AS (
-      SELECT DISTINCT r."id" AS recipe_id, r."title" AS recipe_title
+      SELECT DISTINCT r."id" AS recipe_id, r."title" AS recipe_title, r."description" AS recipe_description, r."created_at" AS recipe_CreateAt, u."username" AS userName
       FROM public.recipes r
       JOIN public.users u ON r."user_id" = u."id"
       LEFT JOIN public.categories_to_recipe ctr ON r."id" = ctr."recipe_id"

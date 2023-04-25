@@ -3,9 +3,8 @@ const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 const { client } = require('../db/db');
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
-// user session logging
-const session = require('express-session');
 // password hashing
 const bcrypt = require('bcrypt');
 
@@ -67,8 +66,8 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
   try {
     console.log('in register route');
     // take input from website
-    const username = req.body.username
-    console.log("this is username:" + username);
+    const username = req.body.username;
+    console.log('this is username:' + username);
     const email = req.body.email;
     const password = req.body.password;
 
@@ -87,16 +86,16 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     const file = req.file;
     var newUser;
     const uploadImg = (file) => {
-      // check if buffer is working 
+      // check if buffer is working
       if (!file.buffer) {
         return Promise.reject(new Error('File buffer is not available'));
       }
-      const uploadParams = { 
-        Bucket: process.env.AWS_BUCKET_NAME, 
-        Key: uuidv4() + '-' + file.originalname, 
-        Body: file.buffer, 
-        ContentEncoding: 'base64', 
-        ContentType: file.mimetype, 
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: uuidv4() + '-' + file.originalname,
+        Body: file.buffer,
+        ContentEncoding: 'base64',
+        ContentType: file.mimetype,
       };
       return new Promise(async (resolve, reject) => {
         await s3.upload(uploadParams, async function (err, data) {
@@ -111,6 +110,7 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
               password: hashedPassword,
               profile_picture: data.Location,
             });
+
             res
               .status(201)
               .json({ message: 'User created successfully', user: newUser });
@@ -120,8 +120,6 @@ router.post('/register', upload.single('profile_picture'), async (req, res) => {
     };
     const imgURL = await uploadImg(file);
 
-    // Create a session and return a success message
-    req.session.user = newUser;
     res.redirect('/');
   } catch (err) {
     console.error(err);
@@ -148,7 +146,6 @@ router.post('/login', async (req, res) => {
     }
 
     // take in password and compare with user password from email
-    console.log(dbUserData.password);
     const passwordMatch = await bcrypt.compare(password, dbUserData.password);
 
     if (!passwordMatch) {
@@ -156,32 +153,24 @@ router.post('/login', async (req, res) => {
       return;
     }
 
-    req.session.save(() => {
-      req.session.user_id = dbUserData.id;
-      req.session.username = dbUserData.username;
-      req.session.loggedIn = true;
-
-      console.log('sessions saved: ');
-      res.json({ user: dbUserData, message: 'You are now logged in!' });
-    });
+    if (dbUserData && passwordMatch) {
+      const token = jwt.sign({
+          userId: dbUserData._id,
+        },
+        process.env.JWT_SECRET, {
+          expiresIn: '24h',
+        }
+      );
+      res.json({
+        success: true,
+        message: 'Authentication successful!',
+        token,
+      });
+    } 
   } catch (err) {
+    console.log(err.message)
     res.status(500).json({ message: 'An error occurred during login.' });
   }
 });
-
-// logout route
-router.post('/logout', (req, res) => {
-  if (req.session.loggedIn) {
-    req.session.destroy(() => {
-      console.log('You are now logout!');
-      res.status(204).end();
-    });
-  } else {
-    res.status(404).end();
-  }
-});
-
-//upload profile pic
-router.post('/profilepic', (req, res) => {});
 
 module.exports = router;
