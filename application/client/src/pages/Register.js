@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import { Alert } from '@mui/material';
 
 // import { useNavigate } from 'react-router-dom';
 const Register = () => {
@@ -23,52 +24,50 @@ const Register = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const errors = {};
-    // if (userName.length < 6 || userName.length > 20) {
-    //   errors.username = 'Username must be between 6 and 20 characters';
+    const errors = {};
+    if (userName.length < 6 || userName.length > 20) {
+      errors.username = 'Username must be between 6 and 20 characters';
 
-    //   // toast.error('Username must be between 6 and 20 characters', {
-    //   //   position: toast.POSITION.TOP_CENTER,
-    //   //   className: 'toast-message',
-    //   // });
-    //   console.log('Invalid Username');
-    //   console.log(userName);
-    // }
+      // toast.error('Username must be between 6 and 20 characters', {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   className: 'toast-message',
+      // });
+      console.log('Invalid Username');
+      console.log(userName);
+    }
 
-    // if (
-    //   !password.match(
-    //     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+~`|}{\[\]\\:;'<>,.?/])[a-zA-Z\d!@#$%^&*()_+~`|}{\[\]\\:;'<>,.?/]{8,20}$/
-    //   )
-    // ) {
-    //   errors.password =
-    //     'Password must be a combination letters, numbers, and special  with a maximum of 20 length';
-    //   // toast.error(errors.password, {
-    //   //   position: toast.POSITION.TOP_CENTER,
-    //   //   className: 'toast-message',
-    //   // });
-    //   console.log('Invalid password');
-    // }
+    if (!password.match(/^(?=.*[\W_])[a-zA-Z0-9\W_]{6,20}$/)) {
+      errors.password =
+        ' a minimum of 6 characters and a maximum of 20 characters long and it must have a special character.';
+      // toast.error(errors.password, {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   className: 'toast-message',
+      // });
+      alert('Invalid password');
+      console.log('Invalid password');
+    }
 
-    // if (
-    //   !email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/)
-    // ) {
-    //   errors.email = 'Please enter a valid email address';
-    //   // toast.error(errors.email, {
-    //   //   position: toast.POSITION.TOP_CENTER,
-    //   //   className: 'toast-message',
-    //   // });
-    // }
+    if (
+      !email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/)
+    ) {
+      errors.email = 'Please enter a valid email address';
+      // toast.error(errors.email, {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   className: 'toast-message',
+      // });
+      alert('invalid email');
+    }
 
-    // if (Object.keys(errors).length > 0) {
-    //   setValidationErrors(errors);
-    //   // toast.error('Invalid Input', {
-    //   //   position: toast.POSITION.TOP_CENTER,
-    //   //   className: 'toast-message',
-    //   // });
-    // } else {
-    //   console.log('created account successful');
-    //   history.push('/login');
-    // }
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      // toast.error('Invalid Input', {
+      //   position: toast.POSITION.TOP_CENTER,
+      //   className: 'toast-message',
+      // });
+    } else {
+      console.log('created account successful');
+      // history.push('/login');
+    }
 
     try {
       e.preventDefault();
@@ -77,8 +76,12 @@ const Register = () => {
       formData.append('username', userName);
       formData.append('password', password);
       formData.append('email', email);
-      formData.append('profile_picture', image);
+      //formData.append('profile_picture', image);
 
+      // change this to if statement
+      if (image) {
+        formData.append('profile_picture', image);
+      }
       console.log('This is image: ' + image);
 
       registerUser(formData)
@@ -103,12 +106,18 @@ const Register = () => {
         }
       );
 
+      // check if email has been used
+      if (response.status === 409) {
+        console.log('Email already exists');
+        alert('Email already exists');
+      }
       if (!response.ok) {
         console.log('response not ok');
         throw new Error('Response ERROR');
       }
 
       const data = await response.json();
+
       history.push('/');
       return data;
     } catch (error) {

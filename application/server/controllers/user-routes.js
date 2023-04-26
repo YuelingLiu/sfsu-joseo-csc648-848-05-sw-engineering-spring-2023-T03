@@ -71,13 +71,38 @@ router.post("/register", upload.single("profile_picture"), async (req, res) => {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
+    const usernameRegex = /^[a-zA-Z0-9_-]{6,20}$/;
+    const passwordRegex = /^(?=.*[\W_])[a-zA-Z0-9\W_]{6,20}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // check if email is in db
     const existingUser = await User.getByEmail(email);
     if (existingUser) {
+      console.log('user existed');
       return res
         .status(409)
         .json({ message: "A user with this email already exists" });
+    }
+
+    if (!usernameRegex.test(username)) {
+      console.log('Invalid username from Backend');
+      return res.status(400).json({
+        message:
+          'Username must be 6-20 characters and may only contain letters, numbers, underscores, and hyphens.',
+      });
+    }
+
+    if (!passwordRegex.test(password)) {
+      console.log('Invalid password from Backend');
+      return res.status(400).json({
+        message:
+          'Password must be a combination of letters, numbers, and special characters, with a maximum length of 20 characters.',
+      });
+    }
+
+    if (!emailRegex.test(email)) {
+      console.log('Invalid email from Backend');
+      return res.status(400).json({ message: 'Invalid email address.' });
     }
 
     // Hash the password
@@ -111,13 +136,14 @@ router.post("/register", upload.single("profile_picture"), async (req, res) => {
         email: email,
         password: hashedPassword
       });
-    }
 
+    }
     res
       .status(201)
       .json({ message: "User created successfully", user: newUser });
 
     // res.redirect("/");
+
   } catch (err) {
     console.error(err);
     console.log(err.message);
