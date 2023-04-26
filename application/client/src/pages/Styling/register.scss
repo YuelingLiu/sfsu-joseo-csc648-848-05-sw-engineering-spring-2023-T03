@@ -241,3 +241,74 @@
   height: 100%;
   cursor: pointer;
 }
+
+@media screen and (max-width: 800px) {
+  .register {
+    height: fit-content;
+    .card {
+      flex-direction: column;
+      width: 90%;
+      margin: 0 auto;
+      min-height: unset;
+      height: fit-content;
+      min-width: 90%;
+      .left,
+      .right {
+        width: 100%;
+      }
+      .left {
+        height: 300px;
+        order: 1;
+        margin-top: 50px;
+      }
+      .right {
+        order: 2;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .login {
+    .card {
+      .left {
+        height: 200px;
+        margin-top: 30px;
+        padding: 20px;
+        h1 {
+          font-size: 40px;
+          line-height: 50px;
+        }
+        p {
+          font-size: 14px;
+        }
+        span {
+          font-size: 14px;
+        }
+        button {
+          width: 80%;
+          padding: 8px;
+          font-size: 16px;
+        }
+      }
+      .right {
+        padding: 20px;
+        h1 {
+          font-size: 24px;
+          line-height: 30px;
+        }
+        form {
+          input {
+            padding: 10px;
+            font-size: 14px;
+          }
+          button {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
