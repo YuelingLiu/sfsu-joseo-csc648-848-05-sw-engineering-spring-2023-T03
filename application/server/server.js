@@ -2,7 +2,6 @@
 require('dotenv').config();
 const express = require('express');
 const { client } = require('./db/db');
-require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
 
