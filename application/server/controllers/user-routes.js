@@ -1,10 +1,6 @@
 const router = require("express").Router();
-const {
-        Upload
-      } = require("@aws-sdk/lib-storage"),
-      {
-        S3
-      } = require("@aws-sdk/client-s3");
+const { Upload } = require("@aws-sdk/lib-storage"),
+  { S3 } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
 const { client } = require("../db/db");
 const User = require("../models/User");
@@ -69,10 +65,10 @@ router.get("/following", async (req, res) => {
 // register route
 router.post("/register", upload.single("profile_picture"), async (req, res) => {
   try {
-    console.log("in register route");
+    var newUser;
+
     // take input from website
     const username = req.body.username;
-    console.log("this is username:" + username);
     const email = req.body.email;
     const password = req.body.password;
 
@@ -88,26 +84,34 @@ router.post("/register", upload.single("profile_picture"), async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     //upload the photo to s3 and wait for the URL
-    const file = req.file;
-    var newUser;
-    const uploadParams = {
+    if (req.file) {
+      const file = req.file;
+      const uploadParams = {
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: uuidv4() + "-" + file.originalname,
         Body: file.buffer,
         ContentEncoding: "base64",
         ContentType: file.mimetype,
       };
-    const imgURL = (await new Upload({
-      client: s3,
-      params: uploadParams
-    }).done()).Location;
-    console.log
-    newUser = await User.create({
-      username: username,
-      email: email,
-      password: hashedPassword,
-      profile_picture: imgURL
-    });
+      const imgURL = (
+        await new Upload({
+          client: s3,
+          params: uploadParams,
+        }).done()
+      ).Location;
+      newUser = await User.create({
+        username: username,
+        email: email,
+        password: hashedPassword,
+        profile_picture: imgURL,
+      });
+    } else{
+      newUser = await User.create({
+        username: username,
+        email: email,
+        password: hashedPassword
+      });
+    }
 
     res
       .status(201)
