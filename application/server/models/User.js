@@ -29,13 +29,13 @@ class User {
 
   static async getFollowers(user_id) {
     return await knex('followers')
-    .join('users', 'followers.follower_user', 'users.id')
+    .join('users', 'followers.follower_id', 'users.id')
     .where({user_id});
   }
 
   static async getFollowing(user_id) {
     return await knex('following')
-    .join('users', 'following.following_user', 'users.id')
+    .join('users', 'following.following_id', 'users.id')
     .where({user_id});
   }
 }
