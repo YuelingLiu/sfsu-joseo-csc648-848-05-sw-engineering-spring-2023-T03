@@ -118,7 +118,7 @@ const Register = () => {
 
       const data = await response.json();
 
-      history.push('/login');
+      history.push('/');
       return data;
     } catch (error) {
       console.error('Error while registering user:', error.message);
