@@ -254,16 +254,7 @@ function Navbar () {
                                                 </ListItem>
                                             </Link>
 
-                                            <Link to='/post-recipe' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
-                                                <ListItem disablePadding>
-                                                    <ListItemButton>
-                                                        <ListItemIcon>
-                                                            <StarIcon />
-                                                        </ListItemIcon>
-                                                        <ListItemText primary="Post Recipe" />
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            </Link>
+                                            
                                         </List>
                                     </nav>
                                 </Box>
@@ -295,16 +286,6 @@ function Navbar () {
                                                 </ListItem>
                                             </Link>
 
-                                            <Link to='/post-recipe' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
-                                                <ListItem disablePadding>
-                                                    <ListItemButton>
-                                                        <ListItemIcon>
-                                                            <StarIcon />
-                                                        </ListItemIcon>
-                                                        <ListItemText primary="Post Recipe" />
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            </Link>
                                         </List>
                                     </nav>
                                 </Box>
@@ -444,12 +425,7 @@ function Navbar () {
                                                 Top Rated
                                             </Button>
                                         </Link>
-                                        <Link to="/post-recipe" style={{ textDecoration: 'none' }}>
-                                            <Button sx={{ my: 2, color: 'black', display: 'block' }} >
-                                                Post Recipe
-                                            </Button>
-                                        </Link>
-                                        
+                            
                                     </Toolbar>
 
                                     <Menu
@@ -760,16 +736,7 @@ function Navbar () {
                                                 </ListItem>
                                             </Link>
 
-                                            <Link to='/post-recipe' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
-                                                <ListItem disablePadding>
-                                                    <ListItemButton>
-                                                        <ListItemIcon>
-                                                            <StarIcon />
-                                                        </ListItemIcon>
-                                                        <ListItemText primary="Post Recipe" />
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            </Link>
+                                            
                                         </List>
                                     </nav>
                                 </Box>
@@ -797,17 +764,6 @@ function Navbar () {
                                                             <StarIcon />
                                                         </ListItemIcon>
                                                         <ListItemText primary="Top Rated" />
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            </Link>
-
-                                            <Link to='/post-recipe' style={{ textDecoration: 'none' }} onClick={handleCloseNavMenu}> 
-                                                <ListItem disablePadding>
-                                                    <ListItemButton>
-                                                        <ListItemIcon>
-                                                            <StarIcon />
-                                                        </ListItemIcon>
-                                                        <ListItemText primary="Post Recipe" />
                                                     </ListItemButton>
                                                 </ListItem>
                                             </Link>
@@ -948,12 +904,6 @@ function Navbar () {
                                                 Top Rated
                                             </Button>
                                         </Link>
-                                        <Link to="/post-recipe" style={{ textDecoration: 'none' }}>
-                                            <Button sx={{ my: 2, color: 'black', display: 'block' }} >
-                                                Post Recipe
-                                            </Button>
-                                        </Link>
-                                        
                                     </Toolbar>
 
                                     <Menu
