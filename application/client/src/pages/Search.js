@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DashboardCard from '../components/Cards/DashboardCard';
+import Filterbar from '../components/filterbar/Filterbar';
 
 // MUI
 import MenuItem from '@mui/material/MenuItem';
@@ -48,41 +49,11 @@ const Search = ({ location }) => {
     fetchResults();
   }, [location.search]);
 
-
-  const titleSearch = results.recipe_title
+  console.log(results.recipe_title);
   return (
     <>
       <Container>
-        <Row>
-          <Col xs={5} sm={8}>
-          {results.map((result, index) => (
-            <div key={index}>
-              <h1 sx={{ fontWeight: 'bolder' }}>{result.recipe_title}</h1>
-            </div>
-          ))}
-          </Col>
-
-          <Col xs={7} sm={4}>
-            <div className="d-flex align-items-center">
-              <h3>Sort by:</h3>
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <Select
-                  value={filter}
-                  onChange={handleChange}
-                  displayEmpty
-                  inputProps={{ 'aria-label': 'Without label' }}
-                  sx={{ height: '32px', lineHeight: '30px' }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Lastest</MenuItem>
-                  <MenuItem value={20}>Popular</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-          </Col>
-        </Row>
+        <Filterbar title={results}/>
 
         {results.length > 0 ? (
           results.map((result) => <DashboardCard result={result} />)

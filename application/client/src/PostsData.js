@@ -1,42 +1,58 @@
 export const PostsData = [
     {
-        title: 'Pizza',
+        recipe_title: 'Pizza',
         rating: 2,
-        id: 1
+        id: 1,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        title: 'Burger',
+        recipe_title: 'Burger',
         rating: 4,
-        id: 2
+        id: 2,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        title: 'Shawrma',
+        recipe_title: 'Shawrma',
         rating: 3,
-        id: 3
+        id: 3,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        title: 'Fry',
+        recipe_title: 'Fry',
         rating: 5,
-        id: 4
+        id: 4,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        title: 'Pizza',
+        recipe_title: 'Pizza',
         rating: 2,
-        id: 5
+        id: 5,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        title: 'Burger',
+        recipe_title: 'Burger',
         rating: 4,
-        id: 6
+        id: 6,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        title: 'Shawrma',
+        recipe_title: 'Shawrma',
         rating: 3,
-        id: 7
+        id: 7,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        title: 'Fry',
+        recipe_title: 'Fry',
         rating: 5,
-        id: 8
+        id: 8,
+        username: 'Duncan',
+        recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     }
 ]

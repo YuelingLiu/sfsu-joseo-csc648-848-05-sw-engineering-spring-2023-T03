@@ -60,13 +60,13 @@ function PopularDIshesCards() {
                     </Row>
 
                     <Row >
-                      {(favorite) ? (
+                    {(favorite) ? (
                         <div onClick={FavoriteToFalse} >
-                          <FavoriteIcon className="float-start" sx={{ fontSize: "80px" }}  style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 4
+                          <FavoriteIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 4
                         </div>
                       ) : (
                         <div onClick={FavoriteToTrue} >
-                          <FavoriteBorderIcon className="float-start"  sx={{ fontSize: "30px" }}  style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> <h4 style={{paddingBottom: '5px'}}>3</h4>
+                          <FavoriteBorderIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 3
                         </div>
                       )}
                     </Row>

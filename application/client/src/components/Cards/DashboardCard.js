@@ -32,7 +32,7 @@ function CategoryCard({result}) {
     );
   }
 
-  console.log(result.recipe_title)
+  console.log(result)
   return (
       <>
         <Card style={{ width: '33rem', margin: '20px 20px 15px 22px', padding: '0px' }} >
@@ -45,7 +45,7 @@ function CategoryCard({result}) {
                     </Row>
                     <Row>
                       <Col xs={6} >
-                        <h4>
+                        <h4 style={{ textAlign: 'left'}}>
                           {result.recipe_title}
                         </h4>
                       </Col>
@@ -63,12 +63,16 @@ function CategoryCard({result}) {
 
                     <Row >
                       {(favorite) ? (
-                        <div onClick={FavoriteToFalse} >
-                          <FavoriteIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 4
+                        <div className="d-flex align-items-center">
+                          <div onClick={FavoriteToFalse} >
+                            <FavoriteIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 4
+                          </div>
                         </div>
                       ) : (
-                        <div onClick={FavoriteToTrue} >
-                          <FavoriteBorderIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 3
+                        <div className="d-flex align-items-center">
+                          <div onClick={FavoriteToTrue} >
+                            <FavoriteBorderIcon className="float-start" style={{ marginLeft: 0, marginRight: 'auto', marginBottom: '10px' }} color="error"/> 3
+                          </div>
                         </div>
                       )}
                     </Row>
