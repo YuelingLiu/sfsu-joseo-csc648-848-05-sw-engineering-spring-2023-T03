@@ -34,7 +34,8 @@ const Register = () => {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: 'toast-message',
       // });
-      console.log(errors.username);
+      alert(errors.username);
+      return;
       console.log(userName);
     }
 
@@ -58,6 +59,7 @@ const Register = () => {
       //   className: 'toast-message',
       // });
       alert(errors.password);
+      return;
       console.log('Invalid password');
     }
 
@@ -70,6 +72,7 @@ const Register = () => {
       //   className: 'toast-message',
       // });
       alert(errors.email);
+      return;
       console.log('invalid email');
     }
 
