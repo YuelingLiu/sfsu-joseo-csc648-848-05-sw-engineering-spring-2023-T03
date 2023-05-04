@@ -82,7 +82,7 @@ const Register = () => {
     } else {
       alert('created account successfully');
       console.log('created account successful');
-      // history.push('/login');
+      history.push('/login');
     }
 
     try {
@@ -133,8 +133,6 @@ const Register = () => {
       }
 
       const data = await response.json();
-
-      history.push('/');
       return data;
     } catch (error) {
       console.error('Error while registering user:', error.message);
