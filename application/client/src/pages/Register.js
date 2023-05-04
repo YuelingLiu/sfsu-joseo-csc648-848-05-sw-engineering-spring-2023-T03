@@ -17,11 +17,13 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
+  const [isChecked, setIsChecked] = useState(false);
   // toast.configure();
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     setImage(file);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = {};
@@ -32,18 +34,30 @@ const Register = () => {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: 'toast-message',
       // });
-      console.log('Invalid Username');
+      console.log(errors.username);
       console.log(userName);
+    }
+
+    if (!isChecked) {
+      // toast.error(
+      //   'Please agree to the Privacy Policy before submitting the form.',
+      //   {
+      //     position: toast.POSITION.TOP_CENTER,
+      //     className: 'toast-message',
+      //   }
+      // );
+      alert('Please agree to the Privacy Policy before submitting the form');
+      return;
     }
 
     if (!password.match(/^(?=.*[\W_])[a-zA-Z0-9\W_]{6,20}$/)) {
       errors.password =
-        ' a minimum of 6 characters and a maximum of 20 characters long and it must have a special character.';
+        'Password must be 6-20 characters long and contains a special character.';
       // toast.error(errors.password, {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: 'toast-message',
       // });
-      alert('Invalid password');
+      alert(errors.password);
       console.log('Invalid password');
     }
 
@@ -55,7 +69,8 @@ const Register = () => {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: 'toast-message',
       // });
-      alert('invalid email');
+      alert(errors.email);
+      console.log('invalid email');
     }
 
     if (Object.keys(errors).length > 0) {
@@ -65,6 +80,7 @@ const Register = () => {
       //   className: 'toast-message',
       // });
     } else {
+      alert('created account successfully');
       console.log('created account successful');
       // history.push('/login');
     }
@@ -118,7 +134,7 @@ const Register = () => {
 
       const data = await response.json();
 
-      history.push('/login');
+      history.push('/');
       return data;
     } catch (error) {
       console.error('Error while registering user:', error.message);
@@ -134,12 +150,9 @@ const Register = () => {
             <h2> Welcome to RecipeReel</h2>
           </Link>
 
-          <div>
+          <Link className="account" to="/login">
             <p>You already have an account?</p>
-            <Link to="/login">
-              <button>Login here</button>
-            </Link>
-          </div>
+          </Link>
         </div>
 
         <div className="right">
@@ -172,6 +185,7 @@ const Register = () => {
               type="password"
               placeholder="Password"
               value={password}
+              required={true}
               onChange={(e) => setPassword(e.target.value)}
               id="password"
             />
@@ -180,9 +194,26 @@ const Register = () => {
               type="email"
               placeholder="Email@address.com"
               value={email}
+              required={true}
               onChange={(e) => setEmail(e.target.value)}
               id="email"
             />
+            <label className="policy" for="privacy-policy-checkbox">
+              I have read and agree to the{' '}
+              <a
+                href="https://www.privacypolicyonline.com/live.php?token=CiQ7ixos7r4B0wegGXibJXuVU9qQoeWu"
+                target="_blank"
+              >
+                Privacy Policy
+              </a>
+              <input
+                type="checkbox"
+                id="privacy-policy-checkbox"
+                name="privacy-policy-checkbox"
+                required={true}
+                onChange={(e) => setIsChecked(true)}
+              />
+            </label>
             <button className="submitBtn" onClick={handleSubmit}>
               Register
             </button>

@@ -1,74 +1,71 @@
 .register {
-  height: 100vh;
   background-color: #f4fffb;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  margin-top: 120px;
+  height: 70%;
   .card {
     width: 50%;
     min-width: 760px;
     min-height: 600px;
     display: flex;
+    height: 70%;
     flex-direction: row-reverse;
     background-color: white;
     border-radius: 10px;
-
+    height: 630px;
     @media (min-width: 768px) {
       flex-direction: row-reverse;
     }
     .left {
       flex: 1;
-      background: url('https://images.unsplash.com/photo-1515516969-d4008cc6241a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80')
+      background: url('https://images.unsplash.com/photo-1515516969-d4008cc6241a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80')
         center;
       opacity: 1;
       background-size: cover;
+      height: 630px;
       padding: 50px;
       display: flex;
       flex-direction: column;
       gap: 30px;
       color: white;
       width: 50%;
+      height: 630px;
       @media (min-width: 768px) {
         width: 50%;
       }
-
-      //gap: 150px;
-
       .welcome {
         text-decoration: none !important;
         font-weight: bolder;
         cursor: pointer;
         color: white;
-
+        margin-top: 5px;
         h2 {
+          margin-top: 5px;
           font-size: 40px;
           font-weight: bolder;
         }
       }
-
-      p {
-        position: relative;
-        padding: 0;
-        color: black;
+      .account {
+        text-decoration: none !important;
+        margin-top: 2px;
+        text-align: center;
+        margin-left: 1px;
+        p {
+          text-align: center;
+          position: relative;
+          padding: 0;
+          color: black;
+          cursor: pointer;
+        }
       }
       span {
         color: black;
         font-size: 16px;
         font-weight: bold;
       }
-      button {
-        width: 50%;
-        background-color: #f4fffb;
-        border: none;
-        margin-right: 20px;
-        padding: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        opacity: 0.4;
-      }
     }
-
     .right {
       flex: 1;
       padding: 50px;
@@ -80,28 +77,40 @@
       h1 {
         text-align: center;
         color: black;
+        margin-bottom: 2px;
       }
       form {
         display: flex;
         flex-direction: column;
-        gap: 30px;
-
+        gap: 22px;
+        margin-top: 0px;
         input {
           border: none;
           border-bottom: 1px solid lightgray;
           padding: 10px;
           font-size: 16px;
         }
+        label {
+          margin-left: 10px;
+          margin-right: 10px;
+          vertical-align: middle;
+          input {
+            margin-left: 10px;
+            width: 15px;
+            height: 20px;
+            vertical-align: middle;
+          }
+        }
         button {
           width: 100%;
           padding: 10px;
           border: none;
-          background-color: #f4fffb;
+          background-color: #b3f5ef;
           font-size: 18px;
           font-weight: bold;
           cursor: pointer;
+          margin-top: 0px;
           transition: opacity 0.3s ease-in-out;
-
           &:hover {
             opacity: 0.8;
           }
@@ -110,7 +119,6 @@
     }
   }
 }
-
 @media screen and (max-width: 800px) {
   .login {
     height: fit-content;
@@ -121,7 +129,6 @@
       min-height: unset;
       height: fit-content;
       min-width: 90%;
-
       .left,
       .right {
         width: 100%;
@@ -182,17 +189,6 @@
   }
 }
 
-.toast-message {
-  width: 80%;
-  height: 80px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 7px;
-  display: grid;
-  grid-template-columns: 1.3fr 6fr 0.5fr;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-}
-
 .profile-image {
   display: flex;
   justify-content: center;
@@ -204,13 +200,11 @@
   margin: 0 auto 20px;
   position: relative;
 }
-
 .profile-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
 .default-image {
   width: 100%;
   height: 100%;
@@ -231,7 +225,6 @@
   color: #fff;
   font-weight: 500;
 }
-
 .default-image input[type='file'] {
   opacity: 0;
   position: absolute;
@@ -241,7 +234,9 @@
   height: 100%;
   cursor: pointer;
 }
-
+.checkbox {
+  margin-left: 10px;
+}
 @media screen and (max-width: 800px) {
   .register {
     height: fit-content;
@@ -267,7 +262,6 @@
     }
   }
 }
-
 @media screen and (max-width: 600px) {
   .login {
     .card {
