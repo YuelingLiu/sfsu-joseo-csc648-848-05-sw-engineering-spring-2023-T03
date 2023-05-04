@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 // bootstrap
@@ -7,6 +7,18 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
 
 const PostRecipe = () => {
+    // holds image uploaded name
+    const [selectedFile, setSelectedFile] = useState('');
+
+    // set our image name so we can display it
+    const handleFileChange = (event) => {
+        if (event.target.files.length > 0) {
+            setSelectedFile(event.target.files[0].name);
+        } else {
+            setSelectedFile('');
+        }
+    };
+
     return (
         <>
             <Container>
@@ -42,13 +54,25 @@ const PostRecipe = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formBasicPassword">
-                            <input type="file" id="imageUpload" name="imageUpload" accept="image/*"></input>
+                            <input
+                                type="file"
+                                id="imageUpload"
+                                name="imageUpload"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handleFileChange}
+                            />
+                            <label htmlFor="imageUpload" className="custom-file-upload">
+                                Choose image
+                            </label>
+                            <span style={{ marginLeft: '10px' }}>
+                                {selectedFile || 'No file chosen'}
+                            </span>
                         </Form.Group>
 
                         <Link to="/" style={{ textDecoration: 'none' }}>
                             <Button style={{ marginBottom: '10px' }} size="md" variant="success">Post Recipe</Button>
                         </Link>
-
                     </Form>
                 </div>
             </Container>

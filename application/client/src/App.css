@@ -1,0 +1,19 @@
+.custom-file-upload {
+    background-color: #f0f0f0; /* grey background */
+    border: 1px solid #000; /* black thin line border */
+    color: #000; /* black text color */
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    padding: 4px 8px; /* reduced padding for a smaller button */
+    text-decoration: none;
+    border-radius: 3px; /* slightly rounded corners */
+    user-select: none;
+}
+
+.custom-file-upload:hover {
+    background-color: #e0e0e0; /* slightly darker grey on hover */
+}
+  
+  
