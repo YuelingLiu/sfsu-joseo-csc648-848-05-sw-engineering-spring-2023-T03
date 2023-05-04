@@ -41,7 +41,7 @@ function CategoryCard({result, onClick}) {
                 {/* Title and number of hearts */}
                 <Col md={7}>
                     <Row>
-                      <img src='hero.jpg' alt='pic'/>
+                      <img src='hero.jpg' alt='pic' className='cardImg'/>
                     </Row>
                     <Row>
                       <Col xs={6} >
