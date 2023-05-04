@@ -10,7 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const history = useHistory();  
+  const history = useHistory();
   const { setLoggedIn } = useContext(AuthContext);
 
   const loginHandler = (e) => {
@@ -18,12 +18,14 @@ const Login = () => {
 
     // Perform validation
     if (email.trim() === '') {
-      setError('Please enter your username');
+      alert('Please enter your email');
+      console.log('Please enter your email');
       return;
     }
 
     if (password.trim() === '') {
-      setError('Please enter your password');
+      alert('Please enter your password');
+      console.log('Please enter your password');
       return;
     }
 
@@ -48,11 +50,13 @@ const Login = () => {
         // Handle successful login
         localStorage.setItem('token', data.token);
         setLoggedIn(true);
+        alert('Logged in successfully!');
         history.push('/');
         console.log(data);
       })
       .catch((error) => {
         // Handle login error
+        alert('There was a problem with login!');
         console.error('There was a problem with the login:', error);
       });
   };
@@ -72,14 +76,9 @@ const Login = () => {
             <br />
           </span>
           <br />
-
           <span>
             <br />
-            Don't you have an account?
           </span>
-          <Link to="/register">
-            <button>Register</button>
-          </Link>
         </div>
         <div className="right">
           <h1>Login</h1>
@@ -96,12 +95,15 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button onClick={loginHandler}>Login</button>
+            <button onClick={loginHandler}>Login </button>
+            <p>
+              New to RecipeReel?
+              <Link to="/register"> Sign Up</Link>
+            </p>
           </form>
         </div>
       </div>
     </div>
   );
 };
-
 export default Login;

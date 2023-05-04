@@ -145,11 +145,11 @@ const Register = () => {
       <div className="card">
         <div className="left">
           <Link className="welcome" to="/">
-            <h2> Welcome to RecipeReel</h2>
+            <h1> Welcome to RecipeReel</h1>
           </Link>
 
           <Link className="account" to="/login">
-            <p>You already have an account?</p>
+            <p> Already have an account?</p>
           </Link>
         </div>
 
