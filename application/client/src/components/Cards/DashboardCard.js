@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../categories/Categories.css'
+
 // bootStrap
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
@@ -12,7 +13,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function CategoryCard({result}) {
+function CategoryCard({result, onClick}) {
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
 
@@ -32,16 +33,15 @@ function CategoryCard({result}) {
     );
   }
 
-  console.log(result)
   return (
       <>
-        <Card style={{ width: '33rem', margin: '20px 20px 15px 22px', padding: '0px' }} >
+        <Card className="card-hover" onClick={onClick} >
             <Container fluid>
               <Row>
                 {/* Title and number of hearts */}
                 <Col md={7}>
                     <Row>
-                      <img src='hero.jpg' alt='pic' className='cardImg'/>
+                      <img src='hero.jpg' alt='pic'/>
                     </Row>
                     <Row>
                       <Col xs={6} >

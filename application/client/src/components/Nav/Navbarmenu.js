@@ -561,13 +561,13 @@ function Navbar () {
                                                     </ListItemButton>
                                                 </ListItem>
                                             </Link>
-                                            <Link to='/follows/1' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
+                                            <Link to='/following/1' style={{ textDecoration: 'none' }} onClick={handleCloseUserMenu}> 
                                                 <ListItem disablePadding>
                                                     <ListItemButton>
                                                         <ListItemIcon>
                                                             <DirectionsWalkIcon />
                                                         </ListItemIcon>
-                                                        <ListItemText primary="Follows" />
+                                                        <ListItemText primary="Following" />
                                                     </ListItemButton>
                                                 </ListItem>
                                             </Link>

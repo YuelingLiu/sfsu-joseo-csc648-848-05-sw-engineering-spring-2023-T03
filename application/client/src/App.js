@@ -29,7 +29,7 @@ function App() {
         <Route exact path="/post/:postId" component={PostDetails} />
         <Route exact path="/post-recipe" component={PostRecipe} />
         <Route exact path="/search" component={Search} />
-        <Route exact path="/follows/:userID" component={Follows} />
+        <Route exact path="/following/:userID" component={Follows} />
         <Route exact path="/top-rated" component={TopRated} />
         <Route exact path="/favorites" component={Favorites} />
       </Switch>

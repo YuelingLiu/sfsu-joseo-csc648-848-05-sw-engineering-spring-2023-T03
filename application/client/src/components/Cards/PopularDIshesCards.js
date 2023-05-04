@@ -12,7 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function PopularDIshesCards() {
+function PopularDIshesCards({onClick}) {
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
 
@@ -34,7 +34,7 @@ function PopularDIshesCards() {
 
   return (
       <>
-        <Card style={{ width: '33rem', margin: '20px 20px 15px 22px', padding: '0px' }} >
+        <Card style={{ width: '33rem', margin: '20px 20px 15px 22px', padding: '0px' }}  className="card-hover" onClick={onClick}>
             <Container fluid>
               <Row>
                 {/* Title and number of hearts */}

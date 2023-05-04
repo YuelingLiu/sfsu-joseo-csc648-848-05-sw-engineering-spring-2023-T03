@@ -8,7 +8,7 @@ function Home() {
   return (
     <>
       <Hero />
-      <Catergories />
+      <Catergories/>
     </>
   )
 }

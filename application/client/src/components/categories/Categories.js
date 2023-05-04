@@ -1,4 +1,6 @@
 import React from 'react'
+import { useHistory } from "react-router-dom";
+
 import PopularDIshesCards from '../Cards/PopularDIshesCards'
 import './Categories.css'
 
@@ -8,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 function Categories() {
+  const history = useHistory();
   const categoryList = ['Mexican', 'Italian', 'American']
   return (
     <>
@@ -20,7 +23,7 @@ function Categories() {
 
         <Row style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {categoryList.map(category => (
-                <PopularDIshesCards  category={category} />
+                <PopularDIshesCards  category={category} onClick={() => history.push(`post/${category.id}`)}  />
             ))}
         </Row>
       </Container>
