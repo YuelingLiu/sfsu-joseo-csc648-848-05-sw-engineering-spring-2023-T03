@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import './Styling/register.scss';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Alert } from '@mui/material';
+//import { Alert } from '@mui/material';
 
 // import { useNavigate } from 'react-router-dom';
 const Register = () => {
@@ -30,35 +31,35 @@ const Register = () => {
     if (userName.length < 6 || userName.length > 20) {
       errors.username = 'Username must be between 6 and 20 characters';
 
-      // toast.error('Username must be between 6 and 20 characters', {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-      alert(errors.username);
+      toast.error('Username must be between 6 and 20 characters', {
+        position: toast.POSITION.TOP_CENTER,
+        // className: 'toast-message',
+      });
+      // alert(errors.username);
       return;
       console.log(userName);
     }
 
     if (!isChecked) {
-      // toast.error(
-      //   'Please agree to the Privacy Policy before submitting the form.',
-      //   {
-      //     position: toast.POSITION.TOP_CENTER,
-      //     className: 'toast-message',
-      //   }
-      // );
-      alert('Please agree to the Privacy Policy before submitting the form');
+      toast.error(
+        'Please agree to the Privacy Policy before submitting the form.',
+        {
+          position: toast.POSITION.TOP_CENTER,
+          className: 'toast-message',
+        }
+      );
+      //alert('Please agree to the Privacy Policy before submitting the form');
       return;
     }
 
     if (!password.match(/^(?=.*[\W_])[a-zA-Z0-9\W_]{6,20}$/)) {
       errors.password =
         'Password must be 6-20 characters long and contains a special character.';
-      // toast.error(errors.password, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-      alert(errors.password);
+      toast.error(errors.password, {
+        position: toast.POSITION.TOP_CENTER,
+        className: 'toast-message',
+      });
+      // alert(errors.password);
       return;
       console.log('Invalid password');
     }
@@ -67,23 +68,23 @@ const Register = () => {
       !email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/)
     ) {
       errors.email = 'Please enter a valid email address';
-      // toast.error(errors.email, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-      alert(errors.email);
+      toast.error(errors.email, {
+        position: toast.POSITION.TOP_CENTER,
+        className: 'toast-message',
+      });
+      //alert(errors.email);
       return;
       console.log('invalid email');
     }
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      // toast.error('Invalid Input', {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
+      toast.error('Invalid Input', {
+        position: toast.POSITION.TOP_CENTER,
+        className: 'toast-message',
+      });
     } else {
-      alert('created account successfully');
+      toast.success('created account successfully');
       console.log('created account successful');
       history.push('/login');
     }
@@ -203,7 +204,7 @@ const Register = () => {
               I have read and agree to the{' '}
               <a
                 href="https://www.privacypolicyonline.com/live.php?token=CiQ7ixos7r4B0wegGXibJXuVU9qQoeWu"
-                target="_blank"
+                target="blank"
               >
                 Privacy Policy
               </a>
@@ -221,6 +222,7 @@ const Register = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

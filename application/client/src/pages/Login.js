@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -18,13 +19,17 @@ const Login = () => {
 
     // Perform validation
     if (email.trim() === '') {
-      alert('Please enter your email');
+      toast.error('Please enter your email', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       console.log('Please enter your email');
       return;
     }
 
     if (password.trim() === '') {
-      alert('Please enter your password');
+      toast.error('Please enter your password', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       console.log('Please enter your password');
       return;
     }
@@ -50,13 +55,17 @@ const Login = () => {
         // Handle successful login
         localStorage.setItem('token', data.token);
         setLoggedIn(true);
-        alert('Logged in successfully!');
+        toast.success('Logged in successfully!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
         history.push('/');
-        console.log(data);
+        //  console.log(data);
       })
       .catch((error) => {
         // Handle login error
-        alert('There was a problem with login!');
+        toast.error('There was a problem with login!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
         console.error('There was a problem with the login:', error);
       });
   };
@@ -103,6 +112,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
