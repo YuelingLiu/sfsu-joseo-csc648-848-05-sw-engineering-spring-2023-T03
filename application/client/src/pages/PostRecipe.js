@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 // bootstrap
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -22,6 +25,19 @@ const PostRecipe = () => {
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
 
+  const handlePost = async (e) => {
+    e.preventDefault();
+    const errors = {};
+
+    if (recipeName.trim() === '') {
+      toast.warn("You didn't enter a recipe name", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      console.log('Please enter a recipe name');
+      return;
+    }
+  };
+
   // set our image name so we can display it
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
@@ -36,10 +52,6 @@ const PostRecipe = () => {
     console.log('Checking recipeName', e.target.value);
   };
 
-  const handleDescription = (e) => {
-    setRecipeDescription(e.target.value);
-  };
-
   const handleCookingTime = useCallback((e) => {
     setCookingTime(e.target.value);
   }, []);
@@ -48,8 +60,19 @@ const PostRecipe = () => {
     setCookingTimeUnit(e.target.value);
   }, []);
 
+  const handleDescription = (e) => {
+    setRecipeDescription(e.target.value);
+  };
   const handleDifficulty = (e) => {
     setDifficulty(e.target.value);
+  };
+
+  const handleIngredients = (e) => {
+    setIngredients(e.target.value);
+  };
+
+  const handleCategory = (e) => {
+    setCategory(e.target.value);
   };
 
   return (
@@ -88,6 +111,8 @@ const PostRecipe = () => {
                 as="textarea"
                 placeholder="e.g., Chicken Alfredo"
                 style={{ width: '938px', height: '35px' }}
+                value={recipeName}
+                onChange={handleRecipeName}
               />
             </Form.Group>
 
@@ -103,11 +128,12 @@ const PostRecipe = () => {
                   className="mr-2"
                   placeholder="30"
                   style={{ width: '100px' }}
+                  value={cookingTime}
                   onChange={handleCookingTime}
                 />
                 <Form.Select
-                  value={cookingTimeUnit}
                   style={{ width: '150px' }}
+                  value={cookingTimeUnit}
                   onChange={handleCookingTimeUnit}
                 >
                   <option>minutes</option>
@@ -155,8 +181,11 @@ const PostRecipe = () => {
                 as="textarea"
                 placeholder="Enter ingredients separated by commas"
                 style={{ width: '938px', height: '60px' }}
+                value={ingredients}
+                onChange={handleIngredients}
               />
             </Form.Group>
+
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>
                 <strong>Instructions</strong>
@@ -195,7 +224,12 @@ const PostRecipe = () => {
               <Form.Label>
                 <strong>Category</strong>
               </Form.Label>
-              <Form.Control as="select" style={{ width: '950px' }}>
+              <Form.Control
+                as="select"
+                style={{ width: '950px' }}
+                value={category}
+                onChange={handleCategory}
+              >
                 <option value="">Select a category</option>
                 <option value="African">African</option>
                 <option value="American">American</option>
@@ -229,18 +263,18 @@ const PostRecipe = () => {
               </span>
             </Form.Group>
 
-            <Link to="/" style={{ textDecoration: 'none' }}>
-              <Button
-                style={{ marginBottom: '10px' }}
-                size="md"
-                variant="success"
-              >
-                Post Recipe
-              </Button>
-            </Link>
+            <Button
+              style={{ marginBottom: '10px' }}
+              size="md"
+              variant="success"
+              onClick={handlePost}
+            >
+              Post Recipe
+            </Button>
           </Form>
         </div>
       </Container>
+      <ToastContainer />
     </>
   );
 };

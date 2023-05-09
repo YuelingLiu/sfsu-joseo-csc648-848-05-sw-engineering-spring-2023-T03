@@ -73,7 +73,7 @@ const Register = () => {
         position: toast.POSITION.TOP_CENTER,
       });
     } else {
-      toast.success('created account successfully', {
+      toast.success('created account successfully 🚀👏', {
         position: toast.POSITION.TOP_CENTER,
       });
       console.log('created account successful');

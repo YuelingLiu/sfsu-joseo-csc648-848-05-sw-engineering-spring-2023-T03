@@ -161,7 +161,7 @@ function Navbar() {
   }, []);
 
   const logoutHandler = () => {
-    toast.success('You have logged out!', {
+    toast.success('You have logged out!👋👋👋', {
       position: toast.POSITION.TOP_CENTER,
     });
     localStorage.removeItem('token');
