@@ -194,13 +194,15 @@ const PostDetailsPage = () => {
             {loggedIn ? (
               <Row>
                 <CommentForm/>
-
-                {/* map through comments */}
-                <Comment author='Duncan'  date='05/09/2023' text='LORFHDJSAFHDJSAFHDASJFBDASBVCDSAHFSAJLHFDASJL'/>
               </Row>
             ) : (
               <> </>
             )}
+
+            <Row>
+              {/* map through comments */}
+              <Comment author='Duncan'  date='05/09/2023' text='LORFHDJSAFHDJSAFHDASJFBDASBVCDSAHFSAJLHFDASJL'/>
+            </Row>
          
           </Col>
         </Row>
