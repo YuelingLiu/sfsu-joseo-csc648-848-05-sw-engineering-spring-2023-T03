@@ -33,11 +33,8 @@ const Register = () => {
 
       toast.error('Username must be between 6 and 20 characters', {
         position: toast.POSITION.TOP_CENTER,
-        // className: 'toast-message',
       });
-      // alert(errors.username);
       return;
-      console.log(userName);
     }
 
     if (!isChecked) {
@@ -48,7 +45,6 @@ const Register = () => {
           className: 'toast-message',
         }
       );
-      //alert('Please agree to the Privacy Policy before submitting the form');
       return;
     }
 
@@ -57,11 +53,8 @@ const Register = () => {
         'Password must be 6-20 characters long and contains a special character.';
       toast.error(errors.password, {
         position: toast.POSITION.TOP_CENTER,
-        className: 'toast-message',
       });
-      // alert(errors.password);
       return;
-      console.log('Invalid password');
     }
 
     if (
@@ -70,21 +63,19 @@ const Register = () => {
       errors.email = 'Please enter a valid email address';
       toast.error(errors.email, {
         position: toast.POSITION.TOP_CENTER,
-        className: 'toast-message',
       });
-      //alert(errors.email);
       return;
-      console.log('invalid email');
     }
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       toast.error('Invalid Input', {
         position: toast.POSITION.TOP_CENTER,
-        className: 'toast-message',
       });
     } else {
-      toast.success('created account successfully');
+      toast.success('created account successfully', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       console.log('created account successful');
       history.push('/login');
     }
@@ -129,16 +120,24 @@ const Register = () => {
       // check if email has been used
       if (response.status === 409) {
         console.log('Email already exists');
-        alert('Email already exists');
+        toast.error('Email already exists', {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
       if (!response.ok) {
         console.log('response not ok');
+        toast.error('Register account failed!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
         throw new Error('Response ERROR');
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
+      toast.error('Register account failed!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       console.error('Error while registering user:', error.message);
       throw error;
     }
