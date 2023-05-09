@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DashboardCard from '../components/Cards/DashboardCard';
 import Filterbar from '../components/filterbar/Filterbar';
+import { useHistory } from "react-router-dom";
 
 // MUI
 import MenuItem from '@mui/material/MenuItem';
@@ -21,6 +22,8 @@ const Search = ({ location }) => {
   const handleChange = (event) => {
     setfilter(event.target.value);
   };
+
+  const history = useHistory();
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -49,16 +52,25 @@ const Search = ({ location }) => {
     fetchResults();
   }, [location.search]);
 
-  console.log(results.recipe_title);
+  
+  const handleDashboardCardClick = (recipe_id) => {
+    history.push(`/post/${recipe_id}`);
+  };
+
   return (
     <>
       <Container>
         <Filterbar title={results}/>
 
         {results.length > 0 ? (
-          results.map((result) => <DashboardCard result={result} />)
+          results.map((result) =>  
+           <DashboardCard
+              key={result.recipe_id}
+              result={result}
+              onClick={() => handleDashboardCardClick(result.recipe_id)}
+            />)
         ) : (
-          <p>No results found.</p>
+          <p style={{textAlign: 'center'}}>No results found.</p>
         )}
       </Container>
     </>

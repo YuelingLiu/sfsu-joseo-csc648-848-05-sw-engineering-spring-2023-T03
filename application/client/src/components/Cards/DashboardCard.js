@@ -32,7 +32,6 @@ function CategoryCard({result, onClick}) {
       </div>
     );
   }
-
   return (
       <>
         <Card className="card-hover" onClick={onClick} >

@@ -5,7 +5,11 @@ const { v4: uuidv4 } = require("uuid");
 const { client } = require("../db/db");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const bodyParser = require('body-parser');
+const Comment = require('../models/Comment'); // Make sure to import the Comment model with the correct path
 
+// Use body-parser middleware to parse JSON request bodies
+router.use(bodyParser.json());
 // password hashing
 const bcrypt = require("bcrypt");
 
@@ -176,10 +180,13 @@ router.post("/login", async (req, res) => {
       return;
     }
 
+    console.log('dbUserData: ', JSON.stringify(dbUserData, null, 2));
+    console.log(' dbUserData.id: ' + dbUserData.id);
+
     if (dbUserData && passwordMatch) {
       const token = jwt.sign(
         {
-          userId: dbUserData._id,
+          userId: dbUserData.id,
         },
         process.env.JWT_SECRET,
         {
@@ -195,6 +202,57 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: "An error occurred during login." });
+  }
+});
+
+// Comments
+router.post('/post/:postId/comment', async (req, res) => {
+  try {
+    const { token, text } = req.body;
+    console.log('req.body:', req.body);
+
+    const postId = req.params.postId;
+    console.log("this is postID: " + postId);
+
+    // Verify and decode the JWT token to get the user ID
+    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("this is userID: " + userId);
+
+    // Create the comment
+    const commentData = {
+      user_id: userId,
+      recipe_id: postId,
+      comment: text,
+    };
+
+    const createdComment = await Comment.create(commentData);
+    console.log('Comment created');
+
+    res.status(201).json({
+      status: 'success',
+      data: createdComment,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'failure',
+      message: err.message,
+    });
+  }
+});
+
+
+router.get('/post/:postId/comments', async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const comments = await Comment.getCommentsForPost(postId);
+
+    res.status(201).json({ 
+      status: 'success',
+      data: comments 
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred while fetching comments.' });
   }
 });
 

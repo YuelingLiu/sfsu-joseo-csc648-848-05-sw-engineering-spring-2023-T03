@@ -18,10 +18,6 @@ const Filterbar = ({title}) => {
     setfilter(event.target.value);
   };
 
-
-  console.log('this is title: ',title.recipe_title)
-
-
   return (
     <>
       <Container  style={{ marginBottom: '20px'}}>

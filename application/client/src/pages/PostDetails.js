@@ -3,7 +3,6 @@ import ProfileCard from '../components/ProfileCard/ProfileCard';
 import { AuthContext } from '../AuthContext';
 import Comment from '../components/Comments/Comment';
 import CommentForm from '../components/Comments/CommentForm';
-
 // bootstrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,7 +14,7 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-const PostDetailsPage = () => {
+const PostDetailsPage = (props) => {
   // for dummy star rating
   const [value, setValue] = React.useState(2);
   // login status
@@ -29,6 +28,33 @@ const PostDetailsPage = () => {
   const FavoriteToFalse = () => {
     setFavorite(false);
   };
+
+  // all for comments
+  const postId = props.match.params.postId;
+  const { token } = useContext(AuthContext);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_REQ_URL}/post/${postId}/comments`);
+        console.log("server response: ", response); 
+        const data = await response.json();
+
+        if (response.ok) {
+          setComments(data.comments);
+          console.log(comments);
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (err) {
+        console.log(err.message);
+        console.error(err.message);
+      }
+    };
+
+    fetchComments();
+  }, []);
 
   return (
     <>
@@ -193,7 +219,7 @@ const PostDetailsPage = () => {
             {/* comment section  */}
             {loggedIn ? (
               <Row>
-                <CommentForm/>
+                <CommentForm token={token} postId={postId} />
               </Row>
             ) : (
               <> </>
@@ -201,7 +227,7 @@ const PostDetailsPage = () => {
 
             <Row>
               {/* map through comments */}
-              <Comment author='Duncan'  date='05/09/2023' text='LORFHDJSAFHDJSAFHDASJFBDASBVCDSAHFSAJLHFDASJL'/>
+                <Comment author='Duncan'  date='05/09/2023' text='LORFHDJSAFHDJSAFHDASJFBDASBVCDSAHFSAJLHFDASJL'/>
             </Row>
          
           </Col>
