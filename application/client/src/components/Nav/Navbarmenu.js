@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import jwtDecode from 'jwt-decode';
 import { AuthContext } from '../../AuthContext';
 // MUI Components
 import AppBar from '@mui/material/AppBar';

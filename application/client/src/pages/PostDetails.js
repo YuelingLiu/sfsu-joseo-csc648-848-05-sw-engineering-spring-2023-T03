@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ProfileCard from '../components/ProfileCard/ProfileCard';
+import { AuthContext } from '../AuthContext';
+import Comment from '../components/Comments/Comment';
+import CommentForm from '../components/Comments/CommentForm';
 
 // bootstrap
 import Container from 'react-bootstrap/Container';
@@ -15,6 +18,8 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const PostDetailsPage = () => {
   // for dummy star rating
   const [value, setValue] = React.useState(2);
+  // login status
+  const { loggedIn, setLoggedIn } = useContext(AuthContext);
 
   // for clickable favorite heart button
   const [favorite, setFavorite] = React.useState(false);
@@ -33,8 +38,6 @@ const PostDetailsPage = () => {
           <Col md={7}>
             {/* img row*/}
             <Row>
-              {/* <img src='hero.jpg' alt='pic' /> */}
-              {/* <img src={process.env.REACT_APP_REQ_URL + "/images/hero.jpg"} alt='pic'/> */}
               <img src={`${process.env.PUBLIC_URL}/hero.jpg`} alt="pic" />
             </Row>
 
@@ -186,6 +189,19 @@ const PostDetailsPage = () => {
                 <ProfileCard showDetails />
               </div>
             </Row>
+
+            {/* comment section  */}
+            {loggedIn ? (
+              <Row>
+                <CommentForm/>
+
+                {/* map through comments */}
+                <Comment author='Duncan'  date='05/09/2023' text='LORFHDJSAFHDJSAFHDASJFBDASBVCDSAHFSAJLHFDASJL'/>
+              </Row>
+            ) : (
+              <> </>
+            )}
+         
           </Col>
         </Row>
       </Container>
