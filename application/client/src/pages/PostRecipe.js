@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 // bootstrap
 import Button from 'react-bootstrap/Button';
@@ -25,15 +25,84 @@ const PostRecipe = () => {
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
 
-  const handlePost = async (e) => {
+  const handlePostRecipe = async (e) => {
     e.preventDefault();
     const errors = {};
 
     if (recipeName.trim() === '') {
-      toast.warn("You didn't enter a recipe name", {
+      toast.warn(
+        'Oops! It looks like you forgot to enter a name for your recipe',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      console.log('Please enter a recipe name');
+      return;
+    }
+
+    if (cookingTime.trim() === '') {
+      toast.warn(
+        'Oops! It looks like you forgot to select a cooking time for your recipe',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
+
+    if (cookingTimeUnit.trim() === '') {
+      toast.warn('Please choose a cooking time unit for your recipe', {
         position: toast.POSITION.TOP_CENTER,
       });
-      console.log('Please enter a recipe name');
+      return;
+    }
+    if (recipeDescription.trim() === '') {
+      toast.warn(
+        'Uh oh! Looks like you forgot to add a brief description to your recipe',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
+
+    if (difficulty.trim() === '') {
+      toast.warn(
+        "Hey there! It looks like you haven't selected a difficulty level for your recipe! ",
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
+
+    if (ingredients.length === 0) {
+      toast.warn(
+        'Uh oh! Looks like you forgot to add ingredients to your recipe ',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
+
+    if (instructions.trim() === '') {
+      toast.warn(
+        'Uh oh! It looks like you forgot to add instructions to your recipe ',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
+
+    if (category.trim() === '') {
+      toast.warn(
+        'Uh oh! It looks like you forgot to select a category for your recipe ',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
       return;
     }
   };
@@ -52,25 +121,45 @@ const PostRecipe = () => {
     console.log('Checking recipeName', e.target.value);
   };
 
-  const handleCookingTime = useCallback((e) => {
+  const handleCookingTime = (e) => {
     setCookingTime(e.target.value);
-  }, []);
+  };
 
-  const handleCookingTimeUnit = useCallback((e) => {
+  const handleCookingTimeUnit = (e) => {
     setCookingTimeUnit(e.target.value);
-  }, []);
+  };
 
   const handleDescription = (e) => {
     setRecipeDescription(e.target.value);
   };
+
   const handleDifficulty = (e) => {
     setDifficulty(e.target.value);
   };
 
-  const handleIngredients = (e) => {
-    setIngredients(e.target.value);
+  // const handleIngredients = (e) => {
+  //   setIngredients(e.target.value);
+  // };
+
+  const handleIngredientsChange = (event, index) => {
+    const newIngredients = [...ingredients];
+    newIngredients[index] = event.target.value;
+    setIngredients(newIngredients);
   };
 
+  const handleDeleteIngredient = (index) => {
+    console.log('YoU clicked the trash icon');
+    const newIngredients = [...ingredients];
+    newIngredients.splice(index, 1);
+    setIngredients(newIngredients);
+  };
+  const handleAddIngredient = () => {
+    setIngredients([...ingredients, '']);
+  };
+
+  const handleInstructions = (e) => {
+    setIngredients(e.target.value);
+  };
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
@@ -100,23 +189,65 @@ const PostRecipe = () => {
 
           <Form>
             <Form.Group
-              className="mb-3"
+              className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3"
               controlId="formBasicEmail"
               style={{ marginTop: '18px' }}
             >
-              <Form.Label>
-                <strong>Recipe Name</strong>
-              </Form.Label>
-              <Form.Control
-                as="textarea"
-                placeholder="e.g., Chicken Alfredo"
-                style={{ width: '938px', height: '35px' }}
-                value={recipeName}
-                onChange={handleRecipeName}
-              />
+              <div className="w-100 w-md-50 mb-3 mb-md-0">
+                <Form.Label>
+                  <strong>Recipe Name</strong>
+                </Form.Label>
+                <Form.Control
+                  as="textarea"
+                  placeholder="e.g., Chicken Alfredo"
+                  style={{ height: '35px', width: '350px' }}
+                  value={recipeName}
+                  required={true}
+                  onChange={handleRecipeName}
+                />
+
+                <Form.Label>
+                  <strong>Cooking Time</strong>
+                </Form.Label>
+                <div className="d-flex">
+                  <Form.Control
+                    type="number"
+                    min="1"
+                    step="1"
+                    className="mr-2"
+                    placeholder="30"
+                    style={{ width: '150px' }}
+                    value={cookingTime}
+                    required={true}
+                    onChange={handleCookingTime}
+                  />
+                  <Form.Select
+                    style={{ width: '200px' }}
+                    value={cookingTimeUnit}
+                    onChange={handleCookingTimeUnit}
+                  >
+                    <option>minutes</option>
+                    <option>hours</option>
+                    <option>days</option>
+                  </Form.Select>
+                </div>
+              </div>
+              <div className="w-100 w-md-50">
+                <Form.Label>
+                  <strong>Description</strong>
+                </Form.Label>
+                <Form.Control
+                  as="textarea"
+                  style={{ height: '100px' }}
+                  placeholder="e.g., This easy Chicken Alfredo recipe includes golden pan-fried chicken breasts and tender noodles, coated in the most dreamy cream sauce ever!"
+                  value={recipeDescription}
+                  required={true}
+                  onChange={handleDescription}
+                />
+              </div>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            {/* <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>
                 <strong>Cooking Time</strong>
               </Form.Label>
@@ -129,6 +260,7 @@ const PostRecipe = () => {
                   placeholder="30"
                   style={{ width: '100px' }}
                   value={cookingTime}
+                  required={true}
                   onChange={handleCookingTime}
                 />
                 <Form.Select
@@ -141,28 +273,27 @@ const PostRecipe = () => {
                   <option>days</option>
                 </Form.Select>
               </div>
-            </Form.Group>
+            </Form.Group> */}
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            {/* <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>
                 <strong>Recipe Description</strong>
               </Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
-                placeholder="e.g., This easy Chicken Alfredo recipe includes golden pan-fried chicken breasts and tender noodles, coated in the most dreamy cream sauce ever!"
                 style={{ resize: 'vertical', width: '950px' }}
                 value={recipeDescription}
                 onChange={handleDescription}
               />
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>
                 <strong>Difficulty</strong>
               </Form.Label>
               <Form.Select
-                style={{ width: '250px' }}
+                style={{ width: '350px' }}
                 value={difficulty}
                 onChange={handleDifficulty}
               >
@@ -173,17 +304,58 @@ const PostRecipe = () => {
               </Form.Select>
             </Form.Group>
 
-            <Form.Group controlId="formBasicPassword" className="mb-3">
+            <Form.Group controlId="formBasicPassword" className="mb-3 ">
               <Form.Label>
                 <strong>Ingredients</strong>
+                <p style={{ width: '350px', color: 'gray', fontSize: '14px' }}>
+                  Enter one ingredient per line. Include the quantity (i.e.
+                  cups, tablespoons) and any special preparation (i.e. sifted,
+                  softened, chopped). Use optional headers to organize the
+                  different parts of the recipe (i.e. Cake, Frosting, Dressing).
+                </p>
               </Form.Label>
-              <Form.Control
-                as="textarea"
-                placeholder="Enter ingredients separated by commas"
-                style={{ width: '938px', height: '60px' }}
-                value={ingredients}
-                onChange={handleIngredients}
-              />
+
+              <div className="d-flex">
+                <Form.Control
+                  as="textarea"
+                  placeholder="add ingredients . . . "
+                  //  placeholder={`Ingredient ${index + 1}`}
+                  style={{ width: '350px', height: '35px' }}
+                />
+                <Button
+                  variant="dark"
+                  style={{
+                    backgroundColor: 'transparent',
+                    borderColor: 'transparent',
+                    color: 'hsl(0, 83%, 39%)',
+                  }}
+                >
+                  <FaTrash onClick={handleDeleteIngredient} />
+                </Button>
+              </div>
+
+              {ingredients.map((ingredient, index) => (
+                <Form.Control
+                  key={index}
+                  as="textarea"
+                  placeholder="add ingredients . . . "
+                  //  placeholder={`Ingredient ${index + 1}`}
+                  value={ingredient}
+                  onChange={(event) => handleIngredientsChange(event, index)}
+                  style={{ width: '350px', height: '35px', marginTop: '5px' }}
+                />
+              ))}
+              <Button
+                variant="dark"
+                onClick={handleAddIngredient}
+                style={{
+                  marginTop: '10px',
+                  backgroundColor: 'white',
+                  color: 'Green',
+                }}
+              >
+                Add Ingredient
+              </Button>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -198,6 +370,7 @@ const PostRecipe = () => {
                   whiteSpace: 'pre-wrap',
                   width: '950px',
                 }}
+                onChange={handleInstructions}
                 onInput={(event) => {
                   // Clear any existing timeout
                   clearTimeout(event.target.timeout);
@@ -265,9 +438,10 @@ const PostRecipe = () => {
 
             <Button
               style={{ marginBottom: '10px' }}
+              Reci
               size="md"
               variant="success"
-              onClick={handlePost}
+              onClick={handlePostRecipe}
             >
               Post Recipe
             </Button>
