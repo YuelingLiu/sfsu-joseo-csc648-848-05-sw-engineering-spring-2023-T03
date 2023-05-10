@@ -1,11 +1,15 @@
 const router = require("express").Router();
+const jwt = require("jsonwebtoken");
+
+// Amazon stuff
 const { Upload } = require("@aws-sdk/lib-storage"),
   { S3 } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
 const { client } = require("../db/db");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 const bodyParser = require('body-parser');
+
+// MODELS
+const User = require("../models/User");
 const Comment = require('../models/Comment'); // Make sure to import the Comment model with the correct path
 
 // Use body-parser middleware to parse JSON request bodies
@@ -33,6 +37,8 @@ const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
+
+
 
 router.get("/followers", async (req, res) => {
   const userID = req.query.id;
@@ -244,7 +250,10 @@ router.post('/post/:postId/comment', async (req, res) => {
 router.get('/post/:postId/comments', async (req, res) => {
   try {
     const postId = req.params.postId;
-    const comments = await Comment.getCommentsForPost(postId);
+    console.log(postId);
+
+    const comments = await Comment.getCommentsForRecipe(postId);
+    // console.log(JSON.stringify(comments));
 
     res.status(201).json({ 
       status: 'success',

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, TextField } from '@mui/material';
 
-const CommentForm = ({  token, postId }) => {
+const CommentForm = ({  token, postId, fetchComments }) => {
   const [text, setText] = React.useState('');
 
   const handleSubmit = async (e) => {
@@ -12,7 +12,7 @@ const CommentForm = ({  token, postId }) => {
     console.log('Text:', text);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/post/${postId}/comment`, {
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/post/${postId}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,7 +23,9 @@ const CommentForm = ({  token, postId }) => {
       const result = await response.json();
 
       if (result.status === 'success') {
+        // refresh comment section 
         console.log('Success to post comment');
+        fetchComments(); // <-- here
       } else {
         console.error(result.message);
       }

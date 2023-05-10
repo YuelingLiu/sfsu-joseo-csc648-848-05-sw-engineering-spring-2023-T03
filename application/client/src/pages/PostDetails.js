@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext,  useCallback } from 'react';
+
 import ProfileCard from '../components/ProfileCard/ProfileCard';
 import { AuthContext } from '../AuthContext';
 import Comment from '../components/Comments/Comment';
@@ -32,29 +33,36 @@ const PostDetailsPage = (props) => {
   // all for comments
   const postId = props.match.params.postId;
   const { token } = useContext(AuthContext);
-  const [comments, setComments] = useState([]);
+  const [Comments, setComments] = useState([]);
+
+  const fetchComments = useCallback(async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/post/${postId}/comments`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("comments arr: " + data.data);
+        setComments(data.data);
+      } else {
+        console.log('response was not okay');
+        throw new Error(data.error);
+      }
+    } catch (err) {
+      console.log('response threw error');
+      console.log(err.message);
+      console.error(err.message);
+    }
+  }, [postId]); ;
 
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_REQ_URL}/post/${postId}/comments`);
-        console.log("server response: ", response); 
-        const data = await response.json();
-
-        if (response.ok) {
-          setComments(data.comments);
-          console.log(comments);
-        } else {
-          throw new Error(data.error);
-        }
-      } catch (err) {
-        console.log(err.message);
-        console.error(err.message);
-      }
-    };
-
     fetchComments();
-  }, []);
+  }, [fetchComments]);
 
   return (
     <>
@@ -219,7 +227,8 @@ const PostDetailsPage = (props) => {
             {/* comment section  */}
             {loggedIn ? (
               <Row>
-                <CommentForm token={token} postId={postId} />
+                <CommentForm token={token} postId={postId} fetchComments={fetchComments} />
+
               </Row>
             ) : (
               <> </>
@@ -227,7 +236,15 @@ const PostDetailsPage = (props) => {
 
             <Row>
               {/* map through comments */}
-                <Comment author='Duncan'  date='05/09/2023' text='LORFHDJSAFHDJSAFHDASJFBDASBVCDSAHFSAJLHFDASJL'/>
+              {Comments.map((data, index) => (
+                  <Comment 
+                      key={index}
+                      author={data.username}  
+                      date={data.username}  
+                      text={data.comment} 
+                  />
+              ))}
+
             </Row>
          
           </Col>

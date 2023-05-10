@@ -8,7 +8,6 @@ import FilterbarStatic from '../components/filterbar/FilterbarStatic';
 // boostrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 // This is the TopRated page. It is the page that displays the top rated recipes.
 const TopRated = () => {

@@ -25,12 +25,13 @@ class Comment {
     return await knex('comments').where({ id }).delete();
   }
 
-  static async getCommentsForPost(post_id) {
+  static async getCommentsForRecipe(recipe_id) {
     return await knex('comments')
       .join('users', 'comments.user_id', 'users.id')
-      .where({ post_id })
-      .select('comments.*', 'users.username as user_name');
+      .where({ 'comments.recipe_id': recipe_id })
+      .select('comments.id', 'comments.comment', 'comments.recipe_id', 'users.id as user_id', 'users.username');
   }
+
 }
 
 module.exports = Comment;
