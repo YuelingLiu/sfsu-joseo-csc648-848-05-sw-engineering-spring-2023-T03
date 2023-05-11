@@ -9,10 +9,10 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
-import FilterBar from '../components/filterbar/Filterbar'
-
+import FilterBar from '../components/filterbar/Filterbar';
 
 const PostRecipe = () => {
+  const history = useHistory();
   // holds image uploaded name
   const [selectedFile, setSelectedFile] = useState('');
   const [recipeName, setRecipeName] = useState('');
@@ -27,8 +27,8 @@ const PostRecipe = () => {
   const [instructions, setInstructions] = useState('');
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
+  const [validationErrors, setValidationErrors] = useState({});
 
- 
   const handlePostRecipe = async (e) => {
     e.preventDefault();
     const errors = {};
@@ -54,12 +54,12 @@ const PostRecipe = () => {
       return;
     }
 
-    if (cookingTimeUnit.trim() === '') {
-      toast.warn('Please choose a cooking time unit for your recipe', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      return;
-    }
+    // if (cookingTimeUnit.trim() === '') {
+    //   toast.warn('Please choose a cooking time unit for your recipe', {
+    //     position: toast.POSITION.TOP_CENTER,
+    //   });
+    //   return;
+    // }
     if (recipeDescription.trim() === '') {
       toast.warn(
         'Uh oh! Looks like you forgot to add a brief description to your recipe',
@@ -108,6 +108,78 @@ const PostRecipe = () => {
         }
       );
       return;
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      console.log('post recipe NOT successfully');
+      toast.error('Post recipe failed', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    } else {
+      toast.success('post recipe successfully 🚀👏', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      console.log('post recipe successfully');
+      history.push('/');
+    }
+
+    try {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('title', recipeName);
+      formData.append('cooking_time', cookingTime);
+      formData.append('description', recipeDescription);
+      formData.append('difficulty', difficulty);
+      // formData.append('ingredients', ingredients);
+      // formData.append('instructions', instructions);
+      // formData.append('category', category);
+
+      // change this to if statement
+      if (images) {
+        formData.append('photo_url', images);
+      }
+      console.log('This is recipe images: ' + images);
+
+      postRecipe(formData)
+        .then((recipeData) => {
+          console.log('DATA: ', recipeData);
+        })
+        .catch((error) => {
+          console.log('ERROR: ', error.message);
+        });
+    } catch (error) {
+      console.log('Error message: ' + error.message);
+    }
+  };
+
+  const postRecipe = async (formData) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/post-recipe`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        // console.log('response not ok');
+        // toast.error('Post recipe failed!', {
+        //   position: toast.POSITION.TOP_CENTER,
+        // });
+        throw new Error('Response ERROR');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      // toast.error('Post recipe failed!', {
+      //   position: toast.POSITION.TOP_CENTER,
+      // });
+      console.error('Error while registering user:', error.message);
+      throw error;
     }
   };
 
@@ -170,7 +242,7 @@ const PostRecipe = () => {
     console.log('checking instruction func');
     setInstructions(e.target.value);
   };
-  
+
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
@@ -201,7 +273,8 @@ const PostRecipe = () => {
             >
               <Form.Group
                 controlId="formBasicEmail"
-                style={{ marginTop: '1px', width: '100%' }}
+                className="mb-3"
+                style={{ marginTop: '1px', width: '100%', marginLeft: '2%' }}
               >
                 <Form.Label>
                   <strong>Recipe Name</strong>
@@ -215,7 +288,7 @@ const PostRecipe = () => {
                   onChange={handleRecipeName}
                 />
                 <Form.Group />
-                <Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>
                     <strong>Description</strong>
                   </Form.Label>
