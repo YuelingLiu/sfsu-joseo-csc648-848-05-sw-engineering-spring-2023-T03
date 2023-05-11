@@ -19,7 +19,7 @@ const Register = () => {
   const [image, setImage] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
   const [isChecked, setIsChecked] = useState(false);
-  // toast.configure();
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -30,8 +30,26 @@ const Register = () => {
     const errors = {};
     if (userName.length < 6 || userName.length > 20) {
       errors.username = 'Username must be between 6 and 20 characters';
-
+      setValidationErrors(errors); // set validation errors state
+      console.log(setValidationErrors(errors));
       toast.error('Username must be between 6 and 20 characters', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+
+    if (!password.match(/^(?=.*[\W_])[a-zA-Z0-9\W_]{6,20}$/)) {
+      errors.password =
+        'Password must be 6-20 characters long and contains a special character.';
+      toast.error(errors.password, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      errors.email = 'Please enter a valid email address';
+      toast.error(errors.email, {
         position: toast.POSITION.TOP_CENTER,
       });
       return;
@@ -45,25 +63,6 @@ const Register = () => {
           className: 'toast-message',
         }
       );
-      return;
-    }
-
-    if (!password.match(/^(?=.*[\W_])[a-zA-Z0-9\W_]{6,20}$/)) {
-      errors.password =
-        'Password must be 6-20 characters long and contains a special character.';
-      toast.error(errors.password, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      return;
-    }
-
-    if (
-      !email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/)
-    ) {
-      errors.email = 'Please enter a valid email address';
-      toast.error(errors.email, {
-        position: toast.POSITION.TOP_CENTER,
-      });
       return;
     }
 
@@ -180,6 +179,9 @@ const Register = () => {
               required={true}
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
+              style={{
+                border: validationErrors.username ? '1px solid green' : '',
+              }}
               id="userName"
             />
             <input
