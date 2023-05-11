@@ -187,22 +187,25 @@ router.post("/login", async (req, res) => {
     }
 
     console.log('dbUserData: ', JSON.stringify(dbUserData, null, 2));
-    console.log(' dbUserData.id: ' + dbUserData.id);
+    console.log(' dbUserData.username: ' + dbUserData.username);
 
     if (dbUserData && passwordMatch) {
+      const name = dbUserData.username;
       const token = jwt.sign(
         {
           userId: dbUserData.id,
         },
-        process.env.JWT_SECRET,
+          process.env.JWT_SECRET,
         {
           expiresIn: "24h",
         }
       );
+
       res.json({
         success: true,
         message: "Authentication successful!",
         token,
+        name
       });
     }
   } catch (err) {

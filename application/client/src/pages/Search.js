@@ -15,7 +15,7 @@ import Container from 'react-bootstrap/esm/Container';
 
 const Search = ({ location }) => {
   const [results, setResults] = useState([]);
-  const [title, setTitle] = useState([]);
+  const [title, setTitle] = useState('');
 
   const [filter, setfilter] = React.useState('');
 
@@ -36,9 +36,9 @@ const Search = ({ location }) => {
 
         if (response.ok) {
           setResults(data.results);
-          console.log("Results:", results);
+          console.log("Results:", data.results[0].recipe_title);
 
-          setTitle(results.recipe_title);
+          setTitle(data.results[0].recipe_title);
           console.log("Recipe title:", title);
 
         } else {
@@ -60,7 +60,7 @@ const Search = ({ location }) => {
   return (
     <>
       <Container>
-        <Filterbar title={results}/>
+        <Filterbar title={title}/>
 
         {results.length > 0 ? (
           results.map((result) =>  

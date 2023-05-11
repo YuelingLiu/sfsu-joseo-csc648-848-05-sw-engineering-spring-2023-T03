@@ -23,11 +23,9 @@ const Filterbar = ({title}) => {
       <Container  style={{ marginBottom: '20px'}}>
         <Row>
           <Col xs={5} sm={8}>
-          {title.map((result, index) => (
-            <div key={index}>
-              <h1 sx={{ fontWeight: 'bolder' }}>{result.recipe_title}</h1>
+            <div >
+              <h1 sx={{ fontWeight: 'bolder' }}>{title}</h1>
             </div>
-          ))}
           </Col>
 
           <Col xs={7} sm={4}>
@@ -56,4 +54,4 @@ const Filterbar = ({title}) => {
   )
 }
 
-export default Filterbar
+export default Filterbar;
