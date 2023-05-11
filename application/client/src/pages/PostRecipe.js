@@ -9,6 +9,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
+import FilterBar from '../components/filterbar/Filterbar'
+
 
 const PostRecipe = () => {
   // holds image uploaded name
@@ -26,6 +28,7 @@ const PostRecipe = () => {
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
 
+ 
   const handlePostRecipe = async (e) => {
     e.preventDefault();
     const errors = {};
@@ -165,8 +168,9 @@ const PostRecipe = () => {
 
   const handleInstructions = (e) => {
     console.log('checking instruction func');
-    setIngredients(e.target.value);
+    setInstructions(e.target.value);
   };
+  
   const handleCategory = (e) => {
     setCategory(e.target.value);
   };
@@ -334,25 +338,6 @@ const PostRecipe = () => {
                     value={instructions}
                     required={true}
                     onChange={handleInstructions}
-                    // onInput={(event) => {
-                    //   // Clear any existing timeout
-                    //   clearTimeout(event.target.timeout);
-                    //   // Set a new timeout to execute the numbering code after a short delay
-                    //   event.target.timeout = setTimeout(() => {
-                    //     // Split the text into lines
-                    //     const lines = event.target.value.split('\n');
-                    //     // Remove any existing numbering from the lines
-                    //     const unnumberedLines = lines.map((line) =>
-                    //       line.replace(/^\d+\.\s+/, '')
-                    //     );
-                    //     // Create a new string with numbered lines
-                    //     const numberedText = unnumberedLines
-                    //       .map((line, index) => `${index + 1}. ${line}`)
-                    //       .join('\n');
-                    //     // Update the textarea with the numbered text
-                    //     event.target.value = numberedText;
-                    //   }, 250); // Delay the execution of the numbering code by 250 milliseconds
-                    // }}
                   />
                 </Form.Group>
                 <Form.Group className="mb-2">
