@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 // bootstrap
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -167,286 +168,232 @@ const PostRecipe = () => {
   return (
     <>
       <Container>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <h3
-            align="left"
-            class="w3-border-bottom w3-border-light-grey w3-padding-16 fa-2x"
-          >
-            Create New Recipe
-          </h3>
-          <img
-            src="image6.jpg"
-            alt="Recipe"
-            style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
-          />
+        <Row className="d-flex justify-content-center">
+          <Col md={9} sm={4} xs={12}>
+            <h3 align="center">Add New Recipe</h3>
+            <img
+              src="image8.jpg"
+              alt="Recipe"
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
+          </Col>
+        </Row>
 
-          <Form>
-            <Form.Group
-              className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3"
-              controlId="formBasicEmail"
-              style={{ marginTop: '18px' }}
+        <Row className="d-flex justify-content-center">
+          <Col md={9} sm={4} xs={12}>
+            <Form
+              style={{
+                backgroundColor: '#f4fffb',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
             >
-              <div className="w-100 w-md-50 mb-3 mb-md-0">
+              <Form.Group
+                controlId="formBasicEmail"
+                style={{ marginTop: '1px', width: '100%' }}
+              >
                 <Form.Label>
                   <strong>Recipe Name</strong>
                 </Form.Label>
                 <Form.Control
                   as="textarea"
                   placeholder="e.g., Chicken Alfredo"
-                  style={{ height: '35px', width: '350px' }}
+                  style={{ height: '35px', width: '80%' }}
                   value={recipeName}
                   required={true}
                   onChange={handleRecipeName}
                 />
-
-                <Form.Label>
-                  <strong>Cooking Time</strong>
-                </Form.Label>
-                <div className="d-flex">
+                <Form.Group />
+                <Form.Group>
+                  <Form.Label>
+                    <strong>Description</strong>
+                  </Form.Label>
                   <Form.Control
-                    type="number"
-                    min="1"
-                    step="1"
-                    className="mr-2"
-                    placeholder="30"
-                    style={{ width: '150px' }}
-                    value={cookingTime}
+                    as="textarea"
+                    style={{ height: '100px', width: '80%' }}
+                    placeholder="e.g., This easy Chicken Alfredo recipe includes golden pan-fried chicken breasts and tender noodles, coated in the most dreamy cream sauce ever!"
+                    value={recipeDescription}
                     required={true}
-                    onChange={handleCookingTime}
+                    onChange={handleDescription}
                   />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>
+                    <strong>Cooking Time</strong>
+                  </Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      type="number"
+                      min="1"
+                      step="1"
+                      className="mr-2"
+                      placeholder="30"
+                      style={{ width: '15%' }}
+                      value={cookingTime}
+                      required={true}
+                      onChange={handleCookingTime}
+                    />
+                    <option
+                      value="Minutes "
+                      style={{ marginLeft: '5px', textAlign: 'center' }}
+                    >
+                      Minutes
+                    </option>
+                    {/* style={{ width: '18%' }}
+                    onChange={handleCookingTimeUnit} */}
+                    {/* <option>minutes</option> */}
+                  </div>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>
+                    <strong>Difficulty</strong>
+                  </Form.Label>
                   <Form.Select
-                    style={{ width: '200px' }}
-                    value={cookingTimeUnit}
-                    onChange={handleCookingTimeUnit}
+                    style={{ width: '30%' }}
+                    value={difficulty}
+                    onChange={handleDifficulty}
                   >
-                    <option>minutes</option>
-                    <option>hours</option>
-                    <option>days</option>
+                    <option value="">Select difficulty level</option>
+                    <option value="Easy">Beginner</option>
+                    <option value="Moderate">Intermediate</option>
+                    <option value="Hard">Advanced</option>
                   </Form.Select>
-                </div>
-              </div>
-              <div className="w-100 w-md-50">
-                <Form.Label>
-                  <strong>Description</strong>
-                </Form.Label>
-                <Form.Control
-                  as="textarea"
-                  style={{ height: '100px' }}
-                  placeholder="e.g., This easy Chicken Alfredo recipe includes golden pan-fried chicken breasts and tender noodles, coated in the most dreamy cream sauce ever!"
-                  value={recipeDescription}
-                  required={true}
-                  onChange={handleDescription}
-                />
-              </div>
-            </Form.Group>
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword" className="mb-3 ">
+                  <Form.Label>
+                    <strong>Ingredients</strong>
+                    <p
+                      style={{
+                        color: 'gray',
+                        fontSize: '14px',
+                        width: '80%',
+                      }}
+                    >
+                      Enter one ingredient per line. Include the quantity (i.e.
+                      cups, tablespoons) and any special preparation (i.e.
+                      sifted, softened, chopped). Use optional headers to
+                      organize the different parts of the recipe (i.e. Cake,
+                      Frosting, Dressing).
+                    </p>
+                  </Form.Label>
 
-            {/* <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>
-                <strong>Cooking Time</strong>
-              </Form.Label>
-              <div className="d-flex">
-                <Form.Control
-                  type="number"
-                  min="1"
-                  step="1"
-                  className="mr-2"
-                  placeholder="30"
-                  style={{ width: '100px' }}
-                  value={cookingTime}
-                  required={true}
-                  onChange={handleCookingTime}
-                />
-                <Form.Select
-                  style={{ width: '150px' }}
-                  value={cookingTimeUnit}
-                  onChange={handleCookingTimeUnit}
-                >
-                  <option>minutes</option>
-                  <option>hours</option>
-                  <option>days</option>
-                </Form.Select>
-              </div>
-            </Form.Group> */}
-
-            {/* <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>
-                <strong>Recipe Description</strong>
-              </Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                style={{ resize: 'vertical', width: '950px' }}
-                value={recipeDescription}
-                onChange={handleDescription}
-              />
-            </Form.Group> */}
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>
-                <strong>Difficulty</strong>
-              </Form.Label>
-              <Form.Select
-                style={{ width: '350px' }}
-                value={difficulty}
-                onChange={handleDifficulty}
-              >
-                <option value="">Select difficulty level</option>
-                <option value="Easy">Beginner</option>
-                <option value="Moderate">Intermediate</option>
-                <option value="Hard">Advanced</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword" className="mb-3 ">
-              <Form.Label>
-                <strong>Ingredients</strong>
-                <p style={{ width: '350px', color: 'gray', fontSize: '14px' }}>
-                  Enter one ingredient per line. Include the quantity (i.e.
-                  cups, tablespoons) and any special preparation (i.e. sifted,
-                  softened, chopped). Use optional headers to organize the
-                  different parts of the recipe (i.e. Cake, Frosting, Dressing).
-                </p>
-              </Form.Label>
-
-              <div className="d-flex">
-                <Form.Control
-                  as="textarea"
-                  placeholder="add ingredients . . . "
-                  //  placeholder={`Ingredient ${index + 1}`}
-                  style={{ width: '350px', height: '35px' }}
-                />
-                <Button
-                  variant="dark"
-                  style={{
-                    backgroundColor: 'transparent',
-                    borderColor: 'transparent',
-                    color: 'hsl(0, 83%, 39%)',
-                  }}
-                >
-                  <FaTrash onClick={handleDeleteIngredient} />
-                </Button>
-              </div>
-
-              {ingredients.map((ingredient, index) => (
-                <Form.Control
-                  key={index}
-                  as="textarea"
-                  placeholder="add ingredients . . . "
-                  //  placeholder={`Ingredient ${index + 1}`}
-                  value={ingredient}
-                  onChange={(event) => handleIngredientsChange(event, index)}
-                  style={{ width: '350px', height: '35px', marginTop: '5px' }}
-                />
-              ))}
+                  <div className="d-flex">
+                    <Form.Control
+                      as="textarea"
+                      placeholder="add ingredients . . . "
+                      //  placeholder={`Ingredient ${index + 1}`}
+                      style={{ width: '50%', height: '35px' }}
+                    />
+                    <Button
+                      variant="dark"
+                      style={{
+                        backgroundColor: 'transparent',
+                        borderColor: 'transparent',
+                        color: 'hsl(0, 83%, 39%)',
+                      }}
+                    >
+                      <FaTrash onClick={handleDeleteIngredient} />
+                    </Button>
+                  </div>
+                  <Button
+                    variant="dark"
+                    onClick={handleAddIngredient}
+                    style={{
+                      marginTop: '10px',
+                      backgroundColor: 'white',
+                      color: 'Green',
+                    }}
+                  >
+                    Add Ingredient
+                  </Button>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>
+                    <strong>Description</strong>
+                  </Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    style={{ height: '150px', width: '80%' }}
+                    placeholder="e.g., This easy Chicken Alfredo recipe includes golden pan-fried chicken breasts and tender noodles, coated in the most dreamy cream sauce ever!"
+                    value={recipeDescription}
+                    required={true}
+                    onChange={handleInstructions}
+                    // onInput={(event) => {
+                    //   // Clear any existing timeout
+                    //   clearTimeout(event.target.timeout);
+                    //   // Set a new timeout to execute the numbering code after a short delay
+                    //   event.target.timeout = setTimeout(() => {
+                    //     // Split the text into lines
+                    //     const lines = event.target.value.split('\n');
+                    //     // Remove any existing numbering from the lines
+                    //     const unnumberedLines = lines.map((line) =>
+                    //       line.replace(/^\d+\.\s+/, '')
+                    //     );
+                    //     // Create a new string with numbered lines
+                    //     const numberedText = unnumberedLines
+                    //       .map((line, index) => `${index + 1}. ${line}`)
+                    //       .join('\n');
+                    //     // Update the textarea with the numbered text
+                    //     event.target.value = numberedText;
+                    //   }, 250); // Delay the execution of the numbering code by 250 milliseconds
+                    // }}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label>
+                    <strong>Category</strong>
+                  </Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={category}
+                    style={{ width: '40%' }}
+                    onChange={handleCategory}
+                  >
+                    <option value="">Select a category</option>
+                    <option value="African">African</option>
+                    <option value="American">American</option>
+                    <option value="Asian">Asian</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="French">French</option>
+                    <option value="Greek">Greek</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Latin-American">Latin-American</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Middle-Eastern">Middle-Eastern</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    name="imageUpload"
+                    accept="image/*"
+                    style={{ display: 'none', marginTop: '10px' }}
+                    onChange={handleFileChange}
+                  />
+                  <label htmlFor="imageUpload" className="custom-file-upload">
+                    Choose image
+                  </label>
+                  <span style={{ marginLeft: '10px' }}>
+                    {selectedFile || 'No file chosen'}
+                  </span>
+                </Form.Group>
+              </Form.Group>
               <Button
-                variant="dark"
-                onClick={handleAddIngredient}
-                style={{
-                  marginTop: '10px',
-                  backgroundColor: 'white',
-                  color: 'Green',
-                }}
+                style={{ marginBottom: '10px' }}
+                Reci
+                size="md"
+                variant="success"
+                onClick={handlePostRecipe}
               >
-                Add Ingredient
+                Post Recipe
               </Button>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>
-                <strong>Instructions</strong>
-              </Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={6}
-                placeholder="Hit enter after each step, we will automatically number the instructions for you."
-                style={{
-                  whiteSpace: 'pre-wrap',
-                  width: '950px',
-                }}
-                onChange={handleInstructions}
-                onInput={(event) => {
-                  // Clear any existing timeout
-                  clearTimeout(event.target.timeout);
-                  // Set a new timeout to execute the numbering code after a short delay
-                  event.target.timeout = setTimeout(() => {
-                    // Split the text into lines
-                    const lines = event.target.value.split('\n');
-                    // Remove any existing numbering from the lines
-                    const unnumberedLines = lines.map((line) =>
-                      line.replace(/^\d+\.\s+/, '')
-                    );
-                    // Create a new string with numbered lines
-                    const numberedText = unnumberedLines
-                      .map((line, index) => `${index + 1}. ${line}`)
-                      .join('\n');
-                    // Update the textarea with the numbered text
-                    event.target.value = numberedText;
-                  }, 250); // Delay the execution of the numbering code by 250 milliseconds
-                }}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicCategory">
-              <Form.Label>
-                <strong>Category</strong>
-              </Form.Label>
-              <Form.Control
-                as="select"
-                style={{ width: '950px' }}
-                value={category}
-                onChange={handleCategory}
-              >
-                <option value="">Select a category</option>
-                <option value="African">African</option>
-                <option value="American">American</option>
-                <option value="Asian">Asian</option>
-                <option value="Chinese">Chinese</option>
-                <option value="French">French</option>
-                <option value="Greek">Greek</option>
-                <option value="Indian">Indian</option>
-                <option value="Italian">Italian</option>
-                <option value="Japanese">Japanese</option>
-                <option value="Latin-American">Latin-American</option>
-                <option value="Mexican">Mexican</option>
-                <option value="Middle-Eastern">Middle-Eastern</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <input
-                type="file"
-                id="imageUpload"
-                name="imageUpload"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-              <label htmlFor="imageUpload" className="custom-file-upload">
-                Choose image
-              </label>
-              <span style={{ marginLeft: '10px' }}>
-                {selectedFile || 'No file chosen'}
-              </span>
-            </Form.Group>
-
-            <Button
-              style={{ marginBottom: '10px' }}
-              Reci
-              size="md"
-              variant="success"
-              onClick={handlePostRecipe}
-            >
-              Post Recipe
-            </Button>
-          </Form>
-        </div>
+            </Form>
+          </Col>
+        </Row>
       </Container>
       <ToastContainer />
     </>
