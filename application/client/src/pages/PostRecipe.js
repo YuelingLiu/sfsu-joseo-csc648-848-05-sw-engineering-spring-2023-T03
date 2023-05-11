@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -126,9 +126,9 @@ const PostRecipe = () => {
     setCookingTime(e.target.value);
   };
 
-  const handleCookingTimeUnit = (e) => {
-    setCookingTimeUnit(e.target.value);
-  };
+  // const handleCookingTimeUnit = (e) => {
+  //   setCookingTimeUnit(e.target.value);
+  // };
 
   const handleDescription = (e) => {
     setRecipeDescription(e.target.value);
@@ -141,7 +141,6 @@ const PostRecipe = () => {
   // const handleIngredients = (e) => {
   //   setIngredients(e.target.value);
   // };
-
   const handleIngredientsChange = (event, index) => {
     const newIngredients = [...ingredients];
     newIngredients[index] = event.target.value;
@@ -154,11 +153,18 @@ const PostRecipe = () => {
     newIngredients.splice(index, 1);
     setIngredients(newIngredients);
   };
+
   const handleAddIngredient = () => {
+    console.log('Checking add button gets triggered or not ');
     setIngredients([...ingredients, '']);
+    console.log(ingredients);
   };
+  useEffect(() => {
+    console.log('Updated ingredients:', ingredients);
+  }, [ingredients]);
 
   const handleInstructions = (e) => {
+    console.log('checking instruction func');
     setIngredients(e.target.value);
   };
   const handleCategory = (e) => {
@@ -260,6 +266,7 @@ const PostRecipe = () => {
                     <option value="Hard">Advanced</option>
                   </Form.Select>
                 </Form.Group>
+
                 <Form.Group controlId="formBasicPassword" className="mb-3 ">
                   <Form.Label>
                     <strong>Ingredients</strong>
@@ -271,31 +278,38 @@ const PostRecipe = () => {
                       }}
                     >
                       Enter one ingredient per line. Include the quantity (i.e.
-                      cups, tablespoons) and any special preparation (i.e.
-                      sifted, softened, chopped). Use optional headers to
-                      organize the different parts of the recipe (i.e. Cake,
-                      Frosting, Dressing).
+                      2 cups flour, 1 tablespoon sugar). If an ingredient
+                      requires special preparation, such as sifting or chopping,
+                      include this in the ingredient line (i.e. 1 cup flour,
+                      sifted)
                     </p>
                   </Form.Label>
 
-                  <div className="d-flex">
-                    <Form.Control
-                      as="textarea"
-                      placeholder="add ingredients . . . "
-                      //  placeholder={`Ingredient ${index + 1}`}
-                      style={{ width: '50%', height: '35px' }}
-                    />
-                    <Button
-                      variant="dark"
-                      style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
-                      }}
-                    >
-                      <FaTrash onClick={handleDeleteIngredient} />
-                    </Button>
-                  </div>
+                  {ingredients.map((ingredient, index) => (
+                    <div className="d-flex mb-2" key={index}>
+                      <Form.Control
+                        as="textarea"
+                        placeholder={`Ingredient ${index + 1}`}
+                        style={{ width: '50%', height: '35px' }}
+                        value={ingredient}
+                        onChange={(event) =>
+                          handleIngredientsChange(event, index)
+                        }
+                      />
+                      <Button
+                        variant="dark"
+                        style={{
+                          backgroundColor: 'transparent',
+                          borderColor: 'transparent',
+                          color: 'hsl(0, 83%, 39%)',
+                        }}
+                        onClick={() => handleDeleteIngredient(index)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
+                  ))}
+
                   <Button
                     variant="dark"
                     onClick={handleAddIngredient}
@@ -308,15 +322,16 @@ const PostRecipe = () => {
                     Add Ingredient
                   </Button>
                 </Form.Group>
+
                 <Form.Group>
                   <Form.Label>
-                    <strong>Description</strong>
+                    <strong>Instructions</strong>
                   </Form.Label>
                   <Form.Control
                     as="textarea"
                     style={{ height: '150px', width: '80%' }}
                     placeholder="e.g., This easy Chicken Alfredo recipe includes golden pan-fried chicken breasts and tender noodles, coated in the most dreamy cream sauce ever!"
-                    value={recipeDescription}
+                    value={instructions}
                     required={true}
                     onChange={handleInstructions}
                     // onInput={(event) => {
