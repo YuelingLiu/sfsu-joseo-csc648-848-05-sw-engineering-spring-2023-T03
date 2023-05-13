@@ -24,7 +24,8 @@ const PostRecipe = () => {
   const [difficulty, setDifficulty] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
   const [ingredients, setIngredients] = useState([]);
-  const [instructions, setInstructions] = useState('');
+  const [instructions, setInstructions] = useState([]);
+  const [step, setStep] = useState('');
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
@@ -54,12 +55,6 @@ const PostRecipe = () => {
       return;
     }
 
-    // if (cookingTimeUnit.trim() === '') {
-    //   toast.warn('Please choose a cooking time unit for your recipe', {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
-    //   return;
-    // }
     if (recipeDescription.trim() === '') {
       toast.warn(
         'Uh oh! Looks like you forgot to add a brief description to your recipe',
@@ -90,7 +85,7 @@ const PostRecipe = () => {
       return;
     }
 
-    if (instructions.trim() === '') {
+    if (instructions.length === 0) {
       toast.warn(
         'Uh oh! It looks like you forgot to add instructions to your recipe ',
         {
@@ -100,6 +95,15 @@ const PostRecipe = () => {
       return;
     }
 
+    if (step.length === 0) {
+      toast.warn(
+        'Uh oh! It looks like you forgot to add step to this instruction ',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      return;
+    }
     if (category.trim() === '') {
       toast.warn(
         'Uh oh! It looks like you forgot to select a category for your recipe ',
@@ -238,9 +242,36 @@ const PostRecipe = () => {
     console.log('Updated ingredients:', ingredients);
   }, [ingredients]);
 
-  const handleInstructions = (e) => {
-    console.log('checking instruction func');
-    setInstructions(e.target.value);
+  const handleInstructionsChange = (event, index) => {
+    const newInstructions = [...instructions];
+    newInstructions[index] = event.target.value;
+    setInstructions(newInstructions);
+  };
+
+  const handleDeleteInstruction = (index) => {
+    console.log('YoU clicked the delete instruction icon');
+    const newInstructions = [...instructions];
+    newInstructions.splice(index, 1);
+    setInstructions(newInstructions);
+  };
+
+  const handleAddInstruction = () => {
+    console.log('handle add instruction button ');
+    setInstructions([...instructions, '']);
+    console.log(instructions);
+  };
+  useEffect(() => {
+    console.log('Updated ingredients:', instructions);
+  }, [instructions]);
+
+  // const handleInstructions = (e) => {
+  //   console.log('checking instruction func');
+  //   setInstructions(e.target.value);
+  // };
+  const handleStepChange = (event, index) => {
+    const newInstructions = [...instructions];
+    newInstructions[index].step = parseInt(event.target.value);
+    setStep(newInstructions[index].step);
   };
 
   const handleCategory = (e) => {
@@ -400,19 +431,80 @@ const PostRecipe = () => {
                   </Button>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group controlId="formBasicPassword" className="mb-3 ">
                   <Form.Label>
                     <strong>Instructions</strong>
+                    <p
+                      style={{
+                        color: 'gray',
+                        fontSize: '14px',
+                        width: '80%',
+                      }}
+                    >
+                      Enter step with its instruction, e.g Step 1: Cook the
+                      spaghetti according to package instructions until al
+                      dente. Reserve 1 cup of the pasta water, then drain the
+                      spaghetti.
+                    </p>
                   </Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    style={{ height: '150px', width: '80%' }}
-                    placeholder="e.g., This easy Chicken Alfredo recipe includes golden pan-fried chicken breasts and tender noodles, coated in the most dreamy cream sauce ever!"
-                    value={instructions}
-                    required={true}
-                    onChange={handleInstructions}
-                  />
+
+                  {instructions.map((instruction, index) => (
+                    <div className="d-flex mb-2" key={index}>
+                      <Form.Label>
+                        <strong>Step</strong>
+                      </Form.Label>
+                      <Form.Control
+                        type="number"
+                        min="1"
+                        placeholder={`${index + 1}`}
+                        value={instruction.step}
+                        required={true}
+                        onChange={(e) => handleStepChange(e, index)}
+                        style={{ width: '6%', marginTop: '4px' }}
+                      />
+                      <Form.Control
+                        as="textarea"
+                        placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp. Remove with a slotted spoon and drain on paper towels ${
+                          index + 1
+                        }`}
+                        style={{
+                          width: '80%',
+                          height: '50px',
+                          marginLeft: '2px',
+                        }}
+                        value={instruction}
+                        onChange={(event) =>
+                          handleInstructionsChange(event, index)
+                        }
+                      />
+
+                      <Button
+                        variant="dark"
+                        style={{
+                          backgroundColor: 'transparent',
+                          borderColor: 'transparent',
+                          color: 'hsl(0, 83%, 39%)',
+                        }}
+                        onClick={() => handleDeleteInstruction(index)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
+                  ))}
+
+                  <Button
+                    variant="dark"
+                    onClick={handleAddInstruction}
+                    style={{
+                      marginTop: '10px',
+                      backgroundColor: 'white',
+                      color: 'Green',
+                    }}
+                  >
+                    Add Instruction
+                  </Button>
                 </Form.Group>
+
                 <Form.Group className="mb-2">
                   <Form.Label>
                     <strong>Category</strong>
