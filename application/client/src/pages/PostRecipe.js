@@ -161,7 +161,7 @@ const PostRecipe = () => {
   const postRecipe = async (formData) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/user/post-recipe`,
+        `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`,
         {
           method: 'POST',
           body: formData,

@@ -149,10 +149,6 @@ const Register = () => {
           <Link className="welcome" to="/">
             <h1> Welcome to RecipeReel</h1>
           </Link>
-
-          <Link className="account" to="/login">
-            <p> Already have an account?</p>
-          </Link>
         </div>
 
         <div className="right">
@@ -220,6 +216,9 @@ const Register = () => {
             <button className="submitBtn" onClick={handleSubmit}>
               Register
             </button>
+            <Link className="account" to="/login">
+              <p> Already have an account?</p>
+            </Link>
           </form>
         </div>
       </div>
