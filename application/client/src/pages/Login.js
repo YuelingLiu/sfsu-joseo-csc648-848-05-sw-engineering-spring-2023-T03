@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
-import 'toast-emoji';
+// import 'toast-emoji';
 
 const Login = () => {
   const [email, setEmail] = useState('');
