@@ -18,14 +18,12 @@ const PostRecipe = () => {
   const [recipeName, setRecipeName] = useState('');
 
   const [cookingTime, setCookingTime] = useState('');
-  //dcookingTimeUnit, which holds the selected unit (minutes, hours, or days).
-  const [cookingTimeUnit, setCookingTimeUnit] = useState('minutes');
 
   const [difficulty, setDifficulty] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [instructions, setInstructions] = useState([]);
-  const [step, setStep] = useState('');
+  // const [step, setStep] = useState('');
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
@@ -95,15 +93,6 @@ const PostRecipe = () => {
       return;
     }
 
-    if (step.length === 0) {
-      toast.warn(
-        'Uh oh! It looks like you forgot to add step to this instruction ',
-        {
-          position: toast.POSITION.TOP_CENTER,
-        }
-      );
-      return;
-    }
     if (category.trim() === '') {
       toast.warn(
         'Uh oh! It looks like you forgot to select a category for your recipe ',
@@ -136,9 +125,9 @@ const PostRecipe = () => {
       formData.append('cooking_time', cookingTime);
       formData.append('description', recipeDescription);
       formData.append('difficulty', difficulty);
-      // formData.append('ingredients', ingredients);
-      // formData.append('instructions', instructions);
-      // formData.append('category', category);
+      formData.append('ingredients', ingredients);
+      formData.append('instructions', instructions);
+      formData.append('category', category);
 
       // change this to if statement
       if (images) {
@@ -217,9 +206,6 @@ const PostRecipe = () => {
     setDifficulty(e.target.value);
   };
 
-  // const handleIngredients = (e) => {
-  //   setIngredients(e.target.value);
-  // };
   const handleIngredientsChange = (event, index) => {
     const newIngredients = [...ingredients];
     newIngredients[index] = event.target.value;
@@ -257,21 +243,33 @@ const PostRecipe = () => {
 
   const handleAddInstruction = () => {
     console.log('handle add instruction button ');
-    setInstructions([...instructions, '']);
-    console.log(instructions);
+    const newInstruction = {
+      step: instructions.length + 1,
+      text: '',
+    };
+    console.log('what is new instructions,', newInstruction);
+    setInstructions([...instructions, newInstruction]);
   };
   useEffect(() => {
-    console.log('Updated ingredients:', instructions);
+    console.log('Updated instructions:', instructions);
   }, [instructions]);
 
-  // const handleInstructions = (e) => {
-  //   console.log('checking instruction func');
-  //   setInstructions(e.target.value);
-  // };
   const handleStepChange = (event, index) => {
     const newInstructions = [...instructions];
-    newInstructions[index].step = parseInt(event.target.value);
-    setStep(newInstructions[index].step);
+    const newStep = parseInt(event.target.value);
+
+    if (isNaN(newStep) || newStep === '') {
+      toast.warn('Uh oh! The step value must be a number.', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+    newInstructions[index].step = newStep;
+    console.log(
+      'what are the new instruction',
+      (newInstructions[index].step = newStep)
+    );
+    setInstructions(newInstructions);
   };
 
   const handleCategory = (e) => {
@@ -450,45 +448,65 @@ const PostRecipe = () => {
 
                   {instructions.map((instruction, index) => (
                     <div className="d-flex mb-2" key={index}>
-                      <Form.Label>
-                        <strong>Step</strong>
-                      </Form.Label>
-                      <Form.Control
-                        type="number"
-                        min="1"
-                        placeholder={`${index + 1}`}
-                        value={instruction.step}
-                        required={true}
-                        onChange={(e) => handleStepChange(e, index)}
-                        style={{ width: '6%', marginTop: '4px' }}
-                      />
-                      <Form.Control
-                        as="textarea"
-                        placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp. Remove with a slotted spoon and drain on paper towels ${
-                          index + 1
-                        }`}
+                      <div
                         style={{
-                          width: '80%',
-                          height: '50px',
-                          marginLeft: '2px',
+                          display: 'flex',
+                          width: '10%',
+                          alignItems: 'center',
                         }}
-                        value={instruction}
-                        onChange={(event) =>
-                          handleInstructionsChange(event, index)
-                        }
-                      />
-
-                      <Button
-                        variant="dark"
-                        style={{
-                          backgroundColor: 'transparent',
-                          borderColor: 'transparent',
-                          color: 'hsl(0, 83%, 39%)',
-                        }}
-                        onClick={() => handleDeleteInstruction(index)}
                       >
-                        <FaTrash />
-                      </Button>
+                        <Form.Label>
+                          <strong>Step</strong>
+                        </Form.Label>
+                        <Form.Control
+                          type="number"
+                          min="1"
+                          placeholder={`${index + 1}`}
+                          value={instruction.step}
+                          required={true}
+                          onChange={(e) => handleStepChange(e, index)}
+                          style={{
+                            height: '48px',
+                          }}
+                        />
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          width: '90%',
+                          marginLeft: '0.5px',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Form.Control
+                          as="textarea"
+                          placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp.${
+                            index + 1
+                          }`}
+                          style={{
+                            width: '70%',
+                            height: '50px',
+                            marginLeft: '2px',
+                          }}
+                          value={instruction.text}
+                          required={true}
+                          onChange={(event) =>
+                            handleInstructionsChange(event, index)
+                          }
+                        />
+                        <Button
+                          variant="dark"
+                          style={{
+                            backgroundColor: 'transparent',
+                            borderColor: 'transparent',
+                            color: 'hsl(0, 83%, 39%)',
+                          }}
+                          onClick={() => handleDeleteInstruction(index)}
+                        >
+                          <FaTrash />
+                        </Button>
+                      </div>
                     </div>
                   ))}
 
