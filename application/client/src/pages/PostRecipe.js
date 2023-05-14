@@ -135,7 +135,16 @@ const PostRecipe = () => {
       formData.append('description', recipeDescription);
       formData.append('difficulty', difficulty);
       formData.append('ingredients', ingredients);
-      formData.append('instructions', instructions);
+
+      const finalInstructions = [];
+      instructions.forEach((instruction, i) => {
+        finalInstructions.push({
+          step: i + 1,
+          text: instruction.text,
+        });
+      });
+      formData.append('instructions', finalInstructions);
+
       formData.append('category', category);
 
       // change this to if statement
