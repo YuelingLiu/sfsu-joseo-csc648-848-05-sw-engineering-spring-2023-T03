@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import './Styling/register.scss';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Alert } from '@mui/material';
+//import { Alert } from '@mui/material';
 
 // import { useNavigate } from 'react-router-dom';
 const Register = () => {
@@ -18,7 +19,7 @@ const Register = () => {
   const [image, setImage] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
   const [isChecked, setIsChecked] = useState(false);
-  // toast.configure();
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -29,61 +30,51 @@ const Register = () => {
     const errors = {};
     if (userName.length < 6 || userName.length > 20) {
       errors.username = 'Username must be between 6 and 20 characters';
-
-      // toast.error('Username must be between 6 and 20 characters', {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-      alert(errors.username);
-      return;
-      console.log(userName);
-    }
-
-    if (!isChecked) {
-      // toast.error(
-      //   'Please agree to the Privacy Policy before submitting the form.',
-      //   {
-      //     position: toast.POSITION.TOP_CENTER,
-      //     className: 'toast-message',
-      //   }
-      // );
-      alert('Please agree to the Privacy Policy before submitting the form');
+      setValidationErrors(errors); // set validation errors state
+      console.log(setValidationErrors(errors));
+      toast.error('Username must be between 6 and 20 characters', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       return;
     }
 
     if (!password.match(/^(?=.*[\W_])[a-zA-Z0-9\W_]{6,20}$/)) {
       errors.password =
         'Password must be 6-20 characters long and contains a special character.';
-      // toast.error(errors.password, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-      alert(errors.password);
+      toast.error(errors.password, {
+        position: toast.POSITION.TOP_CENTER,
+      });
       return;
-      console.log('Invalid password');
     }
 
-    if (
-      !email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/)
-    ) {
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       errors.email = 'Please enter a valid email address';
-      // toast.error(errors.email, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
-      alert(errors.email);
+      toast.error(errors.email, {
+        position: toast.POSITION.TOP_CENTER,
+      });
       return;
-      console.log('invalid email');
+    }
+
+    if (!isChecked) {
+      toast.error(
+        'Please agree to the Privacy Policy before submitting the form.',
+        {
+          position: toast.POSITION.TOP_CENTER,
+          className: 'toast-message',
+        }
+      );
+      return;
     }
 
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
-      // toast.error('Invalid Input', {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: 'toast-message',
-      // });
+      toast.error('Invalid Input', {
+        position: toast.POSITION.TOP_CENTER,
+      });
     } else {
-      alert('created account successfully');
+      toast.success('created account successfully 🚀👏', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       console.log('created account successful');
       history.push('/login');
     }
@@ -128,16 +119,24 @@ const Register = () => {
       // check if email has been used
       if (response.status === 409) {
         console.log('Email already exists');
-        alert('Email already exists');
+        toast.error('Email already exists', {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
       if (!response.ok) {
         console.log('response not ok');
+        toast.error('Register account failed!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
         throw new Error('Response ERROR');
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
+      toast.error('Register account failed!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       console.error('Error while registering user:', error.message);
       throw error;
     }
@@ -149,10 +148,6 @@ const Register = () => {
         <div className="left">
           <Link className="welcome" to="/">
             <h1> Welcome to RecipeReel</h1>
-          </Link>
-
-          <Link className="account" to="/login">
-            <p> Already have an account?</p>
           </Link>
         </div>
 
@@ -180,6 +175,9 @@ const Register = () => {
               required={true}
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
+              style={{
+                border: validationErrors.username ? '1px solid green' : '',
+              }}
               id="userName"
             />
             <input
@@ -203,7 +201,7 @@ const Register = () => {
               I have read and agree to the{' '}
               <a
                 href="https://www.privacypolicyonline.com/live.php?token=CiQ7ixos7r4B0wegGXibJXuVU9qQoeWu"
-                target="_blank"
+                target="blank"
               >
                 Privacy Policy
               </a>
@@ -218,9 +216,13 @@ const Register = () => {
             <button className="submitBtn" onClick={handleSubmit}>
               Register
             </button>
+            <Link className="account" to="/login">
+              <p> Already have an account?</p>
+            </Link>
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import ProfileCard from '../components/ProfileCard/ProfileCard';
+import React, { useState, useEffect, useContext,  useCallback } from 'react';
 
+import ProfileCard from '../components/ProfileCard/ProfileCard';
+import { AuthContext } from '../AuthContext';
+import Comment from '../components/Comments/Comment';
+import CommentForm from '../components/Comments/CommentForm';
 // bootstrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -12,9 +15,11 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-const PostDetailsPage = () => {
+const PostDetailsPage = (props) => {
   // for dummy star rating
   const [value, setValue] = React.useState(2);
+  // login status
+  const { loggedIn, setLoggedIn } = useContext(AuthContext);
 
   // for clickable favorite heart button
   const [favorite, setFavorite] = React.useState(false);
@@ -25,6 +30,40 @@ const PostDetailsPage = () => {
     setFavorite(false);
   };
 
+  // all for comments
+  const postId = props.match.params.postId;
+  const { token } = useContext(AuthContext);
+  const [Comments, setComments] = useState([]);
+
+  const fetchComments = useCallback(async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/post/${postId}/comments`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("comments arr: " + data.data);
+        setComments(data.data);
+      } else {
+        console.log('response was not okay');
+        throw new Error(data.error);
+      }
+    } catch (err) {
+      console.log('response threw error');
+      console.log(err.message);
+      console.error(err.message);
+    }
+  }, [postId]); ;
+
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
+
   return (
     <>
       <Container>
@@ -33,8 +72,6 @@ const PostDetailsPage = () => {
           <Col md={7}>
             {/* img row*/}
             <Row>
-              {/* <img src='hero.jpg' alt='pic' /> */}
-              {/* <img src={process.env.REACT_APP_REQ_URL + "/images/hero.jpg"} alt='pic'/> */}
               <img src={`${process.env.PUBLIC_URL}/hero.jpg`} alt="pic" />
             </Row>
 
@@ -186,6 +223,30 @@ const PostDetailsPage = () => {
                 <ProfileCard showDetails />
               </div>
             </Row>
+
+            {/* comment section  */}
+            {loggedIn ? (
+              <Row>
+                <CommentForm token={token} postId={postId} fetchComments={fetchComments} />
+
+              </Row>
+            ) : (
+              <> </>
+            )}
+
+            <Row>
+              {/* map through comments */}
+              {Comments.map((data, index) => (
+                  <Comment 
+                      key={index}
+                      author={data.username}  
+                      date={data.username}  
+                      text={data.comment} 
+                  />
+              ))}
+
+            </Row>
+         
           </Col>
         </Row>
       </Container>

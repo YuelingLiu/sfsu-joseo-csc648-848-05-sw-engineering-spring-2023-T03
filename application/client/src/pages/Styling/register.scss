@@ -47,18 +47,7 @@
           font-weight: bolder;
         }
       }
-      .account {
-        text-decoration: none !important;
-        margin-top: 2px;
-        text-align: center;
-        margin-left: 1px;
-        p {
-          position: relative;
-          color: black;
-          cursor: pointer;
-          font-size: 18px;
-        }
-      }
+
       span {
         color: black;
         font-size: 16px;
@@ -71,12 +60,12 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 50px;
+      gap: 10px;
       width: 50%;
       h1 {
         text-align: center;
         color: black;
-        margin-bottom: 2px;
+        margin-top: 30px;
       }
       form {
         display: flex;
@@ -116,6 +105,18 @@
         }
       }
     }
+  }
+}
+
+.account {
+  margin-top: 2px;
+  text-align: center;
+  margin-left: 1px;
+  p {
+    position: relative;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
   }
 }
 @media screen and (max-width: 800px) {

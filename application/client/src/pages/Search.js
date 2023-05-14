@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DashboardCard from '../components/Cards/DashboardCard';
 import Filterbar from '../components/filterbar/Filterbar';
+import { useHistory } from "react-router-dom";
 
 // MUI
 import MenuItem from '@mui/material/MenuItem';
@@ -14,13 +15,15 @@ import Container from 'react-bootstrap/esm/Container';
 
 const Search = ({ location }) => {
   const [results, setResults] = useState([]);
-  const [title, setTitle] = useState([]);
+  const [title, setTitle] = useState('');
 
   const [filter, setfilter] = React.useState('');
 
   const handleChange = (event) => {
     setfilter(event.target.value);
   };
+
+  const history = useHistory();
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -33,9 +36,9 @@ const Search = ({ location }) => {
 
         if (response.ok) {
           setResults(data.results);
-          console.log("Results:", results);
+          console.log("Results:", data.results[0].recipe_title);
 
-          setTitle(results.recipe_title);
+          setTitle(data.results[0].recipe_title);
           console.log("Recipe title:", title);
 
         } else {
@@ -49,16 +52,25 @@ const Search = ({ location }) => {
     fetchResults();
   }, [location.search]);
 
-  console.log(results.recipe_title);
+  
+  const handleDashboardCardClick = (recipe_id) => {
+    history.push(`/post/${recipe_id}`);
+  };
+
   return (
     <>
       <Container>
-        <Filterbar title={results}/>
+        <Filterbar title={title}/>
 
         {results.length > 0 ? (
-          results.map((result) => <DashboardCard result={result} />)
+          results.map((result) =>  
+           <DashboardCard
+              key={result.recipe_id}
+              result={result}
+              onClick={() => handleDashboardCardClick(result.recipe_id)}
+            />)
         ) : (
-          <p>No results found.</p>
+          <p style={{textAlign: 'center'}}>No results found.</p>
         )}
       </Container>
     </>

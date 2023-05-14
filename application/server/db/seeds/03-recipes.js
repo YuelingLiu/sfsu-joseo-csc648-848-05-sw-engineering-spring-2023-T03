@@ -13,6 +13,5 @@ exports.seed = function(knex) {
       {user_id: "10", title:"Vegetable Stir-Fry", description:"A colorful mix of stir-fried vegetables with a savory soy sauce and garlic", cooking_time:"25", difficulty:"2"},
       {user_id: "11", title:"BBQ Ribs", description:"Tender, fall-off-the-bone pork ribs smothered in tangy BBQ sauce", cooking_time:"180", difficulty:"3"},
       {user_id: "12", title:"Caprese Salad", description:"A refreshing Italian salad with ripe tomatoes, fresh basil, and mozzarella cheese", cooking_time:"10", difficulty:"1"},
-      
     ])
 };

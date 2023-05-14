@@ -1,11 +1,19 @@
 const router = require("express").Router();
+const jwt = require("jsonwebtoken");
+
+// Amazon stuff
 const { Upload } = require("@aws-sdk/lib-storage"),
   { S3 } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
 const { client } = require("../db/db");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
+const bodyParser = require('body-parser');
 
+// MODELS
+const User = require("../models/User");
+const Comment = require('../models/Comment'); // Make sure to import the Comment model with the correct path
+
+// Use body-parser middleware to parse JSON request bodies
+router.use(bodyParser.json());
 // password hashing
 const bcrypt = require("bcrypt");
 
@@ -29,6 +37,8 @@ const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
+
+
 
 router.get("/followers", async (req, res) => {
   const userID = req.query.id;
@@ -176,25 +186,85 @@ router.post("/login", async (req, res) => {
       return;
     }
 
+    console.log('dbUserData: ', JSON.stringify(dbUserData, null, 2));
+    console.log(' dbUserData.username: ' + dbUserData.username);
+
     if (dbUserData && passwordMatch) {
+      const name = dbUserData.username;
       const token = jwt.sign(
         {
-          userId: dbUserData._id,
+          userId: dbUserData.id,
         },
-        process.env.JWT_SECRET,
+          process.env.JWT_SECRET,
         {
           expiresIn: "24h",
         }
       );
+
       res.json({
         success: true,
         message: "Authentication successful!",
         token,
+        name
       });
     }
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ message: "An error occurred during login." });
+  }
+});
+
+// Comments
+router.post('/post/:postId/comment', async (req, res) => {
+  try {
+    const { token, text } = req.body;
+    console.log('req.body:', req.body);
+
+    const postId = req.params.postId;
+    console.log("this is postID: " + postId);
+
+    // Verify and decode the JWT token to get the user ID
+    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("this is userID: " + userId);
+
+    // Create the comment
+    const commentData = {
+      user_id: userId,
+      recipe_id: postId,
+      comment: text,
+    };
+
+    const createdComment = await Comment.create(commentData);
+    console.log('Comment created');
+
+    res.status(201).json({
+      status: 'success',
+      data: createdComment,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'failure',
+      message: err.message,
+    });
+  }
+});
+
+
+router.get('/post/:postId/comments', async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    console.log(postId);
+
+    const comments = await Comment.getCommentsForRecipe(postId);
+    // console.log(JSON.stringify(comments));
+
+    res.status(201).json({ 
+      status: 'success',
+      data: comments 
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred while fetching comments.' });
   }
 });
 
