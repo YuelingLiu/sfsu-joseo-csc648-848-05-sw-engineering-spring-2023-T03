@@ -15,17 +15,17 @@ const PostRecipe = () => {
   const history = useHistory();
   // holds image uploaded name
   const [selectedFile, setSelectedFile] = useState('');
+
+  // form values
   const [recipeName, setRecipeName] = useState('');
-
-  const [cookingTime, setCookingTime] = useState('');
-
-  const [difficulty, setDifficulty] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
+  const [cookingTime, setCookingTime] = useState(0);
+  const [difficulty, setDifficulty] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [instructions, setInstructions] = useState([]);
-  // const [step, setStep] = useState('');
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
+
   const [validationErrors, setValidationErrors] = useState({});
 
   const handlePostRecipe = async (e) => {
@@ -43,7 +43,7 @@ const PostRecipe = () => {
       return;
     }
 
-    if (cookingTime.trim() === '') {
+    if (cookingTime <= 0) {
       toast.warn(
         'Oops! It looks like you forgot to select a cooking time for your recipe',
         {
@@ -91,6 +91,15 @@ const PostRecipe = () => {
         }
       );
       return;
+    }
+
+    for (let i = 0; i < instructions.length; i++) {
+      if (instructions[i].text.length === 0) {
+        toast.warn('Uh oh! At least one of your instructions is empty ', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        return;
+      }
     }
 
     if (category.trim() === '') {
@@ -191,7 +200,8 @@ const PostRecipe = () => {
   };
 
   const handleCookingTime = (e) => {
-    setCookingTime(e.target.value);
+    const time = parseInt(e.target.value);
+    setCookingTime(time);
   };
 
   // const handleCookingTimeUnit = (e) => {
@@ -230,7 +240,10 @@ const PostRecipe = () => {
 
   const handleInstructionsChange = (event, index) => {
     const newInstructions = [...instructions];
-    newInstructions[index] = event.target.value;
+    newInstructions[index] = {
+      step: index + 1,
+      text: event.target.value,
+    };
     setInstructions(newInstructions);
   };
 
