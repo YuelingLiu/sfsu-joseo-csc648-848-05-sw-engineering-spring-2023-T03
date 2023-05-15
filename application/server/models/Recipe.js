@@ -4,12 +4,21 @@ const knex = require('knex')(require('../knexfile').development);
 const { client } = require("../db/db"); 
 
 class Recipe {
-  static async create(data) {
-    return await knex('recipes').insert(data).returning('*');
+    static async create(recipeParam, ingredientsParam, instructionsParam) {
+    const recipe = (await knex('recipes').insert(recipeParam).returning('*'))[0];
+    const ingredients = [];
+    const instructions = [];
+    for(let i = 0; i < ingredientsParam.length; i++){
+      ingredients.push(await knex('ingredients').insert(ingredientsParam).returning('*'))
+    }
+    for(let i = 0; i < instructionsParam.length; i++){
+      ingredients.push(await knex('instructions').insert(instructionsParam).returning('*'))
+    }
+    return {recipe, ingredients, instructions};
   }
 
   static async getById(id) {
-    const recipe = await knex('recipes').where({id});
+    const recipe = (await knex('recipes').where({id}))[0];
     const ingredients = await knex('ingredients').where('ingredients.recipe_id', id)
     const instructions = await knex('instructions').where('instructions.recipe_id', id)
     return {recipe, ingredients, instructions};
