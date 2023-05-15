@@ -13,9 +13,11 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function CategoryCard({result, onClick}) {
+function CategoryCard({result, onClick, userName}) {
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
+  // for same user checking 
+  const [sameUser, setSameUser] = useState(false)
 
   const FavoriteToTrue = () => {
     setFavorite(true);
@@ -31,6 +33,15 @@ function CategoryCard({result, onClick}) {
         <p>{text}</p>
       </div>
     );
+  }
+
+  // get current user page from URL 
+  let splitURL = window.location.href.split('/');
+  let currentUser = splitURL[splitURL.length - 1]
+
+  // if the userName is the same set same user to true
+  if (userName === currentUser) {
+      setSameUser(true);
   }
 
   return (

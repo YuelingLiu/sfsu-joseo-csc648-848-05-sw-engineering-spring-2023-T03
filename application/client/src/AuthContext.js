@@ -1,3 +1,5 @@
+// AuthContext.js
+
 import { createContext, useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 
@@ -5,6 +7,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
 
   const checkToken = () => {
     const token = localStorage.getItem('token');
@@ -19,6 +22,7 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         return false;
       }
+      setToken(token);
       return true;
     } catch (err) {
       console.error('Error decoding token:', err);
@@ -33,7 +37,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ loggedIn, setLoggedIn }}>
+    <AuthContext.Provider value={{ loggedIn, setLoggedIn, token }}>
       {children}
     </AuthContext.Provider>
   );

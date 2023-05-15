@@ -25,6 +25,15 @@ class Comment {
     return await knex('comments').where({ id }).delete();
   }
 
+  static async getCommentsForRecipe(recipe_id) {
+    return await knex('comments')
+      .join('users', 'comments.user_id', 'users.id')
+      .where({ 'comments.recipe_id': recipe_id })
+      .select('comments.id', 'comments.comment', 'comments.recipe_id', 'users.id as user_id', 'users.username');
+  }
+
+}
+
   static async getCommentsForPost(post_id) {
     return await knex('comments')
       .join('users', 'comments.user_id', 'users.id')

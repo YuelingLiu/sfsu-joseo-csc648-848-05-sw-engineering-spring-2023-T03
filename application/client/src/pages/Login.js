@@ -5,11 +5,13 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+// import 'toast-emoji';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  // const [error, setError] = useState('');
   const history = useHistory();
   const { setLoggedIn } = useContext(AuthContext);
 
@@ -18,14 +20,20 @@ const Login = () => {
 
     // Perform validation
     if (email.trim() === '') {
-      alert('Please enter your email');
+      toast.error('Please enter your email! ', {
+        position: toast.POSITION.TOP_CENTER,
+        duration: 3000, // 3s
+      });
       console.log('Please enter your email');
       return;
     }
 
     if (password.trim() === '') {
-      alert('Please enter your password');
-      console.log('Please enter your password');
+      toast.error('Please enter your password! ', {
+        position: toast.POSITION.TOP_CENTER,
+        duration: 3000, // 3s
+      });
+      console.log('Please enter your password!');
       return;
     }
 
@@ -47,16 +55,22 @@ const Login = () => {
         return response.json();
       })
       .then((data) => {
+        console.log(JSON.stringify(data));
         // Handle successful login
         localStorage.setItem('token', data.token);
+        localStorage.setItem('name', data.name);
         setLoggedIn(true);
-        alert('Logged in successfully!');
+        toast.success('Logged in successfully!😄🚀🙌', {
+          position: toast.POSITION.TOP_CENTER,
+        });
         history.push('/');
-        console.log(data);
+        //  console.log(data);
       })
       .catch((error) => {
         // Handle login error
-        alert('There was a problem with login!');
+        toast.error('There was a problem with login!🚫', {
+          position: toast.POSITION.TOP_CENTER,
+        });
         console.error('There was a problem with the login:', error);
       });
   };
@@ -103,6 +117,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
