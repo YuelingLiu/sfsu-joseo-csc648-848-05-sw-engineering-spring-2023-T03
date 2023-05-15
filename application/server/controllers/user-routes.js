@@ -216,4 +216,13 @@ router.delete('/unfollow/:followID', async (req, res) => {
   }
 })
 
+router.post('/save/recipe/:id', async(req, res) =>{
+  try{
+    const savedRecipe = await User.saveRecipe(req.body.userID, req.params.id);
+    res.status(201).json({savedRecipe})
+  }catch(err){
+    console.log(err)
+  }
+})
+
 module.exports = router;

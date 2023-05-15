@@ -48,6 +48,10 @@ class User {
     .join('users', 'following.following_id', 'users.id')
     .where('user_id', userID);
   }
+
+  static async saveRecipe(userID, recipeID){
+    return (await knex('user_favorite_recipes').insert({user_id: userID, recipe_id: recipeID}).returning('*'))[0];
+  }
 }
 
 module.exports = User;
