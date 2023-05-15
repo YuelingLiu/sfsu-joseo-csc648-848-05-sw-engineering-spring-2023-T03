@@ -4,12 +4,37 @@ const knex = require('knex')(require('../knexfile').development);
 const { client } = require("../db/db"); 
 
 class Recipe {
-  static async create(data) {
-    return await knex('recipes').insert(data).returning('*');
+    static async create(recipeParam, ingredientsParam, instructionsParam) {
+    const recipe = (await knex('recipes').insert(recipeParam).returning('*'))[0];
+    const ingredients = [];
+    const instructions = [];
+    for(let i = 0; i < ingredientsParam.length; i++){
+      ingredients.push(await knex('ingredients').insert({
+        recipe_id: recipe.id, 
+        amount: ingredientsParam[i].amount,
+        ingredient: ingredientsParam[i].ingredient
+        }).returning('*'))
+    }
+    for(let i = 0; i < instructionsParam.length; i++){
+      ingredients.push(await knex('instructions').insert({
+        recipe_id: recipe.id,
+        order: instructionsParam[i].order,
+        instruction: instructionsParam[i].instruction
+      }).returning('*'))
+    }
+    return {recipe, ingredients, instructions};
+  }
+
+  static async delete(id){
+    return await knex('recipes').where({id}).del();
   }
 
   static async getById(id) {
-    return await knex('recipes').where({ id }).first();
+    const recipe = (await knex('recipes').where({id}))[0];
+    const ingredients = await knex('ingredients').where('ingredients.recipe_id', id)
+    const instructions = await knex('instructions').where('instructions.recipe_id', id)
+    return {recipe, ingredients, instructions};
+
   }
 
   static async getAll() {
@@ -56,6 +81,10 @@ class Recipe {
 `;
     const { rows } = await client.query(searchQuery);
     return rows;
+  }
+
+  static async rate(userID, recipeID, rating){
+    return await knex('ratings').insert({user_id: userID, recipe_id: recipeID, rating: rating}).returning('*');
   }
 }
 

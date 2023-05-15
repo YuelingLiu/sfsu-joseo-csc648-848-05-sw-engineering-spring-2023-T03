@@ -32,6 +32,16 @@ class Comment {
       .select('comments.id', 'comments.comment', 'comments.recipe_id', 'users.id as user_id', 'users.username');
   }
 
+  static async getCommentsForPost(post_id) {
+    return await knex('comments')
+      .join('users', 'comments.user_id', 'users.id')
+      .where({ post_id })
+      .select('comments.*', 'users.username as user_name');
+  }
+
+  static async likeComment(user_id,comment_id, likeBool){
+    return await knex('comment_likes').insert({user_id: user_id, comment_id: comment_id, like: likeBool}).returning('*');
+  }
 }
 
 module.exports = Comment;
