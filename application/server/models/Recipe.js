@@ -25,6 +25,10 @@ class Recipe {
     return {recipe, ingredients, instructions};
   }
 
+  static async delete(id){
+    return await knex('recipes').where({id}).del();
+  }
+
   static async getById(id) {
     const recipe = (await knex('recipes').where({id}))[0];
     const ingredients = await knex('ingredients').where('ingredients.recipe_id', id)
