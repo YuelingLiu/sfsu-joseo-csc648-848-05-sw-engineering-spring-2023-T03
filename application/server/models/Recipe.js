@@ -9,7 +9,11 @@ class Recipe {
   }
 
   static async getById(id) {
-    return await knex('recipes').where({ id }).first();
+    const recipe = await knex('recipes').where({id});
+    const ingredients = await knex('ingredients').where('ingredients.recipe_id', id)
+    const instructions = await knex('instructions').where('instructions.recipe_id', id)
+    return {recipe, ingredients, instructions};
+
   }
 
   static async getAll() {
