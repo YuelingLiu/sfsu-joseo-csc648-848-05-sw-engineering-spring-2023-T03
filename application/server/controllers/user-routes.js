@@ -41,8 +41,8 @@ const s3 = new S3({
 
 
 router.get("/followers", async (req, res) => {
-  const userID = req.query.id;
-  if (!userID) {
+  const userID = req.body.userID;
+    if (!userID) {
     res.status(400).json({ error: "Missing user ID." });
     return;
   }
@@ -57,8 +57,8 @@ router.get("/followers", async (req, res) => {
 });
 
 router.get("/following", async (req, res) => {
-  const userID = req.query.id;
-  if (!userID) {
+  const userID = req.body.userID;
+    if (!userID) {
     res.status(400).json({ error: "Missing user ID." });
     return;
   }
@@ -214,6 +214,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
 // Comments
 router.post('/post/:postId/comment', async (req, res) => {
   try {
@@ -267,5 +268,41 @@ router.get('/post/:postId/comments', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching comments.' });
   }
 });
+
+router.post('/follow/:followID', async (req, res) => {
+  try{
+    const follows = await User.follow(req.body.userID, req.params.followID);
+    res.status(201).json({follows});
+  } catch(err){
+    console.log(err);
+  }
+})
+
+router.delete('/unfollow/:followID', async (req, res) => {
+  try{
+    const unfollowed = await User.unfollow(req.body.userID, req.params.followID);
+    res.status(200).json({unfollowed})
+  } catch(err){
+    console.log(err)
+  }
+})
+
+router.post('/save/recipe/:id', async(req, res) =>{
+  try{
+    const savedRecipe = await User.saveRecipe(req.body.userID, req.params.id);
+    res.status(201).json({savedRecipe})
+  }catch(err){
+    console.log(err)
+  }
+})
+
+router.get('/savedrecipes', async(req, res) => {
+  try{
+    const savedRecipes = await User.getSavedRecipes(req.body.userID);
+    res.status(400).json({savedRecipes})
+  }catch(err){
+    console.log(err)
+  }
+})
 
 module.exports = router;

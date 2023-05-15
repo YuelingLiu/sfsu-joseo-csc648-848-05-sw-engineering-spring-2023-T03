@@ -8,6 +8,8 @@ const expressJwt = require('express-jwt');
 const searchRoutes = require('./controllers/search-routes');
 const userRoutes = require('./controllers/user-routes');
 const categoriesRoutes = require('./controllers/category-routes');
+const recipeRoutes = require('./controllers/recipe-routes');
+
 
 const app = express();
 const cors = require('cors');
@@ -35,6 +37,7 @@ app.use('/search',  searchRoutes);
 app.use('/user', userRoutes);
 // app.post('/post/:postId/comment', userRoutes); 
 // app.use('/post/:postId/comments', userRoutes); 
+app.use('/recipe', recipeRoutes);
 app.get('/', (req, res) => res.send('Hello World'));
 
 app.listen(PORT, () => console.log(`Server listening in port ${PORT}`));
