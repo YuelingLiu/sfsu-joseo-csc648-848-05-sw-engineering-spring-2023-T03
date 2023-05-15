@@ -31,6 +31,10 @@ class User {
     return (await knex('following').insert({user_id: userID, following_id: followID}).returning('*'))[0]
   }
 
+  static async unfollow(userID, followID){
+    return await knex('following').where('user_id', userID).where('following_id', followID).delete();
+  }
+
   static async getFollowers(userID) {
     return await knex('following')
     .select('users.id','users.username')

@@ -207,4 +207,13 @@ router.post('/follow/:followID', async (req, res) => {
   }
 })
 
+router.delete('/unfollow/:followID', async (req, res) => {
+  try{
+    const unfollowed = await User.unfollow(req.body.userID, req.params.followID);
+    res.status(200).json({unfollowed})
+  } catch(err){
+    console.log(err)
+  }
+})
+
 module.exports = router;
