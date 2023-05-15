@@ -225,4 +225,13 @@ router.post('/save/recipe/:id', async(req, res) =>{
   }
 })
 
+router.get('/savedrecipes', async(req, res) => {
+  try{
+    const savedRecipes = await User.getSavedRecipes(req.body.userID);
+    res.status(400).json({savedRecipes})
+  }catch(err){
+    console.log(err)
+  }
+})
+
 module.exports = router;

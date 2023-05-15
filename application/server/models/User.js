@@ -52,6 +52,12 @@ class User {
   static async saveRecipe(userID, recipeID){
     return (await knex('user_favorite_recipes').insert({user_id: userID, recipe_id: recipeID}).returning('*'))[0];
   }
+
+  static async getSavedRecipes(userID){
+    return await knex('user_favorite_recipes')
+    // .join('recipes', 'user_favorite_recipes.recipe_id', 'recipes.id')
+    .where('user_favorite_recipes.user_id', userID);
+  }
 }
 
 module.exports = User;
