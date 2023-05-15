@@ -31,8 +31,8 @@ const s3 = new S3({
 });
 
 router.get("/followers", async (req, res) => {
-  const userID = req.query.id;
-  if (!userID) {
+  const userID = req.body.userID;
+    if (!userID) {
     res.status(400).json({ error: "Missing user ID." });
     return;
   }
@@ -47,8 +47,8 @@ router.get("/followers", async (req, res) => {
 });
 
 router.get("/following", async (req, res) => {
-  const userID = req.query.id;
-  if (!userID) {
+  const userID = req.body.userID;
+    if (!userID) {
     res.status(400).json({ error: "Missing user ID." });
     return;
   }
@@ -197,5 +197,14 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "An error occurred during login." });
   }
 });
+
+router.post('/follow/:followID', async (req, res) => {
+  try{
+    const follows = await User.follow(req.body.userID, req.params.followID);
+    res.status(201).json({follows});
+  } catch(err){
+    console.log(err);
+  }
+})
 
 module.exports = router;
