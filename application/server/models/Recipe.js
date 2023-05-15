@@ -78,6 +78,10 @@ class Recipe {
     const { rows } = await client.query(searchQuery);
     return rows;
   }
+
+  static async rate(userID, recipeID, rating){
+    return await knex('ratings').insert({user_id: userID, recipe_id: recipeID, rating: rating}).returning('*');
+  }
 }
 
 module.exports = Recipe;
