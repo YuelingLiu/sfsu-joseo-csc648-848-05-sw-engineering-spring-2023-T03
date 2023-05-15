@@ -9,10 +9,18 @@ class Recipe {
     const ingredients = [];
     const instructions = [];
     for(let i = 0; i < ingredientsParam.length; i++){
-      ingredients.push(await knex('ingredients').insert(ingredientsParam).returning('*'))
+      ingredients.push(await knex('ingredients').insert({
+        recipe_id: recipe.id, 
+        amount: ingredientsParam[i].amount,
+        ingredient: ingredientsParam[i].ingredient
+        }).returning('*'))
     }
     for(let i = 0; i < instructionsParam.length; i++){
-      ingredients.push(await knex('instructions').insert(instructionsParam).returning('*'))
+      ingredients.push(await knex('instructions').insert({
+        recipe_id: recipe.id,
+        order: instructionsParam[i].order,
+        instruction: instructionsParam[i].instruction
+      }).returning('*'))
     }
     return {recipe, ingredients, instructions};
   }

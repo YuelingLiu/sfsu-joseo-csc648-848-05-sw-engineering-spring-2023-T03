@@ -1,3 +1,4 @@
+const router = require("express").Router();
 const { Upload } = require("@aws-sdk/lib-storage"),
   { S3 } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
