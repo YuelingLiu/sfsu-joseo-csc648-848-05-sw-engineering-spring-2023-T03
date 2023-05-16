@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 // MUI
 import MenuItem from '@mui/material/MenuItem';
@@ -10,17 +10,36 @@ import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/esm/Row';
 import Container from 'react-bootstrap/esm/Container';
 
-const FilterbarStatic = ({title}) => {
+const FilterbarStatic = ({title, popularFilter}) => {
 
-  const [filter, setfilter] = useState('');
-
+  // filter for changing filter box look
+  const [filter, setFilter] = useState('');
   const handleChange = (event) => {
-    setfilter(event.target.value);
+    // setFilter for name in filter box
+    setFilter(event.target.value);
+
+    // 20 means popular filter was picked
+    if (event.target.value === 20) {
+      showPopularCards();
+    }
+
+    if (event.target.value === 10) {
+      console.log('inside 10');
+      // showPopularCards();
+    }
   };
 
+  // filter for changing cards
+  const showPopularCards = (r) => {
+    console.log(filter);
+    const showPopular = popularFilter();
+    console.log(showPopular);
+  }
 
-  console.log('this is title: ',title.recipe_title)
-
+  // useEffect(() => {
+  //   console.log(filter);
+  //   showPopularCards()
+  //  }, [filter]);
 
   return (
     <>

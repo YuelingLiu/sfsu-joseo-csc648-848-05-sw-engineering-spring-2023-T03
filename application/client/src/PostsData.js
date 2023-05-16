@@ -28,10 +28,10 @@ export const PostsData = [
         recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {
-        recipe_title: 'Pizza',
-        rating: 2,
-        id: 5,
-        username: 'Duncan',
+        recipe_title: 'Cheese',
+        rating: 6,
+        id: 6,
+        username: 'Ashley',
         recipe_description: 'fjhkdslasasasasasasasasasasasaaaaaaaaaaaaaaasasasasasasahfueiahfdsjafhdsalkjfjhlkasdfjkalsd;jfsal;jfaslk;fjasjklfasdjflaskjf'
     },
     {

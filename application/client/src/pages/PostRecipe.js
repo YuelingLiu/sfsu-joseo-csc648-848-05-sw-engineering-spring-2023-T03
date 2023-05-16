@@ -17,11 +17,11 @@ const PostRecipe = () => {
   const [selectedFile, setSelectedFile] = useState('');
 
   // form values
-  const [recipeName, setRecipeName] = useState('');
-  const [recipeDescription, setRecipeDescription] = useState('');
+  const [recipeName, setRecipeName] = useState('turtle');
+  const [recipeDescription, setRecipeDescription] = useState('dsafasfdasdfa');
   const [cookingTime, setCookingTime] = useState(1);
-  const [difficulty, setDifficulty] = useState('');
-  const [ingredients, setIngredients] = useState([]);
+  const [difficulty, setDifficulty] = useState('beginner');
+  const [ingredients, setIngredients] = useState(['fdsafsddfas','fdsafas']);
   const [instructions, setInstructions] = useState([]);
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
@@ -129,69 +129,88 @@ const PostRecipe = () => {
     try {
       e.preventDefault();
 
-      const formData = new FormData();
-      formData.append('title', recipeName);
-      formData.append('cooking_time', cookingTime);
-      formData.append('description', recipeDescription);
-      formData.append('difficulty', difficulty);
-      formData.append('ingredients', ingredients);
+      const recipe = {
+        title: recipeName,
+        cooking_time: cookingTime,
+        description: recipeDescription,
+        difficulty: difficulty,
+        category: category,
+        photo_url: images ? images : null,  // If images is not set, send null
+      };
 
       const finalInstructions = [];
       instructions.forEach((instruction, i) => {
         finalInstructions.push({
-          step: i + 1,
-          text: instruction.text,
+          order: i + 1,
+          instruction: instruction.text,
         });
       });
-      formData.append('instructions', finalInstructions);
 
-      formData.append('category', category);
-
-      // change this to if statement
-      if (images) {
-        formData.append('photo_url', images);
-      }
-      console.log('This is recipe images: ' + images);
-
-      postRecipe(formData)
+      postRecipe(recipe, finalInstructions)
         .then((recipeData) => {
           console.log('DATA: ', recipeData);
         })
         .catch((error) => {
           console.log('ERROR: ', error.message);
         });
-    } catch (error) {
-      console.log('Error message: ' + error.message);
+    } catch (err) {
+      console.log('Error message: ' + err.message);
     }
   };
 
-  const postRecipe = async (formData) => {
+  const postRecipe = async (recipe, finalInstructions) => {
     try {
+      console.log("recipe: ", JSON.stringify(recipe));
+      console.log("instructions: ", finalInstructions);
+
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`,
-        {
+        `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`, {
           method: 'POST',
-          body: formData,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ recipe, ingredients, finalInstructions }),
         }
       );
-
+    
       if (!response.ok) {
-        // console.log('response not ok');
-        // toast.error('Post recipe failed!', {
-        //   position: toast.POSITION.TOP_CENTER,
-        // });
         throw new Error('Response ERROR');
       }
-
+    
       const data = await response.json();
-      return data;
+      console.log('DATA: ', data);
+    
     } catch (error) {
-      // toast.error('Post recipe failed!', {
-      //   position: toast.POSITION.TOP_CENTER,
-      // });
-      console.error('Error while registering user:', error.message);
-      throw error;
+      console.log('Error message: ' + error.message);
     }
+     
+    //   const response = await fetch(
+    //     `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`, {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body:  JSON.stringify({ formData }),
+    //     }
+    //   );
+
+    //   if (!response.ok) {
+    //     // console.log('response not ok');
+    //     // toast.error('Post recipe failed!', {
+    //     //   position: toast.POSITION.TOP_CENTER,
+    //     // });
+    //     throw new Error('Response ERROR');
+    //   }
+
+    //   const data = await response.json();
+    //   return data;
+    // } catch (error) {
+    //   // toast.error('Post recipe failed!', {
+    //   //   position: toast.POSITION.TOP_CENTER,
+    //   // });
+    //   console.error('Error while registering user:', error.message);
+    //   throw error;
+    // }
   };
 
   // set our image name so we can display it
