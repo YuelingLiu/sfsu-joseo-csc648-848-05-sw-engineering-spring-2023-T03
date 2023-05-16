@@ -21,7 +21,7 @@ const PostRecipe = () => {
   const [recipeDescription, setRecipeDescription] = useState('dsafasfdasdfa');
   const [cookingTime, setCookingTime] = useState(1);
   const [difficulty, setDifficulty] = useState('beginner');
-  const [ingredients, setIngredients] = useState(['fdsafsddfas','fdsafas']);
+  const [ingredients, setIngredients] = useState(['fdsafsddfas', 'fdsafas']);
   const [instructions, setInstructions] = useState([]);
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
@@ -135,7 +135,7 @@ const PostRecipe = () => {
         description: recipeDescription,
         difficulty: difficulty,
         category: category,
-        photo_url: images ? images : null,  // If images is not set, send null
+        photo_url: images ? images : null, // If images is not set, send null
       };
 
       const finalInstructions = [];
@@ -160,11 +160,12 @@ const PostRecipe = () => {
 
   const postRecipe = async (recipe, finalInstructions) => {
     try {
-      console.log("recipe: ", JSON.stringify(recipe));
-      console.log("instructions: ", finalInstructions);
+      console.log('recipe: ', JSON.stringify(recipe));
+      console.log('instructions: ', finalInstructions);
 
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`, {
+        `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`,
+        {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -172,20 +173,19 @@ const PostRecipe = () => {
           body: JSON.stringify({ recipe, ingredients, finalInstructions }),
         }
       );
-    
+
       if (!response.ok) {
         throw new Error('Response ERROR');
       }
-    
+
       const data = await response.json();
       console.log('DATA: ', data);
-    
     } catch (error) {
       console.log('Error message: ' + error.message);
     }
-     
+
     //   const response = await fetch(
-    //     `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`, {
+    //     `${process.env.REACT_APP_REQ_URL}/recipe/`, {
     //       method: 'POST',
     //       headers: {
     //         'Content-Type': 'application/json',
