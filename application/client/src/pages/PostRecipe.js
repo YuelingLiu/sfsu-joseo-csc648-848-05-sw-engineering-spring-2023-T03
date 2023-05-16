@@ -381,7 +381,7 @@ const PostRecipe = () => {
                     onChange={handleDifficulty}
                   >
                     <option value="">Select difficulty level</option>
-                    <option value="1">Beginner</option>
+                    <option value="1">Easy</option>
                     <option value="2">Intermediate</option>
                     <option value="3">Advanced</option>
                   </Form.Select>
