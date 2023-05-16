@@ -90,7 +90,7 @@ function Follows() {
     <Box>
       <UserFollowsCard/>
       <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-around'}}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Followers" {...a11yProps(0)} />
           <Tab label="Following" {...a11yProps(1)} />
