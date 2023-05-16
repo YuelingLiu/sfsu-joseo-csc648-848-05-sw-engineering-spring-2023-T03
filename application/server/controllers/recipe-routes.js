@@ -19,9 +19,10 @@ router.post('/', async (req, res) => {
   console.log('IN POST RECIPE ROUTE !!');
   console.log('req.body:', req.body);
 
-  console.log('recipe', req.body.recipe);
-  console.log('ingredients', req.body.ingredients);
-  console.log('instructions', req.body.instructions);
+  // console.log('recipe', req.body.recipe);
+  // console.log('ingredients', req.body.ingredients);
+  // console.log('instructions', req.body.finalInstructions);
+  console.log('IN POST RECIPE ROUTE..... !!');
 
   try {
     const recipe = await Recipe.create(
