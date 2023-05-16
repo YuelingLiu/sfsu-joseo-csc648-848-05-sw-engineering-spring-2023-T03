@@ -17,11 +17,11 @@ const PostRecipe = () => {
   const [selectedFile, setSelectedFile] = useState('');
 
   // form values
-  const [recipeName, setRecipeName] = useState('turtle');
-  const [recipeDescription, setRecipeDescription] = useState('dsafasfdasdfa');
+  const [recipeName, setRecipeName] = useState('spciynoodles2');
+  const [recipeDescription, setRecipeDescription] = useState('spciynoodles2');
   const [cookingTime, setCookingTime] = useState(1);
-  const [difficulty, setDifficulty] = useState('beginner');
-  const [ingredients, setIngredients] = useState(['fdsafsddfas', 'fdsafas']);
+  const [difficulty, setDifficulty] = useState('Beginner');
+  const [ingredients, setIngredients] = useState(['dddddd', 'dd2']);
   const [instructions, setInstructions] = useState([]);
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
@@ -63,7 +63,7 @@ const PostRecipe = () => {
       return;
     }
 
-    if (difficulty.trim() === '') {
+    if (difficulty.length === 0) {
       toast.warn(
         "Hey there! It looks like you haven't selected a difficulty level for your recipe! ",
         {
@@ -161,7 +161,10 @@ const PostRecipe = () => {
   const postRecipe = async (recipe, finalInstructions) => {
     try {
       console.log('recipe: ', JSON.stringify(recipe));
-      console.log('instructions: ', finalInstructions);
+      console.log(
+        'instructions i want to whre is undefine: ',
+        finalInstructions
+      );
 
       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/`, {
         method: 'POST',
@@ -210,7 +213,8 @@ const PostRecipe = () => {
   };
 
   const handleDifficulty = (e) => {
-    setDifficulty(e.target.value);
+    const selectedValue = parseInt(e.target.value, 10); // Convert the selected value to an integer
+    setDifficulty(selectedValue);
   };
 
   const handleIngredientsChange = (event, index) => {
@@ -377,9 +381,9 @@ const PostRecipe = () => {
                     onChange={handleDifficulty}
                   >
                     <option value="">Select difficulty level</option>
-                    <option value="Easy">Beginner</option>
-                    <option value="Moderate">Intermediate</option>
-                    <option value="Hard">Advanced</option>
+                    <option value="1">Beginner</option>
+                    <option value="2">Intermediate</option>
+                    <option value="3">Advanced</option>
                   </Form.Select>
                 </Form.Group>
 
