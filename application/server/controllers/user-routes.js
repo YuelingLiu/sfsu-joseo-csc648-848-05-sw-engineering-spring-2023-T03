@@ -205,7 +205,8 @@ router.post("/login", async (req, res) => {
         success: true,
         message: "Authentication successful!",
         token,
-        name
+        name,
+        user: dbUserData
       });
     }
   } catch (err) {
