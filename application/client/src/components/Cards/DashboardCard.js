@@ -201,6 +201,7 @@ function CategoryCard({ result, onClick, userName }) {
             </Col>
           </Row>
         </Container>
+        <ToastContainer />
       </Card>
       {/* <ToastContainer /> */}
     </>
