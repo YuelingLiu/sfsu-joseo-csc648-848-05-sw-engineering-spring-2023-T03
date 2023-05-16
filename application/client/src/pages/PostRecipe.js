@@ -134,7 +134,7 @@ const PostRecipe = () => {
         cooking_time: cookingTime,
         description: recipeDescription,
         difficulty: difficulty,
-        category: category,
+        //category: category,
         photo_url: images ? images : null, // If images is not set, send null
       };
 
@@ -163,16 +163,13 @@ const PostRecipe = () => {
       console.log('recipe: ', JSON.stringify(recipe));
       console.log('instructions: ', finalInstructions);
 
-      const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ recipe, ingredients, finalInstructions }),
-        }
-      );
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ recipe, ingredients, finalInstructions }),
+      });
 
       if (!response.ok) {
         throw new Error('Response ERROR');
@@ -183,34 +180,6 @@ const PostRecipe = () => {
     } catch (error) {
       console.log('Error message: ' + error.message);
     }
-
-    //   const response = await fetch(
-    //     `${process.env.REACT_APP_REQ_URL}/recipe/`, {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body:  JSON.stringify({ formData }),
-    //     }
-    //   );
-
-    //   if (!response.ok) {
-    //     // console.log('response not ok');
-    //     // toast.error('Post recipe failed!', {
-    //     //   position: toast.POSITION.TOP_CENTER,
-    //     // });
-    //     throw new Error('Response ERROR');
-    //   }
-
-    //   const data = await response.json();
-    //   return data;
-    // } catch (error) {
-    //   // toast.error('Post recipe failed!', {
-    //   //   position: toast.POSITION.TOP_CENTER,
-    //   // });
-    //   console.error('Error while registering user:', error.message);
-    //   throw error;
-    // }
   };
 
   // set our image name so we can display it
