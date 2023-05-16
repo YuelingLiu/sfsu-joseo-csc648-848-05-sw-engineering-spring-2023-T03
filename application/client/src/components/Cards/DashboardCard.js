@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../categories/Categories.css';
 import { FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
+import { useHistory } from "react-router-dom";
 
 // bootStrap
 import Card from 'react-bootstrap/Card';
@@ -17,6 +18,7 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
 function CategoryCard({ result, onClick, userName }) {
+  const history = useHistory();
   let name = localStorage.getItem('name');
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
@@ -92,13 +94,13 @@ function CategoryCard({ result, onClick, userName }) {
 
   return (
     <>
-      <Card className="card-hover" onClick={onClick}>
+      <Card style={{ width: '33rem', margin: '20px 20px 15px 22px', padding: '0px' }}   >
         <Container fluid>
           <Row>
             {/* Title and number of hearts */}
             <Col md={7}>
               <Row>
-                <img src="hero.jpg" alt="pic" className="cardImg" />
+                <img src="hero.jpg" alt="pic" className="cardImg" onClick={onClick} />
               </Row>
               <Row>
                 <Col xs={6}>
@@ -131,6 +133,21 @@ function CategoryCard({ result, onClick, userName }) {
                       />{' '}
                       4
                     </div>
+                    <Button
+                      variant="dark"
+                      style={{
+                        backgroundColor: 'transparent',
+                        borderColor: 'transparent',
+                        color: 'hsl(0, 83%, 39%)',
+                        marginLeft: 0,
+                        marginRight: 'auto',
+                        marginBottom: '10px',
+                      }}
+                      // onClick={handleDeletePost(result.recipe_id)}
+                      onClick={() => handleDeletePost(result.recipe_title)}
+                    >
+                      <FaTrash />
+                    </Button>
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
@@ -171,7 +188,7 @@ function CategoryCard({ result, onClick, userName }) {
             <Col md={5}>
               <Row style={{ padding: '5px 0px' }}>
                 <Col xs={4}>
-                  <img src="user.ico" alt="user-icon" className="userImg" />
+                  <img src="user.ico" alt="user-icon" className="userImg" onClick={() => {history.push(`/profile`)}} />
                 </Col>
                 <Col xs={8}>
                   <h5>{name}</h5>
@@ -185,7 +202,7 @@ function CategoryCard({ result, onClick, userName }) {
           </Row>
         </Container>
       </Card>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 }

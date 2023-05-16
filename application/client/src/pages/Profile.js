@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from "react-router-dom";
 import { Typography } from '@mui/material';
 import { PostsData } from '../PostsData';
-
+import PopularDIshesCards from '../components/Cards/PopularDIshesCards'
 import ProfileCard from '../components/ProfileCard/ProfileCard';
 import DashboardCard from '../components/Cards/DashboardCard'
 // boostrap
