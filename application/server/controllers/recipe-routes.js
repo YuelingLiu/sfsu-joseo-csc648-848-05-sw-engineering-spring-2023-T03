@@ -19,20 +19,23 @@ router.post('/', async (req, res) => {
   console.log('IN POST RECIPE ROUTE !!');
   console.log('req.body:', req.body);
 
-  // console.log('recipe', req.body.recipe);
-  // console.log('ingredients', req.body.ingredients);
-  // console.log('instructions', req.body.finalInstructions);
+  console.log('recipe: ' + req.body.recipe);
+  console.log('ingredients: ' + JSON.stringify(req.body.ingredients));
+  console.log('instructions: ' + JSON.stringify(req.body.finalInstructions));
+
   console.log('IN POST RECIPE ROUTE..... !!');
 
   try {
     const recipe = await Recipe.create(
       req.body.recipe,
       req.body.ingredients,
-      req.body.instructions
+      req.body.finalInstructions
     );
+    
+    console.log('success');
     res.status(201).json(recipe);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 });
 
