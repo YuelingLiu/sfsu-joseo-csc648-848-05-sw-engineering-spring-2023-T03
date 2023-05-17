@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-
+import { spacing } from '@mui/system';
 
 import UserFollowsCard from "../components/Cards/UserFollowsCard";
 
@@ -66,7 +66,7 @@ function Follows() {
             {...other}
           >
             {value === index && (
-              <Box sx={{ p: 3 }}>
+              <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-around' }}>
                 <Typography>{children}</Typography>
               </Box>
             )}
