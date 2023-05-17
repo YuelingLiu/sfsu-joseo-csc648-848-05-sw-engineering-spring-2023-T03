@@ -18,12 +18,11 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   console.log('IN POST RECIPE ROUTE !!');
   console.log('req.body:', req.body);
+
   console.log('recipe: ' + req.body.recipe);
   console.log('ingredients: ' + JSON.stringify(req.body.ingredients));
   console.log('instructions: ' + JSON.stringify(req.body.finalInstructions));
-  // console.log('recipe', req.body.recipe);
-  // console.log('ingredients', req.body.ingredients);
-  // console.log('instructions', req.body.finalInstructions);
+
   console.log('IN POST RECIPE ROUTE..... !!');
 
   try {

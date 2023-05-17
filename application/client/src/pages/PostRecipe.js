@@ -17,9 +17,9 @@ const PostRecipe = () => {
   const [selectedFile, setSelectedFile] = useState('');
 
   // form values
-  const [recipeName, setRecipeName] = useState('spciynoodles2');
-  const [recipeDescription, setRecipeDescription] = useState('spciynoodles2');
-  const [cookingTime, setCookingTime] = useState(1);
+  const [recipeName, setRecipeName] = useState('pasta');
+  const [recipeDescription, setRecipeDescription] = useState('pasta');
+  const [cookingTime, setCookingTime] = useState(12);
   const [difficulty, setDifficulty] = useState('Beginner');
   const [ingredients, setIngredients] = useState([{ amount: '', ingredient: '' },]);
   const [instructions, setInstructions] = useState([{ order: 1, instruction: '' }]);
@@ -120,29 +120,22 @@ const PostRecipe = () => {
       return;
     }
 
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      console.log('post recipe NOT successfully');
-      toast.error('Post recipe failed', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    } else {
-      toast.success('post recipe successfully 🚀👏', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      console.log('post recipe successfully');
-      history.push('/');
-    }
+    // if (Object.keys(errors).length > 0) {
+    //   setValidationErrors(errors);
+    //   console.log('post recipe NOT successfully');
+    //   toast.error('Post recipe failed', {
+    //     position: toast.POSITION.TOP_CENTER,
+    //   });
+    // } else {
+    //   toast.success('post recipe successfully 🚀👏', {
+    //     position: toast.POSITION.TOP_CENTER,
+    //   });
+    //   console.log('post recipe successfully');
+    //   history.push('/');
+    // }
 
     // for date created
     let currentDateTime = new Date().toISOString();
-    console.log(currentDateTime);
-    for (let i = 0; i < localStorage.length; i++) {
-      let key = localStorage.key(i);
-      let value = localStorage.getItem(key);
-      console.log(`${key}: ${value}`);
-    }
-    
 
     try {
       e.preventDefault();
@@ -155,21 +148,17 @@ const PostRecipe = () => {
         cooking_time: cookingTime,
         difficulty: difficulty,
         photo_url: images ? images : null, // If images is not set, send null
-        //category: category,
       };
      
       const finalInstructions = [];
       instructions.forEach((instruction, i) => {
-        finalInstructions.push({
+        finalInstructions.push({ 
           order: i + 1,
-          instruction: instruction.text,
+          instruction: instruction,
         });
       });
 
-      console.log('recipe: ', JSON.stringify(recipe));
-      console.log("instructions object: " + finalInstructions);
-      console.log("ingredients: " + JSON.stringify(ingredients));
-      
+      console.log('final Instructions arr: ' + JSON.stringify(finalInstructions));
       postRecipe(recipe, finalInstructions)
         .then((recipeData) => {
           console.log('DATA: ', recipeData);
@@ -203,6 +192,12 @@ const PostRecipe = () => {
 
       if (!response.ok) {
         throw new Error('Response ERROR');
+      } else {
+        toast.success('post recipe successfully 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log('post recipe successfully');
+        history.push('/');
       }
 
       const data = await response.json();
@@ -287,8 +282,6 @@ const PostRecipe = () => {
     setInstructions([...instructions, newInstruction]);
   };
 
- 
-  
   useEffect(() => {
     console.log('Updated instructions:', instructions);
   }, [instructions]);
