@@ -17,16 +17,20 @@ const PostRecipe = () => {
   const [selectedFile, setSelectedFile] = useState('');
 
   // form values
-  const [recipeName, setRecipeName] = useState('pasta');
-  const [recipeDescription, setRecipeDescription] = useState('pasta');
+  const [recipeName, setRecipeName] = useState('');
+  const [recipeDescription, setRecipeDescription] = useState('');
   const [cookingTime, setCookingTime] = useState(12);
-  const [difficulty, setDifficulty] = useState('Beginner');
-  const [ingredients, setIngredients] = useState([{ amount: '', ingredient: '' },]);
-  const [instructions, setInstructions] = useState([{ order: 1, instruction: '' }]);
+  const [difficulty, setDifficulty] = useState('Easy');
+  const [ingredients, setIngredients] = useState([
+    { amount: '', ingredient: '' },
+  ]);
+  const [instructions, setInstructions] = useState([
+    { order: 1, instruction: '' },
+  ]);
 
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState('');
 
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -37,8 +41,7 @@ const PostRecipe = () => {
     console.log(id);
 
     let item = localStorage.getItem('myKey');
-    console.log(item);  
-
+    console.log(item);
 
     if (recipeName.trim() === '') {
       toast.warn(
@@ -120,20 +123,6 @@ const PostRecipe = () => {
       return;
     }
 
-    // if (Object.keys(errors).length > 0) {
-    //   setValidationErrors(errors);
-    //   console.log('post recipe NOT successfully');
-    //   toast.error('Post recipe failed', {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
-    // } else {
-    //   toast.success('post recipe successfully 🚀👏', {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
-    //   console.log('post recipe successfully');
-    //   history.push('/');
-    // }
-
     // for date created
     let currentDateTime = new Date().toISOString();
 
@@ -149,16 +138,15 @@ const PostRecipe = () => {
         difficulty: difficulty,
         photo_url: images ? images : null, // If images is not set, send null
       };
-     
+
       const finalInstructions = [];
       instructions.forEach((instruction, i) => {
-        finalInstructions.push({ 
+        finalInstructions.push({
           order: i + 1,
           instruction: instruction,
         });
       });
 
-      console.log('final Instructions arr: ' + JSON.stringify(finalInstructions));
       postRecipe(recipe, finalInstructions)
         .then((recipeData) => {
           console.log('DATA: ', recipeData);
@@ -174,12 +162,9 @@ const PostRecipe = () => {
   const postRecipe = async (recipe, finalInstructions) => {
     try {
       console.log('recipe: ', JSON.stringify(recipe));
-      console.log("instructions object: " + finalInstructions);
-      console.log("ingredients: " + JSON.stringify(ingredients));
-
+      console.log('ingredients: ' + JSON.stringify(ingredients));
       console.log(
-        'instructions i want to where is undefine: ',
-        finalInstructions
+        'final Instructions arr: ' + JSON.stringify(finalInstructions)
       );
 
       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/`, {
@@ -249,13 +234,13 @@ const PostRecipe = () => {
     newIngredients.splice(index, 1);
     setIngredients(newIngredients);
   };
-  
+
   const handleAddIngredient = () => {
     console.log('Checking add button gets triggered or not ');
     setIngredients([...ingredients, { amount: '', ingredient: '' }]);
     console.log(ingredients);
   };
-  
+
   useEffect(() => {
     console.log('Updated ingredients:', ingredients);
   }, [ingredients]);
@@ -264,7 +249,7 @@ const PostRecipe = () => {
     const newInstructions = [...instructions];
     newInstructions[index][type] = event.target.value;
     setInstructions(newInstructions);
-  }
+  };
   const handleDeleteInstruction = (index) => {
     console.log('YoU clicked the delete instruction icon');
     const newInstructions = [...instructions];
@@ -290,12 +275,6 @@ const PostRecipe = () => {
     const newInstructions = [...instructions];
     const newStep = parseInt(event.target.value);
 
-    // if (isNaN(newStep) || newStep === '') {
-    //   toast.warn('Uh oh! The step value must be a number.', {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
-    //   return;
-    // }
     newInstructions[index].step = newStep;
     console.log(
       'what are the new instruction',
@@ -457,7 +436,6 @@ const PostRecipe = () => {
                     </div>
                   ))}
 
-
                   <Button
                     variant="dark"
                     onClick={handleAddIngredient}
@@ -490,32 +468,34 @@ const PostRecipe = () => {
 
                   {instructions.map((instruction, index) => (
                     <div className="d-flex mb-2" key={index}>
-                    <Form.Control
-                    as="textarea"
-                    placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp.${index + 1}`}
-                    style={{
-                      width: '80%',
-                      height: '50px',
-                      marginLeft: '2px',
-                    }}
-                    value={instruction.instruction}
-                    required={true}
-                    onChange={(event) =>
-                      handleInstructionsChange(event, index, 'instruction')
-                    }
-                  />
+                      <Form.Control
+                        as="textarea"
+                        placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp.${
+                          index + 1
+                        }`}
+                        style={{
+                          width: '80%',
+                          height: '50px',
+                          marginLeft: '2px',
+                        }}
+                        value={instruction.instruction}
+                        required={true}
+                        onChange={(event) =>
+                          handleInstructionsChange(event, index, 'instruction')
+                        }
+                      />
 
                       <Button
-                      variant="dark"
-                      style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
-                      }}
-                      onClick={() => handleDeleteInstruction(index)}
-                    >
-                      <FaTrash />
-                    </Button>
+                        variant="dark"
+                        style={{
+                          backgroundColor: 'transparent',
+                          borderColor: 'transparent',
+                          color: 'hsl(0, 83%, 39%)',
+                        }}
+                        onClick={() => handleDeleteInstruction(index)}
+                      >
+                        <FaTrash />
+                      </Button>
                     </div>
                   ))}
 
