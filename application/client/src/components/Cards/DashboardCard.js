@@ -33,7 +33,7 @@ function CategoryCard({ result, onClick, userName }) {
     try {
       // Make the API call to delete the post
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/${id}`,
+        `${process.env.REACT_APP_REQ_URL}/recipe/${result.id}`,
         {
           method: 'DELETE',
           headers: {
