@@ -87,23 +87,23 @@ function Follows() {
       
   return (
     <>
-    <Box>
-      <UserFollowsCard/>
-      <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Followers" {...a11yProps(0)} />
-          <Tab label="Following" {...a11yProps(1)} />
-        </Tabs>
+      <Box>
+        <UserFollowsCard/>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-around'}}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Followers" {...a11yProps(0)} />
+              <Tab label="Following" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <TabPanel value={value} index={0}>
+            {gottenData?createFollowersCards(): <h6>loading</h6> }
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            {gottenData?createFollowingCards(): <h6>loading</h6>}
+          </TabPanel>
+        </Box>
       </Box>
-      <TabPanel value={value} index={0}>
-        {gottenData?createFollowersCards(): <h6>loading</h6> }
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        {gottenData?createFollowingCards(): <h6>loading</h6>}
-      </TabPanel>
-    </Box>
-    </Box>
     </>
   )
 }

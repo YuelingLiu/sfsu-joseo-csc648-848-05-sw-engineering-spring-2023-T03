@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PostsData } from '../PostsData';
 import { useHistory } from "react-router-dom";
 
@@ -13,16 +13,45 @@ import Row from 'react-bootstrap/Row';
 const TopRated = () => {
     const history = useHistory();
     const name = {recipe_title: 'Top Rated'}
+    const [popular, setPopular] = useState([]);
+
+    // filter from highest rating 
+    const handlePopularFilter = () => {
+      console.log("before sort: " + JSON.stringify(PostsData));
+
+      PostsData.sort((a, b) => {
+          return b.rating - a.rating;
+      });
+      setPopular(PostsData)
+      return PostsData;
+    }
+ 
+    // reload cards for filter applied
+    useEffect(() => {
+     console.log('reload');
+    }, []);
+
 
     return (
       <>
-        <FilterbarStatic title={name} />
+        <FilterbarStatic title={name} popularFilter={handlePopularFilter}/>
 
         <Container style={{ maxWidth: '80%' }}>
             <Row style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {PostsData.map(data => (
-                    <DashboardCard  result={data}  onClick={() => history.push(`post/${data.id}`)}/>
-                ))}
+              {/* if popular array isn't empty load filter array */}
+              {popular.length !== 0 ? (
+                <>
+                  {PostsData.map(data => (
+                        <DashboardCard  result={data}  onClick={() => history.push(`post/${data.id}`)}/>
+                    ))}
+                </>
+              ) : (
+                <>
+                  {PostsData.map(data => (
+                      <DashboardCard  result={data}  onClick={() => history.push(`post/${data.id}`)}/>
+                  ))}
+                </>
+              )}
             </Row>
         </Container>
       </>

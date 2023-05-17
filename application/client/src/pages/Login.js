@@ -55,10 +55,11 @@ const Login = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(JSON.stringify(data));
         // Handle successful login
         localStorage.setItem('token', data.token);
         localStorage.setItem('name', data.name);
+        localStorage.setItem('userId', data.user.id)
+
         setLoggedIn(true);
         toast.success('Logged in successfully!😄🚀🙌', {
           position: toast.POSITION.TOP_CENTER,
