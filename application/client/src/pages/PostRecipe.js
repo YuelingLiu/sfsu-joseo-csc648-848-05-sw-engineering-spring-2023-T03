@@ -21,16 +21,24 @@ const PostRecipe = () => {
   const [recipeDescription, setRecipeDescription] = useState('spciynoodles2');
   const [cookingTime, setCookingTime] = useState(1);
   const [difficulty, setDifficulty] = useState('Beginner');
-  const [ingredients, setIngredients] = useState(['dddddd', 'dd2']);
-  const [instructions, setInstructions] = useState([]);
+  const [ingredients, setIngredients] = useState([{ amount: '', ingredient: '' },]);
+  const [instructions, setInstructions] = useState([{ order: 1, instruction: '' }]);
+
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]);
+  const [date, setDate] = useState('')
 
   const [validationErrors, setValidationErrors] = useState({});
 
   const handlePostRecipe = async (e) => {
     e.preventDefault();
     const errors = {};
+    const id = localStorage.getItem('userId');
+    console.log(id);
+
+    let item = localStorage.getItem('myKey');
+    console.log(item);  
+
 
     if (recipeName.trim() === '') {
       toast.warn(
@@ -94,7 +102,7 @@ const PostRecipe = () => {
     }
 
     for (let i = 0; i < instructions.length; i++) {
-      if (instructions[i].text.length === 0) {
+      if (instructions[i].instruction.length === 0) {
         toast.warn('Uh oh! At least one of your instructions is empty ', {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -126,18 +134,30 @@ const PostRecipe = () => {
       history.push('/');
     }
 
+    // for date created
+    let currentDateTime = new Date().toISOString();
+    console.log(currentDateTime);
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      let value = localStorage.getItem(key);
+      console.log(`${key}: ${value}`);
+    }
+    
+
     try {
       e.preventDefault();
 
       const recipe = {
+        user_id: id,
         title: recipeName,
-        cooking_time: cookingTime,
         description: recipeDescription,
+        created_at: currentDateTime,
+        cooking_time: cookingTime,
         difficulty: difficulty,
-        //category: category,
         photo_url: images ? images : null, // If images is not set, send null
+        //category: category,
       };
-
+     
       const finalInstructions = [];
       instructions.forEach((instruction, i) => {
         finalInstructions.push({
@@ -146,6 +166,10 @@ const PostRecipe = () => {
         });
       });
 
+      console.log('recipe: ', JSON.stringify(recipe));
+      console.log("instructions object: " + finalInstructions);
+      console.log("ingredients: " + JSON.stringify(ingredients));
+      
       postRecipe(recipe, finalInstructions)
         .then((recipeData) => {
           console.log('DATA: ', recipeData);
@@ -161,8 +185,11 @@ const PostRecipe = () => {
   const postRecipe = async (recipe, finalInstructions) => {
     try {
       console.log('recipe: ', JSON.stringify(recipe));
+      console.log("instructions object: " + finalInstructions);
+      console.log("ingredients: " + JSON.stringify(ingredients));
+
       console.log(
-        'instructions i want to whre is undefine: ',
+        'instructions i want to where is undefine: ',
         finalInstructions
       );
 
@@ -217,37 +244,32 @@ const PostRecipe = () => {
     setDifficulty(selectedValue);
   };
 
-  const handleIngredientsChange = (event, index) => {
+  const handleIngredientsChange = (event, index, type) => {
     const newIngredients = [...ingredients];
-    newIngredients[index] = event.target.value;
+    newIngredients[index][type] = event.target.value;
     setIngredients(newIngredients);
   };
-
   const handleDeleteIngredient = (index) => {
-    console.log('YoU clicked the trash icon');
     const newIngredients = [...ingredients];
     newIngredients.splice(index, 1);
     setIngredients(newIngredients);
   };
-
+  
   const handleAddIngredient = () => {
     console.log('Checking add button gets triggered or not ');
-    setIngredients([...ingredients, '']);
+    setIngredients([...ingredients, { amount: '', ingredient: '' }]);
     console.log(ingredients);
   };
+  
   useEffect(() => {
     console.log('Updated ingredients:', ingredients);
   }, [ingredients]);
 
-  const handleInstructionsChange = (event, index) => {
+  const handleInstructionsChange = (event, index, type) => {
     const newInstructions = [...instructions];
-    newInstructions[index] = {
-      step: index + 1,
-      text: event.target.value,
-    };
+    newInstructions[index][type] = event.target.value;
     setInstructions(newInstructions);
-  };
-
+  }
   const handleDeleteInstruction = (index) => {
     console.log('YoU clicked the delete instruction icon');
     const newInstructions = [...instructions];
@@ -258,12 +280,15 @@ const PostRecipe = () => {
   const handleAddInstruction = () => {
     console.log('handle add instruction button ');
     const newInstruction = {
-      step: instructions.length + 1,
-      text: '',
+      order: instructions.length + 1,
+      instruction: '',
     };
     console.log('what is new instructions,', newInstruction);
     setInstructions([...instructions, newInstruction]);
   };
+
+ 
+  
   useEffect(() => {
     console.log('Updated instructions:', instructions);
   }, [instructions]);
@@ -409,11 +434,20 @@ const PostRecipe = () => {
                     <div className="d-flex mb-2" key={index}>
                       <Form.Control
                         as="textarea"
-                        placeholder={`Ingredient ${index + 1}`}
-                        style={{ width: '50%', height: '35px' }}
-                        value={ingredient}
+                        placeholder={`Amount ${index + 1}`}
+                        style={{ width: '25%', height: '35px' }}
+                        value={ingredient.amount}
                         onChange={(event) =>
-                          handleIngredientsChange(event, index)
+                          handleIngredientsChange(event, index, 'amount')
+                        }
+                      />
+                      <Form.Control
+                        as="textarea"
+                        placeholder={`Ingredient ${index + 1}`}
+                        style={{ width: '25%', height: '35px' }}
+                        value={ingredient.ingredient}
+                        onChange={(event) =>
+                          handleIngredientsChange(event, index, 'ingredient')
                         }
                       />
                       <Button
@@ -429,6 +463,7 @@ const PostRecipe = () => {
                       </Button>
                     </div>
                   ))}
+
 
                   <Button
                     variant="dark"
@@ -462,33 +497,32 @@ const PostRecipe = () => {
 
                   {instructions.map((instruction, index) => (
                     <div className="d-flex mb-2" key={index}>
-                      <Form.Control
-                        as="textarea"
-                        placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp.${
-                          index + 1
-                        }`}
-                        style={{
-                          width: '80%',
-                          height: '50px',
-                          marginLeft: '2px',
-                        }}
-                        value={instruction.text}
-                        required={true}
-                        onChange={(event) =>
-                          handleInstructionsChange(event, index)
-                        }
-                      />
+                    <Form.Control
+                    as="textarea"
+                    placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp.${index + 1}`}
+                    style={{
+                      width: '80%',
+                      height: '50px',
+                      marginLeft: '2px',
+                    }}
+                    value={instruction.instruction}
+                    required={true}
+                    onChange={(event) =>
+                      handleInstructionsChange(event, index, 'instruction')
+                    }
+                  />
+
                       <Button
-                        variant="dark"
-                        style={{
-                          backgroundColor: 'transparent',
-                          borderColor: 'transparent',
-                          color: 'hsl(0, 83%, 39%)',
-                        }}
-                        onClick={() => handleDeleteInstruction(index)}
-                      >
-                        <FaTrash />
-                      </Button>
+                      variant="dark"
+                      style={{
+                        backgroundColor: 'transparent',
+                        borderColor: 'transparent',
+                        color: 'hsl(0, 83%, 39%)',
+                      }}
+                      onClick={() => handleDeleteInstruction(index)}
+                    >
+                      <FaTrash />
+                    </Button>
                     </div>
                   ))}
 
