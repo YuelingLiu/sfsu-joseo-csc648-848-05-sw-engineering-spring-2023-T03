@@ -145,7 +145,7 @@ const PostRecipe = () => {
       instructions.forEach((instruction, i) => {
         finalInstructions.push({
           order: i + 1,
-          instruction: instruction,
+          instruction: instruction.instruction,
         });
       });
       console.log("recipe", recipe.user_id)
