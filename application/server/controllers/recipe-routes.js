@@ -62,7 +62,7 @@ router.post('/', upload.single("recipe_image"), async (req, res) => {
       ).Location;
     }
     const recipe = {
-      user_id: parsedRecipe.user_id,
+      user_id: parseInt(parsedRecipe.user_id),
       title: parsedRecipe.title,
       description: parsedRecipe.description,
       cooking_time: parsedRecipe.cooking_time,
