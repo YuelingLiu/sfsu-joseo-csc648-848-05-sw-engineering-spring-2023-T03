@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../categories/Categories.css';
 import { FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 // bootStrap
 import Card from 'react-bootstrap/Card';
@@ -26,46 +26,43 @@ function CategoryCard({ result, onClick, userName }) {
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
 
-  const handleDeletePost = (index) => {
+  const handleDeletePost = async () => {
+    console.log('Deleting post with ID:');
     console.log('triggered delete post button');
+
+    try {
+      // Make the API call to delete the post
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/recipe/${result.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Deletion successful
+        toast.success('Deleted recipe successfully 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+
+        console.log('recipe deleted successfully');
+        // Update the state or perform any other necessary actions
+        setDeletePost(true);
+      } else {
+        // Handle errors if the deletion was not successful
+        toast.error('Failed to delete the recipe!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.error('Failed to delete the recipe');
+      }
+    } catch (error) {
+      // Handle any network or other errors
+      console.error('Error occurred while deleting the post:', error);
+    }
   };
-  // const handleDeletePost = async () => {
-  //   console.log('Deleting post with ID:');
-  //   console.log('triggered delete post button');
-
-  // try {
-  //   // Make the API call to delete the post
-  //   const response = await fetch(
-  //     `${process.env.REACT_APP_REQ_URL}/recipe/${id}`,
-  //     {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     }
-  //   );
-
-  //   if (response.ok) {
-  //     // Deletion successful
-  //     toast.success('Deleted recipe successfully 🚀👏', {
-  //       position: toast.POSITION.TOP_CENTER,
-  //     });
-
-  //     console.log('recipe deleted successfully');
-  //     // Update the state or perform any other necessary actions
-  //     setDeletePost(true);
-  //   } else {
-  //     // Handle errors if the deletion was not successful
-  //     toast.error('Failed to delete the recipe!', {
-  //       position: toast.POSITION.TOP_CENTER,
-  //     });
-  //     console.error('Failed to delete the recipe');
-  //   }
-  // } catch (error) {
-  //   // Handle any network or other errors
-  //   console.error('Error occurred while deleting the post:', error);
-  // }
-  //};
 
   const FavoriteToTrue = () => {
     setFavorite(true);
@@ -94,13 +91,24 @@ function CategoryCard({ result, onClick, userName }) {
 
   return (
     <>
-      <Card style={{ width: '33rem', margin: '20px 20px 15px 22px', padding: '0px' }}   >
+      <Card
+        style={{
+          width: '33rem',
+          margin: '20px 20px 15px 22px',
+          padding: '0px',
+        }}
+      >
         <Container fluid>
           <Row>
             {/* Title and number of hearts */}
             <Col md={7}>
               <Row>
-                <img src="hero.jpg" alt="pic" className="cardImg" onClick={onClick} />
+                <img
+                  src="hero.jpg"
+                  alt="pic"
+                  className="cardImg"
+                  onClick={onClick}
+                />
               </Row>
               <Row>
                 <Col xs={6}>
@@ -144,7 +152,7 @@ function CategoryCard({ result, onClick, userName }) {
                         marginBottom: '10px',
                       }}
                       // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.recipe_title)}
+                      onClick={() => handleDeletePost(result.id)}
                     >
                       <FaTrash />
                     </Button>
@@ -188,7 +196,14 @@ function CategoryCard({ result, onClick, userName }) {
             <Col md={5}>
               <Row style={{ padding: '5px 0px' }}>
                 <Col xs={4}>
-                  <img src="user.ico" alt="user-icon" className="userImg" onClick={() => {history.push(`/profile`)}} />
+                  <img
+                    src="user.ico"
+                    alt="user-icon"
+                    className="userImg"
+                    onClick={() => {
+                      history.push(`/profile`);
+                    }}
+                  />
                 </Col>
                 <Col xs={8}>
                   <h5>{name}</h5>
