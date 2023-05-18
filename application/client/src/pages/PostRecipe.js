@@ -10,29 +10,40 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
 import FilterBar from '../components/filterbar/Filterbar';
+import { formControlClasses } from '@mui/material';
 
 const PostRecipe = () => {
   const history = useHistory();
   // holds image uploaded name
   const [selectedFile, setSelectedFile] = useState('');
+
+  // form values
   const [recipeName, setRecipeName] = useState('');
-
-  const [cookingTime, setCookingTime] = useState('');
-  //dcookingTimeUnit, which holds the selected unit (minutes, hours, or days).
-  const [cookingTimeUnit, setCookingTimeUnit] = useState('minutes');
-
-  const [difficulty, setDifficulty] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
-  const [ingredients, setIngredients] = useState([]);
-  const [instructions, setInstructions] = useState([]);
-  const [step, setStep] = useState('');
+  const [cookingTime, setCookingTime] = useState(12);
+  const [difficulty, setDifficulty] = useState('Easy');
+  const [ingredients, setIngredients] = useState([
+    { amount: '', ingredient: '' },
+  ]);
+  const [instructions, setInstructions] = useState([
+    { order: 1, instruction: '' },
+  ]);
+
   const [category, setCategory] = useState('');
-  const [images, setImages] = useState([]);
+  const [recipeImage, setRecipeImage] = useState(null);
+  const [recipeImageName, setRecipeImageName] = useState(null);
+  const [date, setDate] = useState('');
+
   const [validationErrors, setValidationErrors] = useState({});
 
   const handlePostRecipe = async (e) => {
     e.preventDefault();
     const errors = {};
+    const id = localStorage.getItem('userId');
+    console.log(id);
+
+    let item = localStorage.getItem('myKey');
+    console.log(item);
 
     if (recipeName.trim() === '') {
       toast.warn(
@@ -45,7 +56,7 @@ const PostRecipe = () => {
       return;
     }
 
-    if (cookingTime.trim() === '') {
+    if (cookingTime <= 0) {
       toast.warn(
         'Oops! It looks like you forgot to select a cooking time for your recipe',
         {
@@ -65,7 +76,7 @@ const PostRecipe = () => {
       return;
     }
 
-    if (difficulty.trim() === '') {
+    if (difficulty.length === 0) {
       toast.warn(
         "Hey there! It looks like you haven't selected a difficulty level for your recipe! ",
         {
@@ -95,15 +106,15 @@ const PostRecipe = () => {
       return;
     }
 
-    if (step.length === 0) {
-      toast.warn(
-        'Uh oh! It looks like you forgot to add step to this instruction ',
-        {
+    for (let i = 0; i < instructions.length; i++) {
+      if (instructions[i].instruction.length === 0) {
+        toast.warn('Uh oh! At least one of your instructions is empty ', {
           position: toast.POSITION.TOP_CENTER,
-        }
-      );
-      return;
+        });
+        return;
+      }
     }
+
     if (category.trim() === '') {
       toast.warn(
         'Uh oh! It looks like you forgot to select a category for your recipe ',
@@ -114,38 +125,38 @@ const PostRecipe = () => {
       return;
     }
 
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      console.log('post recipe NOT successfully');
-      toast.error('Post recipe failed', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    } else {
-      toast.success('post recipe successfully 🚀👏', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      console.log('post recipe successfully');
-      history.push('/');
-    }
+    // for date created
+    let currentDateTime = new Date().toISOString();
 
     try {
       e.preventDefault();
-
       const formData = new FormData();
-      formData.append('title', recipeName);
-      formData.append('cooking_time', cookingTime);
-      formData.append('description', recipeDescription);
-      formData.append('difficulty', difficulty);
-      // formData.append('ingredients', ingredients);
-      // formData.append('instructions', instructions);
-      // formData.append('category', category);
+      const recipe = {
+        user_id: id,
+        title: recipeName,
+        description: recipeDescription,
+        created_at: currentDateTime,
+        cooking_time: cookingTime,
+        difficulty: difficulty,
+        // photo_url: images ? images : null, // If images is not set, send null
+      };
 
-      // change this to if statement
-      if (images) {
-        formData.append('photo_url', images);
+      const finalInstructions = [];
+      instructions.forEach((instruction, i) => {
+        finalInstructions.push({
+          order: i + 1,
+          instruction: instruction,
+        });
+      });
+      console.log("recipe", recipe.user_id)
+      formData.append('recipe', JSON.stringify(recipe));
+      formData.append('ingredients', JSON.stringify(ingredients));
+      formData.append('instructions', JSON.stringify(finalInstructions));
+      formData.append('test', '123')
+      if(recipeImage){
+        formData.append('recipe_image', recipeImage);
       }
-      console.log('This is recipe images: ' + images);
-
+      console.log("formData, ", formData)
       postRecipe(formData)
         .then((recipeData) => {
           console.log('DATA: ', recipeData);
@@ -153,47 +164,45 @@ const PostRecipe = () => {
         .catch((error) => {
           console.log('ERROR: ', error.message);
         });
-    } catch (error) {
-      console.log('Error message: ' + error.message);
+    } catch (err) {
+      console.log('Error message: ' + err.message);
     }
   };
 
   const postRecipe = async (formData) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/post-recipe`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+      console.log('body: ', JSON.stringify(formData));
+      console.log('recipeImage', recipeImage);
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/`, {
+        method: 'POST',
+        // headers: {
+        //   'Content-Type': 'application/json',
+        // },
+        body: formData,
+      });
 
       if (!response.ok) {
-        // console.log('response not ok');
-        // toast.error('Post recipe failed!', {
-        //   position: toast.POSITION.TOP_CENTER,
-        // });
         throw new Error('Response ERROR');
+      } else {
+        toast.success('post recipe successfully 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log('post recipe successfully');
+        history.push('/');
       }
 
       const data = await response.json();
-      return data;
+      console.log('DATA: ', data);
     } catch (error) {
-      // toast.error('Post recipe failed!', {
-      //   position: toast.POSITION.TOP_CENTER,
-      // });
-      console.error('Error while registering user:', error.message);
-      throw error;
+      console.log('Error message: ' + error.message);
     }
   };
 
-  // set our image name so we can display it
-  const handleFileChange = (event) => {
-    if (event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0].name);
-    } else {
-      setSelectedFile('');
-    }
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    console.log(file.name)
+    setRecipeImage(file);
+    setRecipeImageName(file.name)
   };
 
   const handleRecipeName = (e) => {
@@ -202,7 +211,8 @@ const PostRecipe = () => {
   };
 
   const handleCookingTime = (e) => {
-    setCookingTime(e.target.value);
+    const time = parseInt(e.target.value);
+    setCookingTime(time);
   };
 
   // const handleCookingTimeUnit = (e) => {
@@ -214,20 +224,16 @@ const PostRecipe = () => {
   };
 
   const handleDifficulty = (e) => {
-    setDifficulty(e.target.value);
+    const selectedValue = parseInt(e.target.value, 10); // Convert the selected value to an integer
+    setDifficulty(selectedValue);
   };
 
-  // const handleIngredients = (e) => {
-  //   setIngredients(e.target.value);
-  // };
-  const handleIngredientsChange = (event, index) => {
+  const handleIngredientsChange = (event, index, type) => {
     const newIngredients = [...ingredients];
-    newIngredients[index] = event.target.value;
+    newIngredients[index][type] = event.target.value;
     setIngredients(newIngredients);
   };
-
   const handleDeleteIngredient = (index) => {
-    console.log('YoU clicked the trash icon');
     const newIngredients = [...ingredients];
     newIngredients.splice(index, 1);
     setIngredients(newIngredients);
@@ -235,19 +241,19 @@ const PostRecipe = () => {
 
   const handleAddIngredient = () => {
     console.log('Checking add button gets triggered or not ');
-    setIngredients([...ingredients, '']);
+    setIngredients([...ingredients, { amount: '', ingredient: '' }]);
     console.log(ingredients);
   };
+
   useEffect(() => {
     console.log('Updated ingredients:', ingredients);
   }, [ingredients]);
 
-  const handleInstructionsChange = (event, index) => {
+  const handleInstructionsChange = (event, index, type) => {
     const newInstructions = [...instructions];
-    newInstructions[index] = event.target.value;
+    newInstructions[index][type] = event.target.value;
     setInstructions(newInstructions);
   };
-
   const handleDeleteInstruction = (index) => {
     console.log('YoU clicked the delete instruction icon');
     const newInstructions = [...instructions];
@@ -257,21 +263,28 @@ const PostRecipe = () => {
 
   const handleAddInstruction = () => {
     console.log('handle add instruction button ');
-    setInstructions([...instructions, '']);
-    console.log(instructions);
+    const newInstruction = {
+      order: instructions.length + 1,
+      instruction: '',
+    };
+    console.log('what is new instructions,', newInstruction);
+    setInstructions([...instructions, newInstruction]);
   };
+
   useEffect(() => {
-    console.log('Updated ingredients:', instructions);
+    console.log('Updated instructions:', instructions);
   }, [instructions]);
 
-  // const handleInstructions = (e) => {
-  //   console.log('checking instruction func');
-  //   setInstructions(e.target.value);
-  // };
   const handleStepChange = (event, index) => {
     const newInstructions = [...instructions];
-    newInstructions[index].step = parseInt(event.target.value);
-    setStep(newInstructions[index].step);
+    const newStep = parseInt(event.target.value);
+
+    newInstructions[index].step = newStep;
+    console.log(
+      'what are the new instruction',
+      (newInstructions[index].step = newStep)
+    );
+    setInstructions(newInstructions);
   };
 
   const handleCategory = (e) => {
@@ -369,9 +382,9 @@ const PostRecipe = () => {
                     onChange={handleDifficulty}
                   >
                     <option value="">Select difficulty level</option>
-                    <option value="Easy">Beginner</option>
-                    <option value="Moderate">Intermediate</option>
-                    <option value="Hard">Advanced</option>
+                    <option value="1">Easy</option>
+                    <option value="2">Intermediate</option>
+                    <option value="3">Advanced</option>
                   </Form.Select>
                 </Form.Group>
 
@@ -397,11 +410,20 @@ const PostRecipe = () => {
                     <div className="d-flex mb-2" key={index}>
                       <Form.Control
                         as="textarea"
-                        placeholder={`Ingredient ${index + 1}`}
-                        style={{ width: '50%', height: '35px' }}
-                        value={ingredient}
+                        placeholder={`Amount ${index + 1}`}
+                        style={{ width: '25%', height: '35px' }}
+                        value={ingredient.amount}
                         onChange={(event) =>
-                          handleIngredientsChange(event, index)
+                          handleIngredientsChange(event, index, 'amount')
+                        }
+                      />
+                      <Form.Control
+                        as="textarea"
+                        placeholder={`Ingredient ${index + 1}`}
+                        style={{ width: '25%', height: '35px' }}
+                        value={ingredient.ingredient}
+                        onChange={(event) =>
+                          handleIngredientsChange(event, index, 'ingredient')
                         }
                       />
                       <Button
@@ -450,21 +472,9 @@ const PostRecipe = () => {
 
                   {instructions.map((instruction, index) => (
                     <div className="d-flex mb-2" key={index}>
-                      <Form.Label>
-                        <strong>Step</strong>
-                      </Form.Label>
-                      <Form.Control
-                        type="number"
-                        min="1"
-                        placeholder={`${index + 1}`}
-                        value={instruction.step}
-                        required={true}
-                        onChange={(e) => handleStepChange(e, index)}
-                        style={{ width: '6%', marginTop: '4px' }}
-                      />
                       <Form.Control
                         as="textarea"
-                        placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp. Remove with a slotted spoon and drain on paper towels ${
+                        placeholder={`In a large skillet, cook the pancetta or bacon over medium heat until crisp.${
                           index + 1
                         }`}
                         style={{
@@ -472,9 +482,10 @@ const PostRecipe = () => {
                           height: '50px',
                           marginLeft: '2px',
                         }}
-                        value={instruction}
+                        value={instruction.instruction}
+                        required={true}
                         onChange={(event) =>
-                          handleInstructionsChange(event, index)
+                          handleInstructionsChange(event, index, 'instruction')
                         }
                       />
 
@@ -533,11 +544,12 @@ const PostRecipe = () => {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <input
                     type="file"
+                    // value={recipeImageName}
                     id="imageUpload"
                     name="imageUpload"
                     accept="image/*"
                     style={{ display: 'none', marginTop: '10px' }}
-                    onChange={handleFileChange}
+                    onChange={(e) => handleImageUpload(e)}
                   />
                   <label htmlFor="imageUpload" className="custom-file-upload">
                     Choose image

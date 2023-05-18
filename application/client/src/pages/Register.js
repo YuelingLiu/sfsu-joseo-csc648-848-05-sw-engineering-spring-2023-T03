@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+//import axios from 'axios';
 //import { Alert } from '@mui/material';
 
 // import { useNavigate } from 'react-router-dom';
@@ -108,6 +108,7 @@ const Register = () => {
 
   const registerUser = async (formData) => {
     try {
+      console.log("this is register: " + JSON.stringify(formData));
       const response = await fetch(
         `${process.env.REACT_APP_REQ_URL}/user/register`,
         {

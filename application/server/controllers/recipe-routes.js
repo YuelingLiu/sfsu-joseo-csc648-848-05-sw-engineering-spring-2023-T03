@@ -1,59 +1,121 @@
-const router = require("express").Router();
-const { Upload } = require("@aws-sdk/lib-storage"),
-  { S3 } = require("@aws-sdk/client-s3");
-const { v4: uuidv4 } = require("uuid");
+const router = require('express').Router();
+const { Upload } = require('@aws-sdk/lib-storage'),
+  { S3 } = require('@aws-sdk/client-s3');
+const { v4: uuidv4 } = require('uuid');
 const Recipe = require('../models/Recipe');
 const Comment = require('../models/Comment');
 
+// image storing
+const multer = require("multer");
+const path = require("path");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+// Initialize Multer with the storage options
+// const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
+
+//s3 bucket connection
+const s3 = new S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
 
 router.get('/:id', async (req, res) => {
-  try{
-    const recipeID = req.params.id
+  try {
+    const recipeID = req.params.id;
     const recipe = await Recipe.getById(recipeID);
     res.status(200).json(recipe);
-  } catch (err){
+  } catch (err) {
     console.log(err);
   }
-})
+});
 
-router.post('/', async (req, res) =>{
-    console.log("recipe", req.body.recipe);
-    console.log("ingredients", req.body.ingredients);
-    console.log("instructions", req.body.instructions);
-    try{
-      const recipe = await Recipe.create(req.body.recipe, req.body.ingredients, req.body.instructions);
-      res.status(201).json(recipe);
-    } catch(err){
-      console.log(err)
+router.post('/', upload.single("recipe_image"), async (req, res) => {
+  const parsedRecipe = JSON.parse(req.body.recipe);
+  const parsedIngredients = JSON.parse(req.body.ingredients)
+  const parsedInstructions = JSON.parse(req.body.instructions)
+  console.log('recipe', parsedRecipe);
+  console.log('ingredients: ', parsedIngredients);
+  console.log('instructions: ', parsedInstructions);
+  try {
+    var imgURL = null;
+    if(req.file){
+      const file = req.file;
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: uuidv4() + "-" + file.originalname,
+        Body: file.buffer,
+        ContentEncoding: "base64",
+        ContentType: file.mimetype,
+      };
+      imgURL = (
+        await new Upload({
+          client: s3,
+          params: uploadParams,
+        }).done()
+      ).Location;
     }
-  })
+    const recipe = {
+      user_id: parsedRecipe.user_id,
+      title: parsedRecipe.title,
+      description: parsedRecipe.description,
+      cooking_time: parsedRecipe.cooking_time,
+      difficulty: parsedRecipe.difficulty,
+      photo_url: imgURL
+    }
+    const recipeRes = await Recipe.create(
+      recipe,
+      parsedIngredients,
+      parsedInstructions
+    );
 
-  router.delete('/:id', async (req, res) =>{
-    try{
-      const deleted = await Recipe.delete(req.params.id);
-      res.status(200).json({deleted});
-    } catch(err){
-      console.log(err);
-    }
-  })  
+    console.log('success');
+    res.status(201).json(recipeRes);
+  } catch (err) {
+    console.log(err.message);
+  }
+});
 
-  router.post('/comments/:commentID/like', async (req, res) => {
-    try{
-      console.log(req.body);
-      const commentLike = await Comment.likeComment(req.body.userID,req.params.commentID,req.body.like);
-      res.status(201).json(commentLike);
-    } catch(err){
-      console.log(err);
-    }
-  })
-  
-  router.post('/:id/rating', async (req,res) =>{
-    try{
-      const rating = await Recipe.rate(req.body.userID, req.params.id, req.body.rating);
-      res.status(201).json(rating);
-    } catch(err){
-      console.log(err)
-    }
-  })
-  
-  module.exports = router;
+router.delete('/:id', async (req, res) => {
+  try {
+    const deleted = await Recipe.delete(req.params.id);
+    res.status(200).json({ deleted });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post('/comments/:commentID/like', async (req, res) => {
+  try {
+    console.log(req.body);
+    const commentLike = await Comment.likeComment(
+      req.body.userID,
+      req.params.commentID,
+      req.body.like
+    );
+    res.status(201).json(commentLike);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post('/:id/rating', async (req, res) => {
+  try {
+    const rating = await Recipe.rate(
+      req.body.userID,
+      req.params.id,
+      req.body.rating
+    );
+    res.status(201).json(rating);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+module.exports = router;

@@ -4,7 +4,8 @@ const knex = require('knex')(require('../knexfile').development);
 const { client } = require("../db/db"); 
 
 class Recipe {
-    static async create(recipeParam, ingredientsParam, instructionsParam) {
+  static async create(recipeParam, ingredientsParam, instructionsParam) {
+    console.log("recipeParam: ",recipeParam);
     const recipe = (await knex('recipes').insert(recipeParam).returning('*'))[0];
     const ingredients = [];
     const instructions = [];
