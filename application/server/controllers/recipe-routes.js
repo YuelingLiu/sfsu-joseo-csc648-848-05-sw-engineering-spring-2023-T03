@@ -27,6 +27,15 @@ const s3 = new S3({
   region: process.env.AWS_DEFAULT_REGION
 });
 
+router.get('/', async (req, res) => {
+  try{  
+    const recipes = await Recipe.getAll();
+    res.status(200).json({recipes})
+  } catch(err){
+    console.log(err)
+  }
+})
+
 router.get('/:id', async (req, res) => {
   try {
     const recipeID = req.params.id;
