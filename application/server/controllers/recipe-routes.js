@@ -24,6 +24,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_DEFAULT_REGION
 });
 
 router.get('/:id', async (req, res) => {
@@ -53,7 +54,6 @@ router.post('/', upload.single("recipe_image"), async (req, res) => {
         Body: file.buffer,
         ContentEncoding: "base64",
         ContentType: file.mimetype,
-        Region: 'us-west-1'
       };
       imgURL = (
         await new Upload({
