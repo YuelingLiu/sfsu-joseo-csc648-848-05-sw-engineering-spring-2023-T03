@@ -6,6 +6,8 @@ const { client } = require("../db/db");
 class Recipe {
   static async create(recipeParam, ingredientsParam, instructionsParam) {
     console.log("recipeParam: ",recipeParam);
+    console.log("ingredients: ",ingredientsParam);
+    console.log("instructionsParam: ",instructionsParam);
     const recipe = (await knex('recipes').insert(recipeParam).returning('*'))[0];
     const ingredients = [];
     const instructions = [];
