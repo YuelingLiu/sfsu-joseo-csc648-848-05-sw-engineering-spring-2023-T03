@@ -53,6 +53,7 @@ router.post('/', upload.single("recipe_image"), async (req, res) => {
         Body: file.buffer,
         ContentEncoding: "base64",
         ContentType: file.mimetype,
+        Region: 'us-west-1'
       };
       imgURL = (
         await new Upload({
