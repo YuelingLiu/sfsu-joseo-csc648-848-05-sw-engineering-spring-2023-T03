@@ -2,8 +2,10 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
-
-
+import Typography from '@mui/material/Typography';
+import { spacing } from '@mui/system';
+import Box from '@mui/material/Box';
+import { palette } from '@mui/system';
 
 
 function UserFollowsCard() {
@@ -22,13 +24,22 @@ function UserFollowsCard() {
 
     return (
        <>
-        <Card>
-        <Avatar alt="Profile Picture" src= {user.profile_picture}/>
-        <div>
-        <Chip label={user.followers + " Followers"} variant="outlined" />
-        <Chip label={user.following + " Following"} variant="outlined"/>
-        </div>
-        </Card>
+       <Box sx={{ width: '100%', pt: 0.5, bgcolor: '#D9D9D9', color: '#000000'}}>
+            <Box sx={{ ml: '5%', pt: 0.5}}>
+                <Avatar  style={{ display: 'inline-block' }} alt="Profile Picture" src= {user.profile_picture}/>
+                <Box sx={{ display: 'inline-flex', ml: '1%' }}>
+                    <Typography> {user.username} </Typography>
+                </Box>
+                <div>
+                    <Box sx={{ display: 'inline-block' }}>
+                        <Typography> {user.followers + " Followers"} </Typography>
+                    </Box>
+                    <Box sx={{ display: 'inline-block', ml: 2}}>
+                        <Typography> {user.following + " Following"} </Typography>
+                    </Box>
+                </div>
+            </Box>
+        </Box>
        </>
     );
 }

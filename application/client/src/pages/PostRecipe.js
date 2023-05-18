@@ -21,7 +21,7 @@ const PostRecipe = () => {
   const [recipeName, setRecipeName] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
   const [cookingTime, setCookingTime] = useState(12);
-  const [difficulty, setDifficulty] = useState('Easy');
+  const [difficulty, setDifficulty] = useState(1);
   const [ingredients, setIngredients] = useState([
     { amount: '', ingredient: '' },
   ]);
@@ -148,15 +148,15 @@ const PostRecipe = () => {
           instruction: instruction.instruction,
         });
       });
-      console.log("recipe", recipe.user_id)
+      console.log('recipe', recipe.user_id);
       formData.append('recipe', JSON.stringify(recipe));
       formData.append('ingredients', JSON.stringify(ingredients));
       formData.append('instructions', JSON.stringify(finalInstructions));
-      formData.append('test', '123')
-      if(recipeImage){
+      formData.append('test', '123');
+      if (recipeImage) {
         formData.append('recipe_image', recipeImage);
       }
-      console.log("formData, ", formData)
+      console.log('formData, ', formData);
       postRecipe(formData)
         .then((recipeData) => {
           console.log('DATA: ', recipeData);
@@ -200,9 +200,9 @@ const PostRecipe = () => {
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    console.log(file.name)
+    console.log(file.name);
     setRecipeImage(file);
-    setRecipeImageName(file.name)
+    setRecipeImageName(file.name);
   };
 
   const handleRecipeName = (e) => {
