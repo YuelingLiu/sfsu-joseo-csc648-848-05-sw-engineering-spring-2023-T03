@@ -6,6 +6,8 @@ const { client } = require("../db/db");
 class Recipe {
   static async create(recipeParam, ingredientsParam, instructionsParam) {
     console.log("recipeParam: ",recipeParam);
+    console.log("ingredients: ",ingredientsParam);
+    console.log("instructionsParam: ",instructionsParam);
     const recipe = (await knex('recipes').insert(recipeParam).returning('*'))[0];
     const ingredients = [];
     const instructions = [];
@@ -32,14 +34,20 @@ class Recipe {
 
   static async getById(id) {
     const recipe = (await knex('recipes').where({id}))[0];
-    const ingredients = await knex('ingredients').where('ingredients.recipe_id', id)
-    const instructions = await knex('instructions').where('instructions.recipe_id', id)
+    const ingredients = await knex('ingredients').where('ingredients.recipe_id', id);
+    const instructions = await knex('instructions').where('instructions.recipe_id', id);
     return {recipe, ingredients, instructions};
 
   }
 
   static async getAll() {
-    return await knex('recipes').select('*');
+   const recipesRes = await knex('recipes').select('*');
+   const recipes = await Promise.all(recipesRes.map(async (recipe) => {
+    const ingredients = await knex('ingredients').where('ingredients.recipe_id', recipe.id);
+    const instructions = await knex('instructions').where('instructions.recipe_id', recipe.id);
+    return {recipe, ingredients, instructions}
+   }))
+    return recipes;
   }
 
   static async update(id, data) {

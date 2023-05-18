@@ -24,7 +24,17 @@ const upload = multer({ storage: multer.memoryStorage() });
 const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_DEFAULT_REGION
 });
+
+router.get('/', async (req, res) => {
+  try{  
+    const recipes = await Recipe.getAll();
+    res.status(200).json({recipes})
+  } catch(err){
+    console.log(err)
+  }
+})
 
 router.get('/:id', async (req, res) => {
   try {
@@ -62,7 +72,7 @@ router.post('/', upload.single("recipe_image"), async (req, res) => {
       ).Location;
     }
     const recipe = {
-      user_id: parsedRecipe.user_id,
+      user_id: parseInt(parsedRecipe.user_id),
       title: parsedRecipe.title,
       description: parsedRecipe.description,
       cooking_time: parsedRecipe.cooking_time,
