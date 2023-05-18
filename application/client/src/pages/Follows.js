@@ -96,12 +96,14 @@ function Follows() {
               <Tab label="Following" {...a11yProps(1)} />
             </Tabs>
           </Box>
-          <TabPanel value={value} index={0}>
-            {gottenData?createFollowersCards(): <h6>loading</h6> }
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            {gottenData?createFollowingCards(): <h6>loading</h6>}
-          </TabPanel>
+          <Box sx={{ ml: '20%', mr: '20%'}}>
+            <TabPanel value={value} index={0}>
+              {gottenData?createFollowersCards(): <h6>loading</h6> }
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              {gottenData?createFollowingCards(): <h6>loading</h6>}
+            </TabPanel>
+          </Box>
         </Box>
       </Box>
     </>
