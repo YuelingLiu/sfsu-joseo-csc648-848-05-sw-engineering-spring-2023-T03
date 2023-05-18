@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
 import FilterBar from '../components/filterbar/Filterbar';
+import { formControlClasses } from '@mui/material';
 
 const PostRecipe = () => {
   const history = useHistory();
@@ -29,7 +30,8 @@ const PostRecipe = () => {
   ]);
 
   const [category, setCategory] = useState('');
-  const [images, setImages] = useState([]);
+  const [recipeImage, setRecipeImage] = useState(null);
+  const [recipeImageName, setRecipeImageName] = useState(null);
   const [date, setDate] = useState('');
 
   const [validationErrors, setValidationErrors] = useState({});
@@ -128,7 +130,7 @@ const PostRecipe = () => {
 
     try {
       e.preventDefault();
-
+      const formData = new FormData();
       const recipe = {
         user_id: id,
         title: recipeName,
@@ -136,7 +138,7 @@ const PostRecipe = () => {
         created_at: currentDateTime,
         cooking_time: cookingTime,
         difficulty: difficulty,
-        photo_url: images ? images : null, // If images is not set, send null
+        // photo_url: images ? images : null, // If images is not set, send null
       };
 
       const finalInstructions = [];
@@ -146,8 +148,16 @@ const PostRecipe = () => {
           instruction: instruction,
         });
       });
-
-      postRecipe(recipe, finalInstructions)
+      console.log("recipe", recipe.user_id)
+      formData.append('recipe', JSON.stringify(recipe));
+      formData.append('ingredients', JSON.stringify(ingredients));
+      formData.append('instructions', JSON.stringify(finalInstructions));
+      formData.append('test', '123')
+      if(recipeImage){
+        formData.append('recipe_image', recipeImage);
+      }
+      console.log("formData, ", formData)
+      postRecipe(formData)
         .then((recipeData) => {
           console.log('DATA: ', recipeData);
         })
@@ -159,20 +169,16 @@ const PostRecipe = () => {
     }
   };
 
-  const postRecipe = async (recipe, finalInstructions) => {
+  const postRecipe = async (formData) => {
     try {
-      console.log('recipe: ', JSON.stringify(recipe));
-      console.log('ingredients: ' + JSON.stringify(ingredients));
-      console.log(
-        'final Instructions arr: ' + JSON.stringify(finalInstructions)
-      );
-
+      console.log('body: ', JSON.stringify(formData));
+      console.log('recipeImage', recipeImage);
       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ recipe, ingredients, finalInstructions }),
+        // headers: {
+        //   'Content-Type': 'application/json',
+        // },
+        body: formData,
       });
 
       if (!response.ok) {
@@ -192,13 +198,11 @@ const PostRecipe = () => {
     }
   };
 
-  // set our image name so we can display it
-  const handleFileChange = (event) => {
-    if (event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0].name);
-    } else {
-      setSelectedFile('');
-    }
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    console.log(file.name)
+    setRecipeImage(file);
+    setRecipeImageName(file.name)
   };
 
   const handleRecipeName = (e) => {
@@ -540,11 +544,12 @@ const PostRecipe = () => {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <input
                     type="file"
+                    // value={recipeImageName}
                     id="imageUpload"
                     name="imageUpload"
                     accept="image/*"
                     style={{ display: 'none', marginTop: '10px' }}
-                    onChange={handleFileChange}
+                    onChange={(e) => handleImageUpload(e)}
                   />
                   <label htmlFor="imageUpload" className="custom-file-upload">
                     Choose image
