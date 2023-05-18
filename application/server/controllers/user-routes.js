@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 
 // Amazon stuff
 const { Upload } = require("@aws-sdk/lib-storage"),
-  { S3 } = require("@aws-sdk/client-s3");
+{ S3 } = require("@aws-sdk/client-s3");
+S3.config.update({region: 'us-west-1'});
 const { v4: uuidv4 } = require("uuid");
 const { client } = require("../db/db");
 const bodyParser = require('body-parser');
