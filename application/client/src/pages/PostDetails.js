@@ -34,7 +34,7 @@ const PostDetailsPage = (props) => {
   const postId = props.match.params.postId;
   const { token } = useContext(AuthContext);
   const [Comments, setComments] = useState([]);
-
+  //fetching comments 
   const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/post/${postId}/comments`, {
@@ -59,10 +59,63 @@ const PostDetailsPage = (props) => {
       console.error(err.message);
     }
   }, [postId]); ;
-
   useEffect(() => {
     fetchComments();
   }, [fetchComments]);
+
+  const [recipeDetails, setRecipeDetails] = useState({})
+  const [instructionDetails, setInstructionDetails] = useState([])
+  const [ingredientsDetails, setIngredientsDetails] = useState([])
+  //fetching Recipe details 
+  const getRecipeDetails = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/${postId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const data = await response.json()
+      
+      if (response.ok) {
+        console.log("recipe details okay");
+        setRecipeDetails(data.recipe);
+        setInstructionDetails(data.instructions);
+        setIngredientsDetails(data.ingredients);
+      } else {
+        console.log('response was not okay');
+        throw new Error(data.error);
+      }
+
+    } catch (err) {
+      console.log('response threw error');
+      console.log(err.message);
+      console.error(err.message);
+    }
+  }
+
+  useEffect(() => {
+    getRecipeDetails();
+  }, [postId]);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0 based, add 1 and convert to string
+    const day = ('0' + date.getDate()).slice(-2);
+    const year = date.getFullYear().toString().substr(-2); // Get last 2 digits of year
+    // console.log(month + '/' + day + '/' + year);
+    return month + '/' + day + '/' + year;
+  };
+  const formattedDate = formatDate(recipeDetails.created_at);
+ 
+  // conver '90' mins into hour min format
+  function convertToHoursAndMinutes(num) {
+    const hours = Math.floor(num / 60);
+    const minutes = num % 60;
+    return `${hours}h ${minutes}min`;
+  }
+  const formattedTime = convertToHoursAndMinutes(recipeDetails.cooking_time);
 
   return (
     <>
@@ -84,7 +137,7 @@ const PostDetailsPage = (props) => {
                     <h4 style={{ marginRight: '5px', fontWeight: '700' }}>
                       Cooking time:
                     </h4>
-                    <h4> 2h 30m</h4>
+                    <h4> {formattedTime}</h4>
                   </div>
                 </div>
 
@@ -93,27 +146,26 @@ const PostDetailsPage = (props) => {
                     <h4 style={{ marginRight: '5px', fontWeight: '700' }}>
                       Difficulty:
                     </h4>
-                    <h4> Easy</h4>
+                    <h4>{recipeDetails.difficulty}</h4>
                   </div>
                 </div>
                 {/* ingredients */}
                 <h4 style={{ fontWeight: '700' }}>ingredients list:</h4>
                 {/* MAP THROUGH A COMPONENT FOR PROPER DESIGN */}
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
+                {ingredientsDetails.map((ingredientDetail, index) => {
+                  return (
+                    <div key={index}>
+                      <p>- {ingredientDetail.amount} {ingredientDetail.ingredient}</p>
+                    </div>
+                  )
+                })}
+
                 {/* description */}
                 <h4 style={{ fontWeight: '700', padding: '10px' }}>
                   Description:
                 </h4>
                 <h4>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur.
+                  {recipeDetails.description}
                 </h4>
               </Col>
 
@@ -122,23 +174,14 @@ const PostDetailsPage = (props) => {
                 <h4 style={{ fontWeight: '700' }}>Recipe Instructions:</h4>
 
                 {/* MAP THROUGH A COMPONENT FOR PROPER DESIGN */}
-                <h4 style={{ fontWeight: '600' }}>Step 1:</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-
-                <h4 style={{ fontWeight: '600' }}>Step 2:</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-
-                <h4 style={{ fontWeight: '600' }}>Step 3:</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
-                <h4>- Lorem ipsum dolor sit amet</h4>
+                {instructionDetails.map((instructionDetail, index) => {
+                    return (
+                      <div key={index}>
+                        <h4 style={{ fontWeight: '600' }}>Step {index+1}:</h4>
+                        <p>{instructionDetail.instruction}</p>
+                      </div>
+                    )
+                  })}
               </Col>
             </Row>
           </Col>
@@ -147,7 +190,7 @@ const PostDetailsPage = (props) => {
           <Col md={5}>
             <Row className="justify-content-center">
               <Col xs={6}>
-                <h3 style={{ fontWeight: 'bold' }}>Chicken Tikka Masala</h3>
+                <h3 style={{ fontWeight: 'bold' }}>{recipeDetails.title}</h3>
               </Col>
 
               <Col xs={6}>
@@ -206,7 +249,7 @@ const PostDetailsPage = (props) => {
 
               <Col xs={6}>
                 <h4 style={{ fontWeight: 'bold', textAlign: 'right' }}>
-                  mm/dd/yy
+                 {formattedDate}
                 </h4>
               </Col>
             </Row>

@@ -2,14 +2,14 @@ import React from 'react'
 import { useHistory } from "react-router-dom";
 
 import PopularDIshesCards from '../Cards/PopularDIshesCards'
-import './Categories.css'
+import './PopularDishes.css'
 
 // boostrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-function Categories() {
+function PopularDishes() {
   const history = useHistory();
   const categoryList = ['Mexican', 'Italian', 'American']
   return (
@@ -31,4 +31,4 @@ function Categories() {
   )
 }
 
-export default Categories
+export default PopularDishes;

@@ -16,8 +16,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
+import RecentPost from '../Recent-post/RecentPost';
 
-function CategoryCard({ result, onClick, userName }) {
+function RecentPostCard({ result, onClick, userName }) {
   const history = useHistory();
   let name = localStorage.getItem('name');
   const [value, setValue] = React.useState(2);
@@ -89,7 +90,9 @@ function CategoryCard({ result, onClick, userName }) {
     setSameUser(true);
   }
 
-  console.log("results in dashboard card: " + JSON.stringify(result.title));
+  // console.log("results in dashboard card: " + JSON.stringify(result.title));
+  console.log("results in dashboard card: " + JSON.stringify(result));
+  // console.log(result.recipe.title);
 
   return (
     <>
@@ -114,7 +117,7 @@ function CategoryCard({ result, onClick, userName }) {
               </Row>
               <Row>
                 <Col xs={6}>
-                  <h4 style={{ textAlign: 'left' }}>{result.recipe_title}</h4>
+                  <h4 style={{ textAlign: 'left' }}>{result.recipe.title}</h4>
                 </Col>
 
                 <Col xs={6}>
@@ -185,7 +188,7 @@ function CategoryCard({ result, onClick, userName }) {
                         marginBottom: '10px',
                       }}
                       // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.recipe_title)}
+                      onClick={() => handleDeletePost(result.recipe.title)}
                     >
                       <FaTrash />
                     </Button>
@@ -213,7 +216,7 @@ function CategoryCard({ result, onClick, userName }) {
               </Row>
               <Row>Description:</Row>
               <Row>
-                <ScrollableParagraph text={result.recipe_description} />
+                <ScrollableParagraph text={result.recipe.description} />
               </Row>
             </Col>
           </Row>
@@ -225,4 +228,4 @@ function CategoryCard({ result, onClick, userName }) {
   );
 }
 
-export default CategoryCard;
+export default RecentPostCard;

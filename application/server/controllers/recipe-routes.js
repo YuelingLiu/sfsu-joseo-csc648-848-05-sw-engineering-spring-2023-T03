@@ -38,6 +38,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
+    console.log("id of post: " + req.params.id);
     const recipeID = req.params.id;
     const recipe = await Recipe.getById(recipeID);
     res.status(200).json(recipe);
