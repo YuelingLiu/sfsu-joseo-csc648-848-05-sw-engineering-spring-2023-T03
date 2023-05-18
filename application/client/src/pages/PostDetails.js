@@ -101,10 +101,9 @@ const PostDetailsPage = (props) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0 based, add 1 and convert to string
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); 
     const day = ('0' + date.getDate()).slice(-2);
-    const year = date.getFullYear().toString().substr(-2); // Get last 2 digits of year
-    // console.log(month + '/' + day + '/' + year);
+    const year = date.getFullYear().toString().substr(-2); 
     return month + '/' + day + '/' + year;
   };
   const formattedDate = formatDate(recipeDetails.created_at);

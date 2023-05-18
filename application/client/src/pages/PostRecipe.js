@@ -20,8 +20,8 @@ const PostRecipe = () => {
   // form values
   const [recipeName, setRecipeName] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
-  const [cookingTime, setCookingTime] = useState(12);
-  const [difficulty, setDifficulty] = useState(1);
+  const [cookingTime, setCookingTime] = useState(0);
+  const [difficulty, setDifficulty] = useState(0);
   const [ingredients, setIngredients] = useState([
     { amount: '', ingredient: '' },
   ]);

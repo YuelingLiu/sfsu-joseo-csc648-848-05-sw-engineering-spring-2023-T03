@@ -16,17 +16,23 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
-import RecentPost from '../Recent-post/RecentPost';
+import { useMediaQuery } from '@mui/material';
 
-function RecentPostCard({ result, onClick, userName }) {
+function RecentPostCard({ result, onClick, userName, setCount }) {
   const history = useHistory();
-  let name = localStorage.getItem('name');
+  // let name = localStorage.getItem('name');
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
-
+  const userId = localStorage.getItem('userId')
+  
+  console.log("this is userId: " , userId);
+  console.log("this is result.recipe.user_id: ",result.recipe.user_id);
+  // if (userId == result.recipe.user_id) {
+  //   setSameUser(true)
+  // }
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
     console.log('triggered delete post button');
@@ -34,12 +40,15 @@ function RecentPostCard({ result, onClick, userName }) {
     try {
       // Make the API call to delete the post
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/${result.id}`,
+        `${process.env.REACT_APP_REQ_URL}/recipe/${result.recipe.id}`,
         {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({
+            userID: userId
+          }),
         }
       );
 
@@ -52,6 +61,9 @@ function RecentPostCard({ result, onClick, userName }) {
         console.log('recipe deleted successfully');
         // Update the state or perform any other necessary actions
         setDeletePost(true);
+       
+        // change a count value so RecentPost.js loads again
+        setCount(prevCount => prevCount + 1)
       } else {
         // Handle errors if the deletion was not successful
         toast.error('Failed to delete the recipe!', {
@@ -61,7 +73,7 @@ function RecentPostCard({ result, onClick, userName }) {
       }
     } catch (error) {
       // Handle any network or other errors
-      console.error('Error occurred while deleting the post:', error);
+      console.error('Error occurred while deleting the post:', error.message);
     }
   };
 
@@ -81,19 +93,9 @@ function RecentPostCard({ result, onClick, userName }) {
     );
   }
 
-  // get current user page from URL
-  let splitURL = window.location.href.split('/');
-  let currentUser = splitURL[splitURL.length - 1];
 
-  // if the userName is the same set same user to true
-  if (userName === currentUser) {
-    setSameUser(true);
-  }
 
-  // console.log("results in dashboard card: " + JSON.stringify(result.title));
-  console.log("results in dashboard card: " + JSON.stringify(result));
-  // console.log(result.recipe.title);
-
+  // console.log("on recent page: " + JSON.stringify(result.recipe));
   return (
     <>
       <Card
@@ -211,7 +213,7 @@ function RecentPostCard({ result, onClick, userName }) {
                   />
                 </Col>
                 <Col xs={8}>
-                  <h5>{name}</h5>
+                  <h5>{result.recipe.id}</h5>
                 </Col>
               </Row>
               <Row>Description:</Row>

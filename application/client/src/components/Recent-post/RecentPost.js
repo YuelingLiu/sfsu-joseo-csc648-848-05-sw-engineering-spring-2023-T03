@@ -9,6 +9,7 @@ import RecentPostCard from '../Cards/RecentPostCard'
 
 const RecentPost = () => {
   const [recentPostData, setRecentPostData] = useState([])
+  const [count, setCount] = useState(0)
 
   // render recent post
   const getRecentPost = async () => {
@@ -25,24 +26,20 @@ const RecentPost = () => {
       if (!response) {
         throw new Error(data.error);
       } else {
-        console.log(data.recipes);
         let reversedData = data.recipes.reverse();
-        console.log(reversedData);
         console.log('recent post response ok');
         setRecentPostData(reversedData);
       }
     } catch (err) {
       console.log("error in recent post: " + err.message);
     }
-    
   }
 
   useEffect(() => {
     getRecentPost()
-  }, [])
+  }, [count])
 
   console.log(recentPostData);
-
   return (
     <div>
       {/* send recent post to card to render */}
@@ -55,7 +52,7 @@ const RecentPost = () => {
 
         <Row style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {recentPostData.map(data => (
-              <RecentPostCard result={data}/>
+              <RecentPostCard result={data} setCount={setCount}/>
             ))}
         </Row>
       </Container>
