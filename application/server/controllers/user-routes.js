@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 // Amazon stuff
 const { Upload } = require("@aws-sdk/lib-storage"),
-  { S3 } = require("@aws-sdk/client-s3");
+{ S3 } = require("@aws-sdk/client-s3");
 const { v4: uuidv4 } = require("uuid");
 const { client } = require("../db/db");
 const bodyParser = require('body-parser');
@@ -36,6 +36,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_DEFAULT_REGION
 });
 
 
