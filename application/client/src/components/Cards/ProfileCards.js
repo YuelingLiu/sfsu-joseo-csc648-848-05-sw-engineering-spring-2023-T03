@@ -16,50 +16,54 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
-import { useMediaQuery } from '@mui/material';
 
-function ProfileCards({ result, onClick, userName}) {
+function ProfileCards({ result, onClick}) {
     const history = useHistory();
-    // let name = localStorage.getItem('name');
+    // for rating
     const [value, setValue] = React.useState(2);
+    // for favorites
     const [favorite, setFavorite] = React.useState(false);
     // for same user checking
     const [sameUser, setSameUser] = useState(false);
+    // for deleting 
     const [deletePost, setDeletePost] = useState(false);
-    const userId = localStorage.getItem('userId')
-    const [userNameState, setUserName] = useState('');
+    // get userID
     let userID = localStorage.getItem('userId');
+
+    // set user info
+    const [userNameState, setUserName] = useState('');
+    const [userProfile, setUserImage] = useState()
     console.log(userID);
-    // console.log(userName);
-    // get the user name
-    //   useEffect(() => {
-    //     const fetchUserName = async () => {
-    //       // const userId = localStorage.getItem('userId'); 
-    //       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userName}`);
-    //       if (!response.ok) {
-    //         console.error('Failed to fetch user');
-    //       } else {
-    //         const user = await response.json();
-    //         setUserName(user.username); 
-    //       }
-    //     };
-    //     fetchUserName();
-    //   }, []);
+
+    // get the user name and image 
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userID}`);
+            
+            if (!response.ok) {
+                console.error('Failed to fetch user');
+            } else {
+                const user = await response.json();
+                setUserName(user.username);
+                setUserImage(user.profile_picture)
+            }
+        };
+        fetchUserInfo();
+    }, []);
 
     //   check if same user of owner of profile
     useEffect(() => {
-        if (userId == result.recipe.user_id) {
-        setSameUser(true);
+        if (userID == result.recipe.user_id) {
+            setSameUser(true);
         } else {
-        setSameUser(false);
+            setSameUser(false);
         }
-    }, [userId, result.recipe.user_id]);
+    }, [userID, result.recipe.user_id]);
 
 
   // to delete post 
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
-    console.log('triggered delete post button');
 
     try {
       // Make the API call to delete the post
@@ -71,7 +75,7 @@ function ProfileCards({ result, onClick, userName}) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userID: userId
+            userID: userID
           }),
         }
       );
@@ -227,7 +231,7 @@ function ProfileCards({ result, onClick, userName}) {
               <Row style={{ padding: '5px 0px' }}>
                 <Col xs={4}>
                   <img
-                    src="user.ico"
+                    src={userProfile}
                     alt="user-icon"
                     className="userImg"
                     onClick={() => {
@@ -248,7 +252,6 @@ function ProfileCards({ result, onClick, userName}) {
         </Container>
         <ToastContainer />
       </Card>
-      {/* <ToastContainer /> */}
     </>
   );
 }

@@ -27,6 +27,7 @@ const RecentPost = () => {
       if (!response) {
         throw new Error(data.error);
       } else {
+        console.log("ids ::::: " , data.recipes.user_id);
         let reversedData = data.recipes.reverse();
         console.log('recent post response ok');
         setRecentPostData(reversedData);
@@ -46,6 +47,11 @@ const RecentPost = () => {
     history.push(`/post/${recipe_id}`);
   };
 
+  recentPostData.map(data => {
+    console.log(data.recipe.user_id);
+    // you can return something here if needed
+  })
+
   return (
     <div>
       {/* send recent post to card to render */}
@@ -58,7 +64,7 @@ const RecentPost = () => {
 
         <Row style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {recentPostData.map(data => (
-              <RecentPostCard result={data} setCount={setCount} onClick={() => handleRecentCardClick(data.recipe.id)} userName={data.recipe.user_id}/>
+              <RecentPostCard result={data} setCount={setCount} onClick={() => handleRecentCardClick(data.recipe.id)} userIDs={data.recipe.user_id}/>
             ))}
         </Row>
       </Container>

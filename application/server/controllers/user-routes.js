@@ -274,6 +274,7 @@ router.get('/post/:postId/comments', async (req, res) => {
 
 router.post('/follow/:followID', async (req, res) => {
   try{
+    console.log('in follow');
     const follows = await User.follow(req.body.userID, req.params.followID);
     res.status(201).json({follows});
   } catch(err){
@@ -310,11 +311,8 @@ router.get('/savedrecipes', async(req, res) => {
 
 
 router.get('/:id', async (req, res) => {
-  console.log('hello');
-  const { id } = req.params;
-  console.log(id);
   try {
-    const user = await User.getById(id);
+    const user = await User.getById(1);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

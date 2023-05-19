@@ -19,7 +19,7 @@ const Profile = () => {
   const [profileData, setData] = useState([])
 
   useEffect (() => {
-    const getUserPost = async() => {
+    const getUserPost = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/user/${userID}`,
         {
@@ -48,7 +48,7 @@ const Profile = () => {
     <>
       <Container style={{ maxWidth: '80%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <ProfileCard showDetails userName={name} id={userID}/>
+            <ProfileCard showDetails userName={name} id={userID} userDetails={profileData}/>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>

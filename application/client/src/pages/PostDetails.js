@@ -80,6 +80,8 @@ const PostDetailsPage = (props) => {
       
       if (response.ok) {
         console.log("recipe details okay");
+        console.log(JSON.stringify(data));
+        console.log(data.recipe.user_id);
         setRecipeDetails(data.recipe);
         setInstructionDetails(data.instructions);
         setIngredientsDetails(data.ingredients);
@@ -94,7 +96,6 @@ const PostDetailsPage = (props) => {
       console.error(err.message);
     }
   }
-
   useEffect(() => {
     getRecipeDetails();
   }, [postId]);
@@ -262,7 +263,7 @@ const PostDetailsPage = (props) => {
                   justifyContent: 'center',
                 }}
               >
-                <ProfileCard showDetails />
+                <ProfileCard showDetails userDetails={recipeDetails}/>
               </div>
             </Row>
 

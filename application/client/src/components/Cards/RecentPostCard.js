@@ -18,7 +18,7 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import { useMediaQuery } from '@mui/material';
 
-function RecentPostCard({ result, onClick, userName, setCount }) {
+function RecentPostCard({ result, onClick, userIDs, setCount }) {
   const history = useHistory();
   // let name = localStorage.getItem('name');
   const [value, setValue] = React.useState(2);
@@ -32,16 +32,17 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
   useEffect(() => {
     const fetchUserName = async () => {
       // const userId = localStorage.getItem('userId'); 
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userName}`);
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userIDs}`);
       if (!response.ok) {
         console.error('Failed to fetch user');
       } else {
         const user = await response.json();
+        console.log(user.username);
         setUserName(user.username); 
       }
     };
     fetchUserName();
-  }, []);
+  }, [userIDs]);
 
   // console.log("this is userId: " , userId);
   // console.log("this is result.recipe.user_id: ",result.recipe.user_id);
