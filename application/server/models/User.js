@@ -58,6 +58,7 @@ class User {
     // .join('recipes', 'user_favorite_recipes.recipe_id', 'recipes.id')
     .where('user_favorite_recipes.user_id', userID);
   }
+
 }
 
 module.exports = User;

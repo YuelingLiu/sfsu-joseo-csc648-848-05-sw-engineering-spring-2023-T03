@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-
+import { useHistory } from "react-router-dom";
 // bootstrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import RecentPostCard from '../Cards/RecentPostCard'
 
 const RecentPost = () => {
+  const history = useHistory();
   const [recentPostData, setRecentPostData] = useState([])
   const [count, setCount] = useState(0)
 
@@ -39,7 +40,12 @@ const RecentPost = () => {
     getRecentPost()
   }, [count])
 
-  console.log(recentPostData);
+
+  const handleRecentCardClick = (recipe_id) => {
+    console.log("recipe_i: " , recipe_id);
+    history.push(`/post/${recipe_id}`);
+  };
+
   return (
     <div>
       {/* send recent post to card to render */}
@@ -52,7 +58,7 @@ const RecentPost = () => {
 
         <Row style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {recentPostData.map(data => (
-              <RecentPostCard result={data} setCount={setCount}/>
+              <RecentPostCard result={data} setCount={setCount} onClick={() => handleRecentCardClick(data.recipe.id)} userName={data.recipe.user_id}/>
             ))}
         </Row>
       </Container>

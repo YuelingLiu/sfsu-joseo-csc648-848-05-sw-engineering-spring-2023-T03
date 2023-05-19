@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../categories/PopularDishes.css';
 import { FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,12 +27,34 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
   const userId = localStorage.getItem('userId')
-  
-  console.log("this is userId: " , userId);
-  console.log("this is result.recipe.user_id: ",result.recipe.user_id);
-  // if (userId == result.recipe.user_id) {
-  //   setSameUser(true)
-  // }
+  console.log("CARD:" ,userName);
+  const [userNameState, setUserName] = useState('');
+  useEffect(() => {
+    const fetchUserName = async () => {
+      // const userId = localStorage.getItem('userId'); 
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userName}`);
+      if (!response.ok) {
+        console.error('Failed to fetch user');
+      } else {
+        const user = await response.json();
+        console.log(JSON.stringify(user));
+        console.log("fdsa" , user.username);
+        setUserName(user.username); 
+      }
+    };
+    fetchUserName();
+  }, []);
+  console.log(userName);
+
+  // console.log("this is userId: " , userId);
+  // console.log("this is result.recipe.user_id: ",result.recipe.user_id);
+  useEffect(() => {
+    if (userId == result.recipe.user_id) {
+      setSameUser(true);
+    } else {
+      setSameUser(false);
+    }
+  }, [userId, result.recipe.user_id]);
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
     console.log('triggered delete post button');
@@ -92,10 +114,8 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
       </div>
     );
   }
-
-
-
   // console.log("on recent page: " + JSON.stringify(result.recipe));
+
   return (
     <>
       <Card
@@ -126,6 +146,7 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                   <Box
                     sx={{
                       '& > legend': { mt: 2 },
+                      mt: '10px'
                     }}
                   >
                     <Rating name="read-only" value={value} readOnly />
@@ -148,21 +169,23 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                       />{' '}
                       4
                     </div>
-                    <Button
-                      variant="dark"
-                      style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
-                        marginLeft: 0,
-                        marginRight: 'auto',
-                        marginBottom: '10px',
-                      }}
-                      // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.id)}
-                    >
-                      <FaTrash />
-                    </Button>
+                    {sameUser && (
+                      <Button
+                        variant="dark"
+                        style={{
+                          backgroundColor: 'transparent',
+                          borderColor: 'transparent',
+                          color: 'hsl(0, 83%, 39%)',
+                          marginLeft: 0,
+                          marginRight: 'auto',
+                          marginBottom: '10px',
+                        }}
+                        // onClick={handleDeletePost(result.recipe_id)}
+                        onClick={() => handleDeletePost(result.recipe.title)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    )}
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
@@ -178,22 +201,23 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                       />{' '}
                       3
                     </div>
-
-                    <Button
-                      variant="dark"
-                      style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
-                        marginLeft: 0,
-                        marginRight: 'auto',
-                        marginBottom: '10px',
-                      }}
-                      // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.recipe.title)}
-                    >
-                      <FaTrash />
-                    </Button>
+                    {sameUser && (
+                      <Button
+                        variant="dark"
+                        style={{
+                          backgroundColor: 'transparent',
+                          borderColor: 'transparent',
+                          color: 'hsl(0, 83%, 39%)',
+                          marginLeft: 0,
+                          marginRight: 'auto',
+                          marginBottom: '10px',
+                        }}
+                        // onClick={handleDeletePost(result.recipe_id)}
+                        onClick={() => handleDeletePost(result.recipe.title)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    )}
                   </div>
                 )}
               </Row>
@@ -208,12 +232,12 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                     alt="user-icon"
                     className="userImg"
                     onClick={() => {
-                      history.push(`/profile`);
+                      history.push(`/profile/${userNameState}`);
                     }}
                   />
                 </Col>
                 <Col xs={8}>
-                  <h5>{result.recipe.id}</h5>
+                  <h5>{userNameState}</h5>
                 </Col>
               </Row>
               <Row>Description:</Row>
