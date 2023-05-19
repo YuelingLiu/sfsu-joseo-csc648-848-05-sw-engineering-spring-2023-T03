@@ -25,9 +25,10 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
   const [favorite, setFavorite] = React.useState(false);
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
-  const [deletePost, setDeletePost] = useState(false);
+
   const userId = localStorage.getItem('userId');
-  const [userNameState, setUserName] = useState('');
+  const [userNameRecent, setUsernameRecent] = useState('');
+  const [userImg, setUserImg] = useState('');
 
   useEffect(() => {
     console.log('this is userID ', userIDs);
@@ -37,72 +38,17 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
         `${process.env.REACT_APP_REQ_URL}/user/${userIDs}`
       );
       if (!response.ok) {
-        console.error('Failed to fetch user');
-        console.log('response on recent page', response);
+        console.log('Failed to fetch user');
       } else {
         const user = await response.json();
-        console.log('RESPONSE!!!!', user);
-
         console.log('on recent card', user.username);
-        setUserName(user.username);
+        console.log('on recent card, ', user.profile_picture);
+        setUsernameRecent(user.username);
+        setUserImg(user.profile_picture);
       }
     };
     fetchUserName();
   }, [userIDs]);
-
-  // console.log("this is userId: " , userId);
-  // console.log("this is result.recipe.user_id: ",result.recipe.user_id);
-  // useEffect(() => {
-  //   if (userId == result.recipe.user_id) {
-  //     setSameUser(true);
-  //   } else {
-  //     setSameUser(false);
-  //   }
-  // }, [userId, result.recipe.user_id]);
-
-  // const handleDeletePost = async () => {
-  //   console.log('Deleting post with ID:');
-  //   console.log('triggered delete post button');
-
-  //   try {
-  //     // Make the API call to delete the post
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_REQ_URL}/recipe/${result.recipe.id}`,
-  //       {
-  //         method: 'DELETE',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           userID: userId
-  //         }),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       // Deletion successful
-  //       toast.success('Deleted recipe successfully 🚀👏', {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-
-  //       console.log('recipe deleted successfully');
-  //       // Update the state or perform any other necessary actions
-  //       setDeletePost(true);
-
-  //       // change a count value so RecentPost.js loads again
-  //       setCount(prevCount => prevCount + 1)
-  //     } else {
-  //       // Handle errors if the deletion was not successful
-  //       toast.error('Failed to delete the recipe!', {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       console.error('Failed to delete the recipe');
-  //     }
-  //   } catch (error) {
-  //     // Handle any network or other errors
-  //     console.error('Error occurred while deleting the post:', error.message);
-  //   }
-  // };
 
   const FavoriteToTrue = () => {
     setFavorite(true);
@@ -135,7 +81,7 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
             <Col md={7}>
               <Row>
                 <img
-                  src="hero.jpg"
+                  src={result.recipe.photo_url}
                   alt="pic"
                   className="cardImg"
                   onClick={onClick}
@@ -205,23 +151,6 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
                       />{' '}
                       3
                     </div>
-                    {/* {sameUser && (
-                      <Button
-                        variant="dark"
-                        style={{
-                          backgroundColor: 'transparent',
-                          borderColor: 'transparent',
-                          color: 'hsl(0, 83%, 39%)',
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        // onClick={handleDeletePost(result.recipe_id)}
-                        onClick={() => handleDeletePost(result.recipe.title)}
-                      >
-                        <FaTrash />
-                      </Button>
-                    )} */}
                   </div>
                 )}
               </Row>
@@ -232,16 +161,16 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
               <Row style={{ padding: '5px 0px' }}>
                 <Col xs={4}>
                   <img
-                    src="user.ico"
+                    src={userImg}
                     alt="user-icon"
                     className="userImg"
-                    onClick={() => {
-                      history.push(`/profile/${userNameState}`);
-                    }}
+                    // onClick={() => {
+                    //   history.push(`/profile/${userNameState}`);
+                    // }}
                   />
                 </Col>
                 <Col xs={8}>
-                  <h5>{userNameState}</h5>
+                  <h5>{userNameRecent}</h5>
                 </Col>
               </Row>
               <Row>Description:</Row>

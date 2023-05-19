@@ -20,6 +20,10 @@ const PostDetailsPage = (props) => {
   const [value, setValue] = React.useState(2);
   // login status
   const { loggedIn, setLoggedIn } = useContext(AuthContext);
+  const [recipeDetails, setRecipeDetails] = useState({});
+  const [instructionDetails, setInstructionDetails] = useState([]);
+  const [ingredientsDetails, setIngredientsDetails] = useState([]);
+  const [recipeImg, setRecipeImg] = useState('image7');
 
   // for clickable favorite heart button
   const [favorite, setFavorite] = React.useState(false);
@@ -66,9 +70,6 @@ const PostDetailsPage = (props) => {
     fetchComments();
   }, [fetchComments]);
 
-  const [recipeDetails, setRecipeDetails] = useState({});
-  const [instructionDetails, setInstructionDetails] = useState([]);
-  const [ingredientsDetails, setIngredientsDetails] = useState([]);
   //fetching Recipe details
   const getRecipeDetails = async () => {
     try {
@@ -87,7 +88,10 @@ const PostDetailsPage = (props) => {
       if (response.ok) {
         console.log('recipe details okay');
         console.log(JSON.stringify(data));
-        console.log('checking what is user id,', data.recipe.user_id);
+        console.log(
+          'checking what is user id in post detials page,',
+          data.recipe.user_id
+        );
         setRecipeDetails(data.recipe);
         console.log(
           'checking recipe details now ',
@@ -95,6 +99,12 @@ const PostDetailsPage = (props) => {
         );
         setInstructionDetails(data.instructions);
         setIngredientsDetails(data.ingredients);
+
+        if (data.recipe.photo_url) {
+          setRecipeImg(data.recipe.photo_url);
+        } else {
+          setRecipeImg('image7.png');
+        }
       } else {
         console.log('response was not okay');
         throw new Error(data.error);
@@ -108,6 +118,11 @@ const PostDetailsPage = (props) => {
   useEffect(() => {
     getRecipeDetails();
   }, [postId]);
+  // using sepearate single dependency array
+  useEffect(() => {
+    console.log('recipe details have been updated:', recipeDetails);
+    // Perform actions that rely on updated recipeDetails here
+  }, [recipeDetails]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -132,9 +147,12 @@ const PostDetailsPage = (props) => {
         <Row>
           {/* left side of page */}
           <Col md={7}>
-            {/* img row*/}
             <Row>
-              <img src={`${process.env.PUBLIC_URL}/hero.jpg`} alt="pic" />
+              {recipeImg ? (
+                <img src={recipeImg} alt="pic" />
+              ) : (
+                <img src="image7.jpg" alt="pic" />
+              )}
             </Row>
 
             {/* detail row */}
