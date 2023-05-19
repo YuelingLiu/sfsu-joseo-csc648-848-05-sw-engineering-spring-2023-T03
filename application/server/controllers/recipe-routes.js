@@ -35,9 +35,19 @@ router.get('/', async (req, res) => {
     console.log(err)
   }
 })
+router.get('/user/:id', async (req, res) => {
+  try{
+    console.log('in route');
+    const recipes = await Recipe.getByUserID(req.params.id)
+    res.status(200).json({recipes})
+  }  catch(err){
+    console.log(err)
+  }
+})
 
 router.get('/:id', async (req, res) => {
   try {
+    console.log("id of post: " + req.params.id);
     const recipeID = req.params.id;
     const recipe = await Recipe.getById(recipeID);
     res.status(200).json(recipe);
@@ -95,10 +105,10 @@ router.post('/', upload.single("recipe_image"), async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const recipe = await Recipe.getById(req.params.id);
-    console.log(recipe)
     if(recipe.recipe== undefined){
       res.status(404).json({message: "recipe does not exist"});
     }
+
     if(recipe.recipe.user_id == req.body.userID){
       const deleted = await Recipe.delete(recipe.recipe.id);
       res.status(200).json({ deleted });

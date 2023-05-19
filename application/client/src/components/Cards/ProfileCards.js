@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../categories/PopularDishes.css';
 import { FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
@@ -17,28 +17,66 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function CategoryCard({ result, onClick, userName }) {
-  const history = useHistory();
-  let name = localStorage.getItem('name');
-  const [value, setValue] = React.useState(2);
-  const [favorite, setFavorite] = React.useState(false);
-  // for same user checking
-  const [sameUser, setSameUser] = useState(false);
-  const [deletePost, setDeletePost] = useState(false);
+function ProfileCards({ result, onClick}) {
+    const history = useHistory();
+    // for rating
+    const [value, setValue] = React.useState(2);
+    // for favorites
+    const [favorite, setFavorite] = React.useState(false);
+    // for same user checking
+    const [sameUser, setSameUser] = useState(false);
+    // for deleting 
+    const [deletePost, setDeletePost] = useState(false);
+    // get userID
+    let userID = localStorage.getItem('userId');
 
+    // set user info
+    const [userNameState, setUserName] = useState('');
+    const [userProfile, setUserImage] = useState()
+    console.log(userID);
+
+    // get the user name and image 
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userID}`);
+            
+            if (!response.ok) {
+                console.error('Failed to fetch user');
+            } else {
+                const user = await response.json();
+                setUserName(user.username);
+                setUserImage(user.profile_picture)
+            }
+        };
+        fetchUserInfo();
+    }, []);
+
+    //   check if same user of owner of profile
+    useEffect(() => {
+        if (userID == result.recipe.user_id) {
+            setSameUser(true);
+        } else {
+            setSameUser(false);
+        }
+    }, [userID, result.recipe.user_id]);
+
+
+  // to delete post 
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
-    console.log('triggered delete post button');
 
     try {
       // Make the API call to delete the post
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/${result.id}`,
+        `${process.env.REACT_APP_REQ_URL}/recipe/${result.recipe.id}`,
         {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({
+            userID: userID
+          }),
         }
       );
 
@@ -51,6 +89,7 @@ function CategoryCard({ result, onClick, userName }) {
         console.log('recipe deleted successfully');
         // Update the state or perform any other necessary actions
         setDeletePost(true);
+    
       } else {
         // Handle errors if the deletion was not successful
         toast.error('Failed to delete the recipe!', {
@@ -60,7 +99,7 @@ function CategoryCard({ result, onClick, userName }) {
       }
     } catch (error) {
       // Handle any network or other errors
-      console.error('Error occurred while deleting the post:', error);
+      console.error('Error occurred while deleting the post:', error.message);
     }
   };
 
@@ -79,18 +118,7 @@ function CategoryCard({ result, onClick, userName }) {
       </div>
     );
   }
-
-  // get current user page from URL
-  let splitURL = window.location.href.split('/');
-  let currentUser = splitURL[splitURL.length - 1];
-
-  // if the userName is the same set same user to true
-  if (userName === currentUser) {
-    setSameUser(true);
-  }
-
-  console.log("results in dashboard card: " + JSON.stringify(result.title));
-
+  console.log(JSON.stringify(result));
   return (
     <>
       <Card
@@ -106,7 +134,7 @@ function CategoryCard({ result, onClick, userName }) {
             <Col md={7}>
               <Row>
                 <img
-                  src="hero.jpg"
+                  src={result.recipe.photo_url}
                   alt="pic"
                   className="cardImg"
                   onClick={onClick}
@@ -114,13 +142,14 @@ function CategoryCard({ result, onClick, userName }) {
               </Row>
               <Row>
                 <Col xs={6}>
-                  <h4 style={{ textAlign: 'left' }}>{result.recipe_title}</h4>
+                  <h4 style={{ textAlign: 'left' }}>{result.recipe.title}</h4>
                 </Col>
 
                 <Col xs={6}>
                   <Box
                     sx={{
                       '& > legend': { mt: 2 },
+                      mt: '10px'
                     }}
                   >
                     <Rating name="read-only" value={value} readOnly />
@@ -143,21 +172,23 @@ function CategoryCard({ result, onClick, userName }) {
                       />{' '}
                       4
                     </div>
-                    <Button
-                      variant="dark"
-                      style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
-                        marginLeft: 0,
-                        marginRight: 'auto',
-                        marginBottom: '10px',
-                      }}
-                      // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.id)}
-                    >
-                      <FaTrash />
-                    </Button>
+                    {sameUser && (
+                      <Button
+                        variant="dark"
+                        style={{
+                          backgroundColor: 'transparent',
+                          borderColor: 'transparent',
+                          color: 'hsl(0, 83%, 39%)',
+                          marginLeft: 0,
+                          marginRight: 'auto',
+                          marginBottom: '10px',
+                        }}
+                        // onClick={handleDeletePost(result.recipe_id)}
+                        onClick={() => handleDeletePost(result.recipe.title)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    )}
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
@@ -173,22 +204,23 @@ function CategoryCard({ result, onClick, userName }) {
                       />{' '}
                       3
                     </div>
-
-                    <Button
-                      variant="dark"
-                      style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
-                        marginLeft: 0,
-                        marginRight: 'auto',
-                        marginBottom: '10px',
-                      }}
-                      // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.recipe_title)}
-                    >
-                      <FaTrash />
-                    </Button>
+                    {sameUser && (
+                      <Button
+                        variant="dark"
+                        style={{
+                          backgroundColor: 'transparent',
+                          borderColor: 'transparent',
+                          color: 'hsl(0, 83%, 39%)',
+                          marginLeft: 0,
+                          marginRight: 'auto',
+                          marginBottom: '10px',
+                        }}
+                        // onClick={handleDeletePost(result.recipe_id)}
+                        onClick={() => handleDeletePost(result.recipe.title)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    )}
                   </div>
                 )}
               </Row>
@@ -199,30 +231,29 @@ function CategoryCard({ result, onClick, userName }) {
               <Row style={{ padding: '5px 0px' }}>
                 <Col xs={4}>
                   <img
-                    src="user.ico"
+                    src={userProfile}
                     alt="user-icon"
                     className="userImg"
                     onClick={() => {
-                      history.push(`/profile`);
+                      history.push(`/profile/${userNameState}`);
                     }}
                   />
                 </Col>
                 <Col xs={8}>
-                  <h5>{name}</h5>
+                  <h5>{userNameState}</h5>
                 </Col>
               </Row>
               <Row>Description:</Row>
               <Row>
-                <ScrollableParagraph text={result.recipe_description} />
+                <ScrollableParagraph text={result.recipe.description} />
               </Row>
             </Col>
           </Row>
         </Container>
         <ToastContainer />
       </Card>
-      {/* <ToastContainer /> */}
     </>
   );
 }
 
-export default CategoryCard;
+export default ProfileCards;

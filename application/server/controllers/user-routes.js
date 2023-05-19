@@ -20,6 +20,7 @@ const bcrypt = require("bcrypt");
 // image storing
 const multer = require("multer");
 const path = require("path");
+const { route } = require("./recipe-routes");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./uploads/");
@@ -266,17 +267,18 @@ router.get('/post/:postId/comments', async (req, res) => {
       data: comments 
     });
   } catch (err) {
-    console.error(err);
+    console.log(err.message)
     res.status(500).json({ error: 'An error occurred while fetching comments.' });
   }
 });
 
 router.post('/follow/:followID', async (req, res) => {
   try{
+    console.log('in follow');
     const follows = await User.follow(req.body.userID, req.params.followID);
     res.status(201).json({follows});
   } catch(err){
-    console.log(err);
+    console.log(err.message)
   }
 })
 
@@ -285,7 +287,7 @@ router.delete('/unfollow/:followID', async (req, res) => {
     const unfollowed = await User.unfollow(req.body.userID, req.params.followID);
     res.status(200).json({unfollowed})
   } catch(err){
-    console.log(err)
+    console.log(err.message)
   }
 })
 
@@ -294,7 +296,7 @@ router.post('/save/recipe/:id', async(req, res) =>{
     const savedRecipe = await User.saveRecipe(req.body.userID, req.params.id);
     res.status(201).json({savedRecipe})
   }catch(err){
-    console.log(err)
+    console.log(err.message)
   }
 })
 
@@ -303,8 +305,23 @@ router.get('/savedrecipes', async(req, res) => {
     const savedRecipes = await User.getSavedRecipes(req.body.userID);
     res.status(400).json({savedRecipes})
   }catch(err){
-    console.log(err)
+    console.log(err.message)
   }
 })
+
+
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await User.getById(1);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json(user);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "An error occurred while fetching the user" });
+  }
+});
+
 
 module.exports = router;

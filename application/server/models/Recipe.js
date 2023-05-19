@@ -37,7 +37,6 @@ class Recipe {
     const ingredients = await knex('ingredients').where('ingredients.recipe_id', id);
     const instructions = await knex('instructions').where('instructions.recipe_id', id);
     return {recipe, ingredients, instructions};
-
   }
 
   static async getAll() {
@@ -50,6 +49,16 @@ class Recipe {
     return recipes;
   }
 
+  static async getByUserID(userID) {
+    const recipesRes = await knex('recipes').select('*').where('recipes.user_id', userID);
+    const recipes = await Promise.all(recipesRes.map(async (recipe) => {
+     const ingredients = await knex('ingredients').where('ingredients.recipe_id', recipe.id);
+     const instructions = await knex('instructions').where('instructions.recipe_id', recipe.id);
+     return {recipe, ingredients, instructions}
+    }))
+     return recipes;
+   }
+
   static async update(id, data) {
     return await knex('recipes').where({ id }).update(data).returning('*');
   }
@@ -59,11 +68,6 @@ class Recipe {
   }
 
   static async search(query) {
-    // return await knex('recipes')
-    // .join('categoriesToRecipe','categoriesToRecipe.recipeID', 'recipes.ID')
-    // .join('categories', 'categories.ID', 'categoriesToRecipe.categoryID')
-    // .where('category', 'like', `%${query}%`)
-    // .orWhere('title', 'like', `%${query}%`);
     const searchQuery = `
     WITH search_result AS (
       SELECT DISTINCT r."id" AS recipe_id, r."title" AS recipe_title, r."description" AS recipe_description, r."created_at" AS recipe_CreateAt, u."username" AS userName

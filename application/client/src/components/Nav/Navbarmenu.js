@@ -103,6 +103,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar() {
+  let name = localStorage.getItem('name');
   // for drop downs
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -655,7 +656,7 @@ function Navbar() {
                         <nav aria-label="main mailbox folders">
                           <List>
                             <Link
-                              to="/profile"
+                              to={`/profile/${name}`}
                               style={{ textDecoration: 'none' }}
                               onClick={handleCloseUserMenu}
                             >
@@ -1259,7 +1260,7 @@ function Navbar() {
                           <nav aria-label="main mailbox folders">
                             <List>
                               <Link
-                                to="/profile"
+                                to={`/profile/${name}`}
                                 style={{ textDecoration: 'none' }}
                                 onClick={handleCloseUserMenu}
                               >

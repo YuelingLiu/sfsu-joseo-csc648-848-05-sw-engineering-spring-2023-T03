@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../categories/Categories.css'
+import '../categories/PopularDishes.css'
 // bootStrap
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
