@@ -30,6 +30,7 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
   const [userNameState, setUserName] = useState('');
 
   useEffect(() => {
+    console.log("this is userID ", userIDs);
     const fetchUserName = async () => {
       // const userId = localStorage.getItem('userId'); 
       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userIDs}`);
@@ -37,12 +38,14 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
         console.error('Failed to fetch user');
       } else {
         const user = await response.json();
+        console.log(JSON.stringify(user));
         console.log(user.username);
         setUserName(user.username); 
       }
     };
     fetchUserName();
   }, [userIDs]);
+
 
   // console.log("this is userId: " , userId);
   // console.log("this is result.recipe.user_id: ",result.recipe.user_id);

@@ -45,6 +45,17 @@ router.get('/user/:id', async (req, res) => {
   }
 })
 
+router.get('/user/:id', async (req, res) => {
+  try {
+    console.log('in route');
+    const user = await User.getByID(req.params.id);  // Change this line to call the appropriate method in your User model
+    res.status(200).json(user);
+  }  catch(err) {
+    console.log(err);
+  }
+});
+
+
 router.get('/:id', async (req, res) => {
   try {
     console.log("id of post: " + req.params.id);

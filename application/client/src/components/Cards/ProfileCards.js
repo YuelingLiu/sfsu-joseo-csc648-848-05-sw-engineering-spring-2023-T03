@@ -33,7 +33,7 @@ function ProfileCards({ result, onClick}) {
     // set user info
     const [userNameState, setUserName] = useState('');
     const [userProfile, setUserImage] = useState()
-    console.log(userID);
+    // console.log(userID);
 
     // get the user name and image 
     useEffect(() => {
@@ -118,7 +118,7 @@ function ProfileCards({ result, onClick}) {
       </div>
     );
   }
-  console.log(JSON.stringify(result));
+  // console.log(JSON.stringify(result));
   return (
     <>
       <Card

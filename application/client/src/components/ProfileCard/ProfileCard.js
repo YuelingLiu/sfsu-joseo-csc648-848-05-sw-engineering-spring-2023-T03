@@ -21,40 +21,43 @@ function ProfileCard({ showDetails, userName,userDetails }) {
       setSameUser(true);
     }
   }, [userName, currentUser]); // Update sameUser only when userName or currentUser change
-
-  useEffect(() => {
-    const getProfileImg = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_REQ_URL}/user/${userID}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        const data = await response.json();
-        const user = data; // Assuming the profile image is accessible directly from the data response
-        console.log('-----what is user image profile,', user.profile_picture);
-        console.log('Checking what is data', JSON.stringify(data));
-        if (!response.ok) {
-          throw new Error('Failed to fetch profile image');
-        } else {
-          setProfileImg(user.profile_picture);
-        }
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    getProfileImg();  // you need to call the function
-  }, [userName, currentUser]); // Dependency array was missing
+  console.log(JSON.stringify(userDetails));
+  // console.log(userDetails.id);
+  // useEffect(() => {
+  //   const getProfileImg = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `${process.env.REACT_APP_REQ_URL}/user/${userID}`,
+  //         {
+  //           method: 'GET',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //           },
+  //         }
+  //       );
+  //       const data = await response.json();
+  //       const user = data; // Assuming the profile image is accessible directly from the data response
+  //       console.log('-----what is user image profile,', user.profile_picture);
+  //       console.log('Checking what is data', JSON.stringify(data));
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch profile image');
+  //       } else {
+  //         setProfileImg(user.profile_picture);
+  //       }
+  //     } catch (err) {
+  //       console.log(err.message);
+  //     }
+  //   };
+  //   getProfileImg();  // you need to call the function
+  // }, [userName, currentUser]); // Dependency array was missing
 
     
     // console.log("username in profile card: " + userName);
     // console.log('userdetails: ',userDetails.user_id);
-    const [profileUsername, setUsername] = useState([])
-    const currentPostProfileUserID = userDetails.user_id;
+    const [profileUsername, setUsername] = useState('')
+    let currentPostProfileUserID = userDetails.id
+    
+    console.log('currentPostProfileUserID: ', currentPostProfileUserID);
     useEffect (() => {
       const getUserPost = async () => {
         try {
@@ -73,10 +76,11 @@ function ProfileCard({ showDetails, userName,userDetails }) {
 
             if (!response.ok) {
                 throw new Error('Failed to fetch profile image');
-            } else {
-                setUsername(user.username)
-                setProfileImg(user.profile_picture);
-            }
+            } 
+            
+            setUsername(user.username)
+            setProfileImg(user.profile_picture);
+            
         } catch (err) {
           console.log(err.message);
         }
@@ -85,8 +89,10 @@ function ProfileCard({ showDetails, userName,userDetails }) {
       getUserPost()
     }, [userID])
 
+    // console.log("this is name: ",profileUsername);
+
     // for following 
-    // const [profileUserID, setProfileUserID] = useState([])
+    // const [profileUserID, setProf ileUserID] = useState([])
     const handleFollowUser = async () => {
         try {
             // console.log('body: ', JSON.stringify(formData));

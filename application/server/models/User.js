@@ -59,6 +59,9 @@ class User {
     .where('user_favorite_recipes.user_id', userID);
   }
 
+  static async getByUsername(username) {
+    return await knex('users').where({ username }).first();
+  }
 }
 
 module.exports = User;
