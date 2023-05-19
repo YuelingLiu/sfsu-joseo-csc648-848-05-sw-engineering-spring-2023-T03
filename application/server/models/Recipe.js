@@ -49,6 +49,16 @@ class Recipe {
     return recipes;
   }
 
+  static async getByUserID(userID) {
+    const recipesRes = await knex('recipes').select('*').where('recipes.user_id', userID);
+    const recipes = await Promise.all(recipesRes.map(async (recipe) => {
+     const ingredients = await knex('ingredients').where('ingredients.recipe_id', recipe.id);
+     const instructions = await knex('instructions').where('instructions.recipe_id', recipe.id);
+     return {recipe, ingredients, instructions}
+    }))
+     return recipes;
+   }
+
   static async update(id, data) {
     return await knex('recipes').where({ id }).update(data).returning('*');
   }
