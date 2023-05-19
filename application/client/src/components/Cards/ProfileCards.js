@@ -19,39 +19,41 @@ import Rating from '@mui/material/Rating';
 import { useMediaQuery } from '@mui/material';
 
 function ProfileCards({ result, onClick, userName}) {
-  const history = useHistory();
-  // let name = localStorage.getItem('name');
-  const [value, setValue] = React.useState(2);
-  const [favorite, setFavorite] = React.useState(false);
-  // for same user checking
-  const [sameUser, setSameUser] = useState(false);
-  const [deletePost, setDeletePost] = useState(false);
-  const userId = localStorage.getItem('userId')
-  const [userNameState, setUserName] = useState('');
+    const history = useHistory();
+    // let name = localStorage.getItem('name');
+    const [value, setValue] = React.useState(2);
+    const [favorite, setFavorite] = React.useState(false);
+    // for same user checking
+    const [sameUser, setSameUser] = useState(false);
+    const [deletePost, setDeletePost] = useState(false);
+    const userId = localStorage.getItem('userId')
+    const [userNameState, setUserName] = useState('');
+    let userID = localStorage.getItem('userId');
+    console.log(userID);
+    // console.log(userName);
+    // get the user name
+    //   useEffect(() => {
+    //     const fetchUserName = async () => {
+    //       // const userId = localStorage.getItem('userId'); 
+    //       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userName}`);
+    //       if (!response.ok) {
+    //         console.error('Failed to fetch user');
+    //       } else {
+    //         const user = await response.json();
+    //         setUserName(user.username); 
+    //       }
+    //     };
+    //     fetchUserName();
+    //   }, []);
 
-  // get the user name
-//   useEffect(() => {
-//     const fetchUserName = async () => {
-//       // const userId = localStorage.getItem('userId'); 
-//       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userName}`);
-//       if (!response.ok) {
-//         console.error('Failed to fetch user');
-//       } else {
-//         const user = await response.json();
-//         setUserName(user.username); 
-//       }
-//     };
-//     fetchUserName();
-//   }, []);
-
-  // check if same user of owner of profile
-  useEffect(() => {
-    if (userId == result.recipe.user_id) {
-      setSameUser(true);
-    } else {
-      setSameUser(false);
-    }
-  }, [userId, result.recipe.user_id]);
+    //   check if same user of owner of profile
+    useEffect(() => {
+        if (userId == result.recipe.user_id) {
+        setSameUser(true);
+        } else {
+        setSameUser(false);
+        }
+    }, [userId, result.recipe.user_id]);
 
 
   // to delete post 
@@ -112,7 +114,7 @@ function ProfileCards({ result, onClick, userName}) {
       </div>
     );
   }
-
+  console.log(JSON.stringify(result));
   return (
     <>
       <Card
@@ -128,7 +130,7 @@ function ProfileCards({ result, onClick, userName}) {
             <Col md={7}>
               <Row>
                 <img
-                  src="hero.jpg"
+                  src={result.recipe.photo_url}
                   alt="pic"
                   className="cardImg"
                   onClick={onClick}

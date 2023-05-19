@@ -9,7 +9,7 @@ import { Button } from '@mui/material';
 function ProfileCard({ showDetails, userName }) {
     // for same user checking 
     const [sameUser, setSameUser] = useState(false)
-
+    let userID = localStorage.getItem('userId');
     // get current user page from URL 
     let splitURL = window.location.href.split('/');
     let currentUser = splitURL[splitURL.length - 1]
@@ -28,7 +28,7 @@ function ProfileCard({ showDetails, userName }) {
             <Card sx={{ width: 320, marginLeft: 2.5 }}>
                 <CardHeader />
                 <Avatar
-                    alt="Remy Sharp"
+                    alt={userName.toUpperCase()}
                     src="user.ico"
                     sx={{ width: 180, height: 180, margin: '0 auto' }}
                 />

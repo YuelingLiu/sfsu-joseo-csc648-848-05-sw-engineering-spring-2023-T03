@@ -33,7 +33,6 @@ const Profile = () => {
         if (!response) {
           console.error('Failed fetch recipe for profile');
         } else {
-          // console.log("profile: " + JSON.stringify(data));
           setData(data.recipes)
         }
       } catch (err) {
@@ -44,11 +43,12 @@ const Profile = () => {
     getUserPost()
   }, [userID])
 
+  
   return (
     <>
       <Container style={{ maxWidth: '80%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <ProfileCard showDetails userName={name}/>
+            <ProfileCard showDetails userName={name} id={userID}/>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
