@@ -26,26 +26,29 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
-  const userId = localStorage.getItem('userId')
+  const userId = localStorage.getItem('userId');
   const [userNameState, setUserName] = useState('');
 
   useEffect(() => {
-    console.log("this is userID ", userIDs);
+    console.log('this is userID ', userIDs);
     const fetchUserName = async () => {
-      // const userId = localStorage.getItem('userId'); 
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userIDs}`);
+      // const userId = localStorage.getItem('userId');
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/${userIDs}`
+      );
       if (!response.ok) {
         console.error('Failed to fetch user');
+        console.log('response on recent page', response);
       } else {
         const user = await response.json();
-        console.log(JSON.stringify(user));
-        console.log(user.username);
-        setUserName(user.username); 
+        console.log('RESPONSE!!!!', user);
+
+        console.log('on recent card', user.username);
+        setUserName(user.username);
       }
     };
     fetchUserName();
   }, [userIDs]);
-
 
   // console.log("this is userId: " , userId);
   // console.log("this is result.recipe.user_id: ",result.recipe.user_id);
@@ -85,7 +88,7 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
   //       console.log('recipe deleted successfully');
   //       // Update the state or perform any other necessary actions
   //       setDeletePost(true);
-       
+
   //       // change a count value so RecentPost.js loads again
   //       setCount(prevCount => prevCount + 1)
   //     } else {
@@ -147,7 +150,7 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
                   <Box
                     sx={{
                       '& > legend': { mt: 2 },
-                      mt: '10px'
+                      mt: '10px',
                     }}
                   >
                     <Rating name="read-only" value={value} readOnly />
