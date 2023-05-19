@@ -37,6 +37,7 @@ router.get('/', async (req, res) => {
 })
 router.get('/user/:id', async (req, res) => {
   try{
+    console.log('in route');
     const recipes = await Recipe.getByUserID(req.params.id)
     res.status(200).json({recipes})
   }  catch(err){

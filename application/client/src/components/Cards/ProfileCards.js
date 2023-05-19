@@ -18,7 +18,7 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import { useMediaQuery } from '@mui/material';
 
-function RecentPostCard({ result, onClick, userName, setCount }) {
+function ProfileCards({ result, onClick, userName}) {
   const history = useHistory();
   // let name = localStorage.getItem('name');
   const [value, setValue] = React.useState(2);
@@ -29,73 +29,73 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
   const userId = localStorage.getItem('userId')
   const [userNameState, setUserName] = useState('');
 
+  // get the user name
+//   useEffect(() => {
+//     const fetchUserName = async () => {
+//       // const userId = localStorage.getItem('userId'); 
+//       const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userName}`);
+//       if (!response.ok) {
+//         console.error('Failed to fetch user');
+//       } else {
+//         const user = await response.json();
+//         setUserName(user.username); 
+//       }
+//     };
+//     fetchUserName();
+//   }, []);
+
+  // check if same user of owner of profile
   useEffect(() => {
-    const fetchUserName = async () => {
-      // const userId = localStorage.getItem('userId'); 
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userName}`);
-      if (!response.ok) {
-        console.error('Failed to fetch user');
+    if (userId == result.recipe.user_id) {
+      setSameUser(true);
+    } else {
+      setSameUser(false);
+    }
+  }, [userId, result.recipe.user_id]);
+
+
+  // to delete post 
+  const handleDeletePost = async () => {
+    console.log('Deleting post with ID:');
+    console.log('triggered delete post button');
+
+    try {
+      // Make the API call to delete the post
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/recipe/${result.recipe.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userID: userId
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Deletion successful
+        toast.success('Deleted recipe successfully 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+
+        console.log('recipe deleted successfully');
+        // Update the state or perform any other necessary actions
+        setDeletePost(true);
+    
       } else {
-        const user = await response.json();
-        setUserName(user.username); 
+        // Handle errors if the deletion was not successful
+        toast.error('Failed to delete the recipe!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.error('Failed to delete the recipe');
       }
-    };
-    fetchUserName();
-  }, []);
-
-  // console.log("this is userId: " , userId);
-  // console.log("this is result.recipe.user_id: ",result.recipe.user_id);
-  // useEffect(() => {
-  //   if (userId == result.recipe.user_id) {
-  //     setSameUser(true);
-  //   } else {
-  //     setSameUser(false);
-  //   }
-  // }, [userId, result.recipe.user_id]);
-
-  // const handleDeletePost = async () => {
-  //   console.log('Deleting post with ID:');
-  //   console.log('triggered delete post button');
-
-  //   try {
-  //     // Make the API call to delete the post
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_REQ_URL}/recipe/${result.recipe.id}`,
-  //       {
-  //         method: 'DELETE',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           userID: userId
-  //         }),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       // Deletion successful
-  //       toast.success('Deleted recipe successfully 🚀👏', {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-
-  //       console.log('recipe deleted successfully');
-  //       // Update the state or perform any other necessary actions
-  //       setDeletePost(true);
-       
-  //       // change a count value so RecentPost.js loads again
-  //       setCount(prevCount => prevCount + 1)
-  //     } else {
-  //       // Handle errors if the deletion was not successful
-  //       toast.error('Failed to delete the recipe!', {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       console.error('Failed to delete the recipe');
-  //     }
-  //   } catch (error) {
-  //     // Handle any network or other errors
-  //     console.error('Error occurred while deleting the post:', error.message);
-  //   }
-  // };
+    } catch (error) {
+      // Handle any network or other errors
+      console.error('Error occurred while deleting the post:', error.message);
+    }
+  };
 
   const FavoriteToTrue = () => {
     setFavorite(true);
@@ -166,7 +166,7 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                       />{' '}
                       4
                     </div>
-                    {/* {sameUser && (
+                    {sameUser && (
                       <Button
                         variant="dark"
                         style={{
@@ -182,7 +182,7 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                       >
                         <FaTrash />
                       </Button>
-                    )} */}
+                    )}
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
@@ -198,7 +198,7 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                       />{' '}
                       3
                     </div>
-                    {/* {sameUser && (
+                    {sameUser && (
                       <Button
                         variant="dark"
                         style={{
@@ -214,7 +214,7 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
                       >
                         <FaTrash />
                       </Button>
-                    )} */}
+                    )}
                   </div>
                 )}
               </Row>
@@ -251,4 +251,4 @@ function RecentPostCard({ result, onClick, userName, setCount }) {
   );
 }
 
-export default RecentPostCard;
+export default ProfileCards;
