@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext,  useCallback } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import ProfileCard from '../components/ProfileCard/ProfileCard';
 import { AuthContext } from '../AuthContext';
@@ -20,6 +20,10 @@ const PostDetailsPage = (props) => {
   const [value, setValue] = React.useState(2);
   // login status
   const { loggedIn, setLoggedIn } = useContext(AuthContext);
+  const [recipeDetails, setRecipeDetails] = useState({});
+  const [instructionDetails, setInstructionDetails] = useState([]);
+  const [ingredientsDetails, setIngredientsDetails] = useState([]);
+  const [recipeImg, setRecipeImg] = useState('image7');
 
   // for clickable favorite heart button
   const [favorite, setFavorite] = React.useState(false);
@@ -34,20 +38,23 @@ const PostDetailsPage = (props) => {
   const postId = props.match.params.postId;
   const { token } = useContext(AuthContext);
   const [Comments, setComments] = useState([]);
-  //fetching comments 
+  //fetching comments
   const fetchComments = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/post/${postId}/comments`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/post/${postId}/comments`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log("comments arr: " + data.data);
+        console.log('comments arr: ' + data.data);
         setComments(data.data);
       } else {
         console.log('response was not okay');
@@ -58,57 +65,74 @@ const PostDetailsPage = (props) => {
       console.log(err.message);
       console.error(err.message);
     }
-  }, [postId]); ;
+  }, [postId]);
   useEffect(() => {
     fetchComments();
   }, [fetchComments]);
 
-  const [recipeDetails, setRecipeDetails] = useState({})
-  const [instructionDetails, setInstructionDetails] = useState([])
-  const [ingredientsDetails, setIngredientsDetails] = useState([])
-  //fetching Recipe details 
+  //fetching Recipe details
   const getRecipeDetails = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/recipe/${postId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      const data = await response.json()
-      
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/recipe/${postId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = await response.json();
+
       if (response.ok) {
-        console.log("recipe details okay");
+        console.log('recipe details okay');
         console.log(JSON.stringify(data));
-        console.log(data.recipe.user_id);
+        console.log(
+          'checking what is user id in post detials page,',
+          data.recipe.user_id
+        );
         setRecipeDetails(data.recipe);
+        console.log(
+          'checking recipe details now ',
+          JSON.stringify(recipeDetails)
+        );
         setInstructionDetails(data.instructions);
         setIngredientsDetails(data.ingredients);
+
+        if (data.recipe.photo_url) {
+          setRecipeImg(data.recipe.photo_url);
+        } else {
+          setRecipeImg('image7.png');
+        }
       } else {
         console.log('response was not okay');
         throw new Error(data.error);
       }
-
     } catch (err) {
       console.log('response threw error');
       console.log(err.message);
       console.error(err.message);
     }
-  }
+  };
   useEffect(() => {
     getRecipeDetails();
   }, [postId]);
+  // using sepearate single dependency array
+  useEffect(() => {
+    console.log('recipe details have been updated:', recipeDetails);
+    // Perform actions that rely on updated recipeDetails here
+  }, [recipeDetails]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const month = ('0' + (date.getMonth() + 1)).slice(-2); 
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
-    const year = date.getFullYear().toString().substr(-2); 
+    const year = date.getFullYear().toString().substr(-2);
     return month + '/' + day + '/' + year;
   };
   const formattedDate = formatDate(recipeDetails.created_at);
- 
+
   // conver '90' mins into hour min format
   function convertToHoursAndMinutes(num) {
     const hours = Math.floor(num / 60);
@@ -123,9 +147,12 @@ const PostDetailsPage = (props) => {
         <Row>
           {/* left side of page */}
           <Col md={7}>
-            {/* img row*/}
             <Row>
-              <img src={`${process.env.PUBLIC_URL}/hero.jpg`} alt="pic" />
+              {recipeImg ? (
+                <img src={recipeImg} alt="pic" />
+              ) : (
+                <img src="image7.jpg" alt="pic" />
+              )}
             </Row>
 
             {/* detail row */}
@@ -155,18 +182,19 @@ const PostDetailsPage = (props) => {
                 {ingredientsDetails.map((ingredientDetail, index) => {
                   return (
                     <div key={index}>
-                      <p>- {ingredientDetail.amount} {ingredientDetail.ingredient}</p>
+                      <p>
+                        - {ingredientDetail.amount}{' '}
+                        {ingredientDetail.ingredient}
+                      </p>
                     </div>
-                  )
+                  );
                 })}
 
                 {/* description */}
                 <h4 style={{ fontWeight: '700', padding: '10px' }}>
                   Description:
                 </h4>
-                <h4>
-                  {recipeDetails.description}
-                </h4>
+                <h4>{recipeDetails.description}</h4>
               </Col>
 
               <Col md={5}>
@@ -175,13 +203,13 @@ const PostDetailsPage = (props) => {
 
                 {/* MAP THROUGH A COMPONENT FOR PROPER DESIGN */}
                 {instructionDetails.map((instructionDetail, index) => {
-                    return (
-                      <div key={index}>
-                        <h4 style={{ fontWeight: '600' }}>Step {index+1}:</h4>
-                        <p>{instructionDetail.instruction}</p>
-                      </div>
-                    )
-                  })}
+                  return (
+                    <div key={index}>
+                      <h4 style={{ fontWeight: '600' }}>Step {index + 1}:</h4>
+                      <p>{instructionDetail.instruction}</p>
+                    </div>
+                  );
+                })}
               </Col>
             </Row>
           </Col>
@@ -249,7 +277,7 @@ const PostDetailsPage = (props) => {
 
               <Col xs={6}>
                 <h4 style={{ fontWeight: 'bold', textAlign: 'right' }}>
-                 {formattedDate}
+                  {formattedDate}
                 </h4>
               </Col>
             </Row>
@@ -263,15 +291,18 @@ const PostDetailsPage = (props) => {
                   justifyContent: 'center',
                 }}
               >
-                <ProfileCard showDetails userDetails={recipeDetails}/>
+                <ProfileCard showDetails userDetails={recipeDetails} />
               </div>
             </Row>
 
             {/* comment section  */}
             {loggedIn ? (
               <Row>
-                <CommentForm token={token} postId={postId} fetchComments={fetchComments} />
-
+                <CommentForm
+                  token={token}
+                  postId={postId}
+                  fetchComments={fetchComments}
+                />
               </Row>
             ) : (
               <> </>
@@ -280,16 +311,14 @@ const PostDetailsPage = (props) => {
             <Row>
               {/* map through comments */}
               {Comments.map((data, index) => (
-                  <Comment 
-                      key={index}
-                      author={data.username}  
-                      date={data.username}  
-                      text={data.comment} 
-                  />
+                <Comment
+                  key={index}
+                  author={data.username}
+                  date={data.username}
+                  text={data.comment}
+                />
               ))}
-
             </Row>
-         
           </Col>
         </Row>
       </Container>

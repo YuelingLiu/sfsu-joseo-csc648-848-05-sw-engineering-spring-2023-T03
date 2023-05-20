@@ -312,7 +312,7 @@ router.get('/savedrecipes', async(req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const user = await User.getById(1);
+    const user = await User.getById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -322,6 +322,22 @@ router.get('/:id', async (req, res) => {
     return res.status(500).json({ message: "An error occurred while fetching the user" });
   }
 });
+
+router.get('username/:username', async (req, res) => {
+  try{
+    const user = await User.getByUsername(req.params.username);
+    if (!user) {
+      res.status(404).json({message: 'User not found'});
+    } else {
+      res.status(200).json(user);
+    }
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({message: 'Server error'});
+  }
+});
+
+
 
 
 module.exports = router;
