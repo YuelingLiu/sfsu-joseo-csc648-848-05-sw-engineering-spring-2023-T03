@@ -26,6 +26,7 @@ const RecipeDetailPage = (props) => {
   const [instructionDetails, setInstructionDetails] = useState([]);
   const [ingredientsDetails, setIngredientsDetails] = useState([]);
   const [recipeImg, setRecipeImg] = useState('image7');
+  const [isSavedRecipe, setIsSavedRecipe] = useState(false);
 
   // for clickable favorite heart button
   const [favorite, setFavorite] = React.useState(false);
@@ -75,6 +76,12 @@ const RecipeDetailPage = (props) => {
   // save recipe
   const handleSaveRecipe = async (e) => {
     e.preventDefault();
+    if (isSavedRecipe) {
+      toast.error('Yay! you already save this!', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
     console.log('clicked save button!');
     try {
       // Make an HTTP POST request to the save recipe route
@@ -90,6 +97,7 @@ const RecipeDetailPage = (props) => {
       );
 
       if (response.ok) {
+        setIsSavedRecipe(true);
         // Recipe saved successfully
         console.log('Recipe saved!');
         toast.success('Yay! You saved this recipe! 🚀👏', {
@@ -230,8 +238,7 @@ const RecipeDetailPage = (props) => {
                   return (
                     <div key={index}>
                       <p>
-                        - {ingredientDetail.amount}{' '}
-                        {ingredientDetail.ingredient}
+                        {ingredientDetail.amount} {ingredientDetail.ingredient}
                       </p>
                     </div>
                   );
