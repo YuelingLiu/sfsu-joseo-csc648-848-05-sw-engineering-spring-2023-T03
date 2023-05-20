@@ -7,14 +7,15 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 
-function ProfileCard({ showDetails, userDetails: { user_id } }) {
+function UserProfileCard({ user_id }) {
   // console.log('what is ser details', userDetails);
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
   const [profileImg, setProfileImg] = useState(null);
   const [profileUsername, setProfileUsername] = useState('');
+
   let userID = localStorage.getItem('userId');
-  console.log('checking what is userID here in profileCard', user_id);
+  console.log('checking what is userID here in User-profileCard', userID);
   // get current user page from URL
   let splitURL = window.location.href.split('/');
   let currentUser = splitURL[splitURL.length - 1];
@@ -32,7 +33,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
     const getImgAndName = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_REQ_URL}/user/${user_id}`,
+          `${process.env.REACT_APP_REQ_URL}/user/${userID}`,
           {
             method: 'GET',
             headers: {
@@ -52,41 +53,8 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
         console.log(err.message);
       }
     };
-    getImgAndName(); //
-  }, [user_id]); // Dependency array was missing
-
-  // for following
-
-  const handleFollowUser = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/user/follow/${user_id}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // Send the currently logged in userID
-          body: JSON.stringify({
-            userID: user_id,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error('Response ERROR');
-      }
-      console.log('DATA: ', data);
-      toast.success(`Hurray!you followed  ${profileUsername}! 🍾🎉♨`, {
-        position: toast.POSITION.TOP_CENTER,
-        duration: 3000, // 3s
-      });
-    } catch (error) {
-      console.log('Error message: ' + error.message);
-    }
-  };
+    getImgAndName(); // you need to call the function
+  }, [user_id]); //
 
   // FOLLOWERS
   const [FollowerData, setFollowerData] = useState([]);
@@ -142,8 +110,6 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
         console.log(err.message);
       }
     };
-
-    // getUserfollowing()
   }, [user_id]);
 
   // need to make an if for if the user is following show unFOLLOW
@@ -163,31 +129,16 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
           >
             {profileUsername}
           </Typography>
-          {showDetails ? (
-            <>
-              <div className="d-flex items-center justify-content-evenly">
-                <Typography variant="subtitle1">## Followers</Typography>
-                <Typography variant="subtitle1">## Following</Typography>
-              </div>
-
-              {/* if true we dont want the follow button */}
-              {sameUser ? (
-                <></>
-              ) : (
-                <>
-                  <div className="d-flex justify-content-center mt-2">
-                    <Button variant="contained" onClick={handleFollowUser}>
-                      Follow
-                    </Button>
-                  </div>
-                </>
-              )}
-            </>
-          ) : null}
+          <>
+            <div className="d-flex items-center justify-content-evenly">
+              <Typography variant="subtitle1">## Followers</Typography>
+              <Typography variant="subtitle1">## Following</Typography>
+            </div>
+          </>
         </CardContent>
       </Card>
       <ToastContainer />
     </>
   );
 }
-export default ProfileCard;
+export default UserProfileCard;

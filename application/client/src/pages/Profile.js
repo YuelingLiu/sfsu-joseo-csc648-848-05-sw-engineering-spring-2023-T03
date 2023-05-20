@@ -10,12 +10,14 @@ import ProfileCards from '../components/Cards/ProfileCards';
 // boostrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import UserProfileCard from '../components/ProfileCard/UserProfileCard';
 
 const Profile = () => {
   const history = useHistory();
   // get username
   let name = localStorage.getItem('name');
-  let userID = localStorage.getItem('userId');
+  let user_id = localStorage.getItem('userId');
+  console.log('what is the name here profile page', name, user_id);
   const [profileData, setData] = useState([]);
 
   // user post
@@ -25,7 +27,7 @@ const Profile = () => {
       try {
         // CHANGE USERID FOR USERID FROM THE fetchUser TO GET THE ACTUAL OWNERS POST
         const response = await fetch(
-          `${process.env.REACT_APP_REQ_URL}/recipe/user/${userID}`,
+          `${process.env.REACT_APP_REQ_URL}/recipe/user/${user_id}`,
           {
             method: 'GET',
             headers: {
@@ -46,7 +48,7 @@ const Profile = () => {
       }
     };
     getUserPost();
-  }, [userID]);
+  }, [user_id]);
 
   // What does this do?
   const [userData, setUserData] = useState(null);
@@ -80,12 +82,7 @@ const Profile = () => {
             justifyContent: 'center',
           }}
         >
-          <ProfileCard
-            showDetails
-            userName={name}
-            id={userID}
-            userDetails={userData}
-          />
+          <UserProfileCard id={user_id} />
         </div>
 
         <div
