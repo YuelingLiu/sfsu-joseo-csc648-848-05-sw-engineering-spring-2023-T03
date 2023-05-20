@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 import ProfileCard from '../components/ProfileCard/ProfileCard';
 import { AuthContext } from '../AuthContext';
@@ -71,6 +72,38 @@ const RecipeDetailPage = (props) => {
     fetchComments();
   }, [fetchComments]);
 
+  // save recipe
+  const handleSaveRecipe = async (e) => {
+    e.preventDefault();
+    console.log('clicked save button!');
+    try {
+      // Make an HTTP POST request to the save recipe route
+      const response = await await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${postId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userID: postId }),
+        }
+      );
+
+      if (response.ok) {
+        // Recipe saved successfully
+        console.log('Recipe saved!');
+        toast.success('Yay! You saved this recipe! 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      } else {
+        // Error saving the recipe
+        console.log('Failed to save the recipe.');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   //fetching Recipe details
   const getRecipeDetails = async () => {
     try {
@@ -88,7 +121,7 @@ const RecipeDetailPage = (props) => {
 
       if (response.ok) {
         console.log('recipe details okay');
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
         console.log(
           'checking what is user id in post detials page,',
           data.recipe.user_id
@@ -163,6 +196,7 @@ const RecipeDetailPage = (props) => {
                 marginTop: '2px',
                 textTransform: 'uppercase',
               }}
+              onClick={handleSaveRecipe}
             >
               Save
             </Button>
@@ -335,6 +369,7 @@ const RecipeDetailPage = (props) => {
           </Col>
         </Row>
       </Container>
+      <ToastContainer />
     </>
   );
 };

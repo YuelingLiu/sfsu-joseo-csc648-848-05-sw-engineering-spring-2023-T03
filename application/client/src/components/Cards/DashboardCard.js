@@ -222,7 +222,6 @@ function CategoryCard({ result, onClick, userName }) {
         </Container>
         <ToastContainer />
       </Card>
-      {/* <ToastContainer /> */}
     </>
   );
 }

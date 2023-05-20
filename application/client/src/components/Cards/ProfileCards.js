@@ -17,9 +17,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-import RecipeDetailPage from '../../pages/RecipeDetailPage';
-import UserPostDetails from '../../pages/UserPostDetails';
-
 function ProfileCards({ result, onClick }) {
   const history = useHistory();
   // for rating
@@ -140,13 +137,8 @@ function ProfileCards({ result, onClick }) {
                   src={result.recipe.photo_url}
                   alt="pic"
                   className="cardImg"
-                  // onClick={() => {
-                  //   history.push(
-                  //     `/profile/${userNameState}/${result.recipe.id}`
-                  //   );
-                  // }}
                   onClick={() => {
-                    UserPostDetails(result.recipe.id);
+                    history.push(`/post/${result.recipe.id}`);
                   }}
                 />
               </Row>

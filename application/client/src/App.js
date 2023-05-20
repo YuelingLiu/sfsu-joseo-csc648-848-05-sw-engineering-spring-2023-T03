@@ -13,7 +13,6 @@ import RecipeDetailPage from './pages/RecipeDetailPage';
 import Follows from './pages/Follows';
 import TopRated from './pages/TopRated';
 import Favorites from './pages/Favorites';
-import UserPostDetails from './pages/UserPostDetails';
 
 function App() {
   return (
@@ -25,11 +24,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/recipes" component={Recipe} />
-          <Route
-            exact
-            path="/profile/username/:postId"
-            component={UserPostDetails}
-          />
+
           <Route exact path="/profile/:userID" component={Profile} />
           <Route exact path="/post/:postId" component={RecipeDetailPage} />
           <Route exact path="/post-recipe" component={PostRecipe} />
