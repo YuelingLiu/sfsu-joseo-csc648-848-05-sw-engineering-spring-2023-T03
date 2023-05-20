@@ -25,6 +25,8 @@ function CategoryCard({ result, onClick, userName }) {
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
+  const [authorName, setAuthorName] = useState('');
+  console.log(result);
 
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
@@ -89,7 +91,7 @@ function CategoryCard({ result, onClick, userName }) {
     setSameUser(true);
   }
 
-  console.log("results in dashboard card: " + JSON.stringify(result.title));
+  console.log('results in dashboard card: ' + JSON.stringify(result.title));
 
   return (
     <>
@@ -208,7 +210,7 @@ function CategoryCard({ result, onClick, userName }) {
                   />
                 </Col>
                 <Col xs={8}>
-                  <h5>{name}</h5>
+                  <h5>{result.username}</h5>
                 </Col>
               </Row>
               <Row>Description:</Row>
