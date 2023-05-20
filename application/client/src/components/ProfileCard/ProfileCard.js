@@ -15,23 +15,27 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
   // console.log('what is ser details', userDetails);
   // for same user checking
 
-  const [sameUser, setSameUser] = useState(false);
+  const [sameUser, setSameUser] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [profileUsername, setProfileUsername] = useState('');
+
   let userID = localStorage.getItem('userId');
-  console.log('checking what is userID here in profileCard', user_id);
+  userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
+  console.log(
+    'checking what is userID that is logged in user from local storage',
+    userID
+  );
+  console.log('checking what is passed in  here in profileCard', user_id);
   // get current user page from URL
   let splitURL = window.location.href.split('/');
   let currentUser = splitURL[splitURL.length - 1];
   const { loggedIn, setLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
-    // if the userName is the same set same user to true
+    setSameUser(userID === user_id);
+  }, [userID, user_id]);
 
-    if (userID === user_id) {
-      setSameUser(true);
-    }
-  }, [user_id]); // Update sameUser only when userName or currentUser change
+  console.log(sameUser);
 
   // this is just too get user profile_picture and username
   useEffect(() => {
@@ -67,6 +71,13 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
   };
 
   const handleFollowUser = async () => {
+    // if (!sameUser) {
+    //   toast.error(`Oops, you cannot follow yourself! !♨`, {
+    //     position: toast.POSITION.TOP_CENTER,
+    //     duration: 3000, // 3s
+    //   });
+    //   return;
+    // }
     if (!loggedIn) {
       toast.error(`Must login to  follow others! !♨`, {
         position: toast.POSITION.TOP_CENTER,
@@ -182,29 +193,26 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
           >
             {profileUsername}
           </Typography>
-          {showDetails ? (
-            <>
-              <div className="d-flex items-center justify-content-evenly">
-                <Button variant="subtitle1" onClick={seeFollowerHandler}>
-                  Followers
-                </Button>
-                <Typography variant="subtitle1">## Following</Typography>
-              </div>
+          {/* {showDetails ? (
+            <> */}
+          <div className="d-flex items-center justify-content-evenly">
+            <Button variant="subtitle1" onClick={seeFollowerHandler}>
+              Followers
+            </Button>
+            <Typography variant="subtitle1">## Following</Typography>
+          </div>
 
-              {/* if true we dont want the follow button */}
-              {sameUser ? (
-                <></>
-              ) : (
-                <>
-                  <div className="d-flex justify-content-center mt-2">
-                    <Button variant="contained" onClick={handleFollowUser}>
-                      Follow
-                    </Button>
-                  </div>
-                </>
-              )}
-            </>
-          ) : null}
+          {/* if true we dont want the follow button */}
+          {sameUser ? null : (
+            <div className="d-flex justify-content-center mt-2">
+              <Button variant="contained" onClick={handleFollowUser}>
+                Follow
+              </Button>
+            </div>
+          )}
+
+          {/* </> */}
+          {/* ) : null} */}
         </CardContent>
       </Card>
       <ToastContainer />

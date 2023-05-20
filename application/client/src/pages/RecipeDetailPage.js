@@ -8,6 +8,7 @@ import CommentForm from '../components/Comments/CommentForm';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/esm/Button';
 
 // MUI
 import Box from '@mui/material/Box';
@@ -154,8 +155,20 @@ const RecipeDetailPage = (props) => {
                 <img src="image7.jpg" alt="pic" />
               )}
             </Row>
+            <Button
+              style={{
+                color: 'white',
+                backgroundColor: 'hsl(0, 83%, 39%)',
+                width: '30%',
+                marginTop: '2px',
+                textTransform: 'uppercase',
+              }}
+            >
+              Save
+            </Button>
 
             {/* detail row */}
+
             <Row>
               <Col md={7}>
                 {/* cooking time */}
