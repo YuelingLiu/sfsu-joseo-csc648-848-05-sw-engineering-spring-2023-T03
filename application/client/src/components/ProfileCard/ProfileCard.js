@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -7,12 +7,14 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import { AuthContext } from '../../AuthContext';
 
 function ProfileCard({ showDetails, userDetails: { user_id } }) {
   const history = useHistory();
 
   // console.log('what is ser details', userDetails);
   // for same user checking
+
   const [sameUser, setSameUser] = useState(false);
   const [profileImg, setProfileImg] = useState(null);
   const [profileUsername, setProfileUsername] = useState('');
@@ -21,6 +23,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
   // get current user page from URL
   let splitURL = window.location.href.split('/');
   let currentUser = splitURL[splitURL.length - 1];
+  const { loggedIn, setLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
     // if the userName is the same set same user to true
@@ -64,6 +67,14 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
   };
 
   const handleFollowUser = async () => {
+    if (!loggedIn) {
+      toast.error(`Must login to  follow others! !♨`, {
+        position: toast.POSITION.TOP_CENTER,
+        duration: 3000, // 3s
+      });
+
+      return;
+    }
     try {
       const response = await fetch(
         `${process.env.REACT_APP_REQ_URL}/user/follow/${user_id}`,
