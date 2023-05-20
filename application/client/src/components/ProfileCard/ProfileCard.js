@@ -6,8 +6,11 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 function ProfileCard({ showDetails, userDetails: { user_id } }) {
+  const history = useHistory();
+
   // console.log('what is ser details', userDetails);
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
@@ -56,6 +59,9 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
   }, [user_id]); // Dependency array was missing
 
   // for following
+  const seeFollowerHandler = () => {
+    history.push(`/following/${userID}`);
+  };
 
   const handleFollowUser = async () => {
     try {
@@ -103,6 +109,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
           }
         );
         const data = await response.json();
+        console.log('getUserfollowers data', data);
 
         if (!response) {
           console.error('Failed fetch recipe for profile');
@@ -132,6 +139,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
           }
         );
         const data = await response.json();
+        console.log('following data', data);
 
         if (!response) {
           console.error('Failed fetch recipe for profile');
@@ -166,7 +174,9 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
           {showDetails ? (
             <>
               <div className="d-flex items-center justify-content-evenly">
-                <Typography variant="subtitle1">## Followers</Typography>
+                <Button variant="subtitle1" onClick={seeFollowerHandler}>
+                  Followers
+                </Button>
                 <Typography variant="subtitle1">## Following</Typography>
               </div>
 

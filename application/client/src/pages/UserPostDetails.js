@@ -16,7 +16,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 // POST details
-import PostDetails from './PostDetails';
+import PostDetails from './RecipeDetailPage';
 
 const UserPostDetails = () => {
   return (

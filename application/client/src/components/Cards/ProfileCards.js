@@ -17,51 +17,55 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function ProfileCards({ result, onClick}) {
-    const history = useHistory();
-    // for rating
-    const [value, setValue] = React.useState(2);
-    // for favorites
-    const [favorite, setFavorite] = React.useState(false);
-    // for same user checking
-    const [sameUser, setSameUser] = useState(false);
-    // for deleting 
-    const [deletePost, setDeletePost] = useState(false);
-    // get userID
-    let userID = localStorage.getItem('userId');
+import RecipeDetailPage from '../../pages/RecipeDetailPage';
+import UserPostDetails from '../../pages/UserPostDetails';
 
-    // set user info
-    const [userNameState, setUserName] = useState('');
-    const [userProfile, setUserImage] = useState()
-    // console.log(userID);
+function ProfileCards({ result, onClick }) {
+  const history = useHistory();
+  // for rating
+  const [value, setValue] = React.useState(2);
+  // for favorites
+  const [favorite, setFavorite] = React.useState(false);
+  // for same user checking
+  const [sameUser, setSameUser] = useState(false);
+  // for deleting
+  const [deletePost, setDeletePost] = useState(false);
+  // get userID
+  let userID = localStorage.getItem('userId');
 
-    // get the user name and image 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userID}`);
-            
-            if (!response.ok) {
-                console.error('Failed to fetch user');
-            } else {
-                const user = await response.json();
-                setUserName(user.username);
-                setUserImage(user.profile_picture)
-            }
-        };
-        fetchUserInfo();
-    }, []);
+  // set user info
+  const [userNameState, setUserName] = useState('');
+  const [userProfile, setUserImage] = useState();
+  // console.log(userID);
 
-    //   check if same user of owner of profile
-    useEffect(() => {
-        if (userID == result.recipe.user_id) {
-            setSameUser(true);
-        } else {
-            setSameUser(false);
-        }
-    }, [userID, result.recipe.user_id]);
+  // get the user name and image
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/${userID}`
+      );
 
+      if (!response.ok) {
+        console.error('Failed to fetch user');
+      } else {
+        const user = await response.json();
+        setUserName(user.username);
+        setUserImage(user.profile_picture);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
-  // to delete post 
+  //   check if same user of owner of profile
+  useEffect(() => {
+    if (userID == result.recipe.user_id) {
+      setSameUser(true);
+    } else {
+      setSameUser(false);
+    }
+  }, [userID, result.recipe.user_id]);
+
+  // to delete post
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
 
@@ -75,7 +79,7 @@ function ProfileCards({ result, onClick}) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userID: userID
+            userID: userID,
           }),
         }
       );
@@ -89,7 +93,6 @@ function ProfileCards({ result, onClick}) {
         console.log('recipe deleted successfully');
         // Update the state or perform any other necessary actions
         setDeletePost(true);
-    
       } else {
         // Handle errors if the deletion was not successful
         toast.error('Failed to delete the recipe!', {
@@ -137,7 +140,14 @@ function ProfileCards({ result, onClick}) {
                   src={result.recipe.photo_url}
                   alt="pic"
                   className="cardImg"
-                  onClick={onClick}
+                  // onClick={() => {
+                  //   history.push(
+                  //     `/profile/${userNameState}/${result.recipe.id}`
+                  //   );
+                  // }}
+                  onClick={() => {
+                    UserPostDetails(result.recipe.id);
+                  }}
                 />
               </Row>
               <Row>
@@ -149,7 +159,7 @@ function ProfileCards({ result, onClick}) {
                   <Box
                     sx={{
                       '& > legend': { mt: 2 },
-                      mt: '10px'
+                      mt: '10px',
                     }}
                   >
                     <Rating name="read-only" value={value} readOnly />

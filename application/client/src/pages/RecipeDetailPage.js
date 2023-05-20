@@ -15,7 +15,7 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-const PostDetailsPage = (props) => {
+const RecipeDetailPage = (props) => {
   // for dummy star rating
   const [value, setValue] = React.useState(2);
   // login status
@@ -326,4 +326,4 @@ const PostDetailsPage = (props) => {
   );
 };
 
-export default PostDetailsPage;
+export default RecipeDetailPage;
