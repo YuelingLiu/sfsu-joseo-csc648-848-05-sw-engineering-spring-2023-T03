@@ -65,9 +65,15 @@ class User {
   }
 
   static async getSavedRecipes(userID) {
-    return await knex('user_favorite_recipes')
-      // .join('recipes', 'user_favorite_recipes.recipe_id', 'recipes.id')
+    const savedRecipeIDs = await knex('user_favorite_recipes')
       .where('user_favorite_recipes.user_id', userID);
+      const savedRecipes = await Promise.all(savedRecipeIDs.map(async (recipeData) => {
+        const recipe = await await knex('recipes').where('id', recipeData.recipe_id)
+        const ingredients = await knex('ingredients').where('ingredients.recipe_id', recipeData.recipe_id);
+        const instructions = await knex('instructions').where('instructions.recipe_id', recipeData.recipe_id);
+        return {recipe, ingredients, instructions}
+       }))
+      return savedRecipes
   }
 
   static async getByUsername(username) {
