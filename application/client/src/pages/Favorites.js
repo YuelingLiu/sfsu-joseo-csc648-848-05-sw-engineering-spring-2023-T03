@@ -24,7 +24,7 @@ const Favorites = () => {
   const getAllSavedRecipes = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/${userID}/savedrecipes/`,
+        `${process.env.REACT_APP_REQ_URL}/${userID}/savedrecipes`,
         {
           method: 'GET',
           headers: {

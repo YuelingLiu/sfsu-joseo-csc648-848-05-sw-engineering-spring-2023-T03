@@ -25,8 +25,11 @@ const RecipeDetailPage = (props) => {
   const [recipeDetails, setRecipeDetails] = useState({});
   const [instructionDetails, setInstructionDetails] = useState([]);
   const [ingredientsDetails, setIngredientsDetails] = useState([]);
+  const [savedRecipes, setSaveRecipes] = useState([]);
   const [recipeImg, setRecipeImg] = useState('image7');
   const [isSavedRecipe, setIsSavedRecipe] = useState(false);
+  let userID = localStorage.getItem('userId');
+  userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
 
   // for clickable favorite heart button
   const [favorite, setFavorite] = React.useState(false);
@@ -39,6 +42,7 @@ const RecipeDetailPage = (props) => {
 
   // all for comments
   const postId = props.match.params.postId;
+  console.log('chekcing whast is postIDi n recipeDetailPage,', postId);
   const { token } = useContext(AuthContext);
   const [Comments, setComments] = useState([]);
   //fetching comments
@@ -95,9 +99,11 @@ const RecipeDetailPage = (props) => {
           body: JSON.stringify({ userID: postId }),
         }
       );
+      const data = await response.json();
 
       if (response.ok) {
         setIsSavedRecipe(true);
+        setSaveRecipes(data.data);
         // Recipe saved successfully
         console.log('Recipe saved!');
         toast.success('Yay! You saved this recipe! 🚀👏', {

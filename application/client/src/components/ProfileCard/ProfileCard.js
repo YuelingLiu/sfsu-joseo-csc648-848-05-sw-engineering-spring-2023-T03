@@ -25,7 +25,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
     'checking what is userID that is logged in user from local storage',
     userID
   );
-  console.log('checking what is passed in  here in profileCard', user_id);
+  console.log('checking what is passed in  here in profileCard', userID);
   // get current user page from URL
   let splitURL = window.location.href.split('/');
   let currentUser = splitURL[splitURL.length - 1];
@@ -42,7 +42,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
     const getImgAndName = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_REQ_URL}/user/${user_id}`,
+          `${process.env.REACT_APP_REQ_URL}/user/${userID}`,
           {
             method: 'GET',
             headers: {
