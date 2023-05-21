@@ -42,7 +42,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
     const getImgAndName = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_REQ_URL}/user/${userID}`,
+          `${process.env.REACT_APP_REQ_URL}/user/${user_id}`,
           {
             method: 'GET',
             headers: {

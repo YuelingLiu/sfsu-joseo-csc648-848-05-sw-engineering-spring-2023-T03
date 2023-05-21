@@ -29,6 +29,7 @@ const RecipeDetailPage = (props) => {
   const [recipeImg, setRecipeImg] = useState('image7');
   const [isSavedRecipe, setIsSavedRecipe] = useState(false);
   let userID = localStorage.getItem('userId');
+  const [userProfilePicture, setUserProfilePicture] = useState();
   userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
 
   // for clickable favorite heart button
@@ -150,8 +151,6 @@ const RecipeDetailPage = (props) => {
 
         if (data.recipe.photo_url) {
           setRecipeImg(data.recipe.photo_url);
-        } else {
-          setRecipeImg('image7.png');
         }
       } else {
         console.log('response was not okay');
