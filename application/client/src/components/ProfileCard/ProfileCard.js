@@ -26,6 +26,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
     userID
   );
   console.log('checking what is passed in  here in profileCard', userID);
+  console.log('user_id passed in profileCARd,', user_id);
   // get current user page from URL
   let splitURL = window.location.href.split('/');
   let currentUser = splitURL[splitURL.length - 1];

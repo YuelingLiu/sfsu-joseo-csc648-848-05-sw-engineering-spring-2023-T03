@@ -32,15 +32,15 @@ const Favorites = () => {
           },
         }
       );
-      const data = await response.json();
-      console.log('checking data in favorites:', data);
+      const { savedRecipes } = await response.json();
+      console.log('checking data in favorites:', savedRecipes);
       if (!response) {
-        throw new Error(data.error);
+        throw new Error(savedRecipes.error);
       } else {
-        setSavedRecipes(data);
+        setSavedRecipes(savedRecipes);
       }
     } catch (err) {
-      console.log({ err });
+      throw new Error(err);
     }
   };
 

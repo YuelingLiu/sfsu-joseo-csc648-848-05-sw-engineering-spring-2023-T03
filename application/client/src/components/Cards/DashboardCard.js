@@ -91,7 +91,7 @@ function CategoryCard({ result, onClick, userName }) {
     setSameUser(true);
   }
 
-  console.log('results in dashboard card: ' + JSON.stringify(result.title));
+  console.log('results in dashboard card: ' + JSON.stringify(result));
 
   return (
     <>

@@ -79,18 +79,17 @@ const RecipeDetailPage = (props) => {
   }, [fetchComments]);
 
   // save recipe
-  const handleSaveRecipe = async (e) => {
-    e.preventDefault();
+  const handleSaveRecipe = useCallback(async () => {
     if (isSavedRecipe) {
-      toast.error('Yay! you already save this!', {
+      toast.error('Yay! You already saved this!', {
         position: toast.POSITION.TOP_CENTER,
       });
       return;
     }
-    console.log('clicked save button!');
+    console.log('Clicked save button!');
     try {
       // Make an HTTP POST request to the save recipe route
-      const response = await await fetch(
+      const response = await fetch(
         `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${postId}`,
         {
           method: 'POST',
@@ -100,11 +99,11 @@ const RecipeDetailPage = (props) => {
           body: JSON.stringify({ userID: postId }),
         }
       );
-      const data = await response.json();
+      const { savedRecipe } = await response.json();
 
       if (response.ok) {
         setIsSavedRecipe(true);
-        setSaveRecipes(data.data);
+        setSaveRecipes(savedRecipe); // Update with 'savedRecipe' instead of 'data.data'
         // Recipe saved successfully
         console.log('Recipe saved!');
         toast.success('Yay! You saved this recipe! 🚀👏', {
@@ -117,7 +116,7 @@ const RecipeDetailPage = (props) => {
     } catch (error) {
       console.log(error.message);
     }
-  };
+  }, [isSavedRecipe, postId, setSaveRecipes, setIsSavedRecipe]);
 
   //fetching Recipe details
   const getRecipeDetails = async () => {
@@ -201,7 +200,9 @@ const RecipeDetailPage = (props) => {
                 <img src="image7.jpg" alt="pic" />
               )}
             </Row>
-            <Button
+
+            {/* save isn't working yet */}
+            {/* <Button
               style={{
                 color: 'white',
                 backgroundColor: 'hsl(0, 83%, 39%)',
@@ -212,10 +213,8 @@ const RecipeDetailPage = (props) => {
               onClick={handleSaveRecipe}
             >
               Save
-            </Button>
-
+            </Button> */}
             {/* detail row */}
-
             <Row>
               <Col md={7}>
                 {/* cooking time */}
