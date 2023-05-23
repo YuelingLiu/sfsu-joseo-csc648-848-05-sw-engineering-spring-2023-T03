@@ -24,14 +24,14 @@ function FavoritesCard({ result, onClick, userName }) {
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
-
+  let userID = localStorage.getItem('userId');
   // handle delete on favorite
   const handleDeletePost = async (recipeID) => {
     console.log('triggered delete from favorites button');
     let theRecipeId = recipeID
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userInfo.id}/${theRecipeId}`,
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}/${theRecipeId}`,
         {
           method: 'DELETE',
           headers: {
