@@ -291,6 +291,8 @@ router.delete('/unfollow/:followID', async (req, res) => {
 });
 
 router.post('/save/recipe/:id', async (req, res) => {
+  console.log('in route req.body.userID: ', req.body.userID);
+  console.log('in route req.params.id: ', req.params.id);
   try {
     const savedRecipe = await User.saveRecipe(req.body.userID, req.params.id);
     res.status(201).json({ savedRecipe });

@@ -26,7 +26,7 @@ function CategoryCard({ result, onClick, userName }) {
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
   const [authorName, setAuthorName] = useState('');
-  console.log(result);
+  console.log("Here is result in DashboardCard: ",result);
 
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
@@ -108,7 +108,7 @@ function CategoryCard({ result, onClick, userName }) {
             <Col md={7}>
               <Row>
                 <img
-                  src="hero.jpg"
+                  src={result.recipe_photo_url}
                   alt="pic"
                   className="cardImg"
                   onClick={onClick}
@@ -201,7 +201,7 @@ function CategoryCard({ result, onClick, userName }) {
               <Row style={{ padding: '5px 0px' }}>
                 <Col xs={4}>
                   <img
-                    src="user.ico"
+                    src={result.user_profile_picture}
                     alt="user-icon"
                     className="userImg"
                     onClick={() => {

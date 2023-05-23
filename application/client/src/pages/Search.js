@@ -36,6 +36,7 @@ const Search = ({ location }) => {
 
         if (response.ok) {
           setResults(data.results);
+
           console.log("Results:", data.results[0].recipe_title);
 
           setTitle(data.results[0].recipe_title);
@@ -62,16 +63,18 @@ const Search = ({ location }) => {
       <Container>
         <Filterbar title={title}/>
 
-        {results.length > 0 ? (
-          results.map((result) =>  
-           <DashboardCard
-              key={result.recipe_id}
-              result={result}
-              onClick={() => handleDashboardCardClick(result.recipe_id)}
-            />)
-        ) : (
-          <p style={{textAlign: 'center'}}>No results found.</p>
-        )}
+        <Row style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {results.length > 0 ? (
+              results.map((result) =>  
+              <DashboardCard
+                  key={result.recipe_id}
+                  result={result}
+                  onClick={() => handleDashboardCardClick(result.recipe_id)}
+                />)
+            ) : (
+              <p style={{textAlign: 'center'}}>No results found.</p>
+            )}
+        </Row>
       </Container>
     </>
   );
