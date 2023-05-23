@@ -28,7 +28,7 @@ function FavoritesCard({ result, onClick, userName }) {
   // handle delete on favorite
   const handleDeletePost = async (recipeID) => {
     console.log('triggered delete from favorites button');
-    let theRecipeId = recipeID
+    let theRecipeId = recipeID;
     try {
       const response = await fetch(
         `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}/${theRecipeId}`,
@@ -41,7 +41,7 @@ function FavoritesCard({ result, onClick, userName }) {
       );
 
       if (response.ok) {
-        toast.success('Deleted recipe from favorites successfully 🚀👏', {
+        toast.success('Removed recipe from favorites successfully 🚀👏', {
           position: toast.POSITION.TOP_CENTER,
         });
 
@@ -53,7 +53,10 @@ function FavoritesCard({ result, onClick, userName }) {
         console.error('Failed to delete the recipe from favorites');
       }
     } catch (error) {
-      console.error('Error occurred while deleting the post from favorites:', error);
+      console.error(
+        'Error occurred while deleting the post from favorites:',
+        error
+      );
     }
   };
 
@@ -85,25 +88,27 @@ function FavoritesCard({ result, onClick, userName }) {
   // fetch for user with Id to get username and their profile_pic
   const getUserInfo = async () => {
     try {
-        let response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${result.recipe[0].user_id}`,   {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-
-        let data = await response.json()
-
-        if (!response) {
-            console.log('bad response');
-        } else {
-            setUserInfo(data)
+      let response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/${result.recipe[0].user_id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
+      );
 
+      let data = await response.json();
+
+      if (!response) {
+        console.log('bad response');
+      } else {
+        setUserInfo(data);
+      }
     } catch (err) {
-        console.log(err.message);
+      console.log(err.message);
     }
-  }
+  };
   useEffect(() => {
     getUserInfo();
     console.log('result.recipe[0].id', result.recipe[0].id);
@@ -129,12 +134,14 @@ function FavoritesCard({ result, onClick, userName }) {
                   className="cardImg"
                   onClick={() => {
                     history.push(`/post/${result.recipe[0].id}`);
-                }}
+                  }}
                 />
               </Row>
               <Row>
                 <Col xs={6}>
-                  <h4 style={{ textAlign: 'left' }}>{result.recipe[0].title}</h4>
+                  <h4 style={{ textAlign: 'left' }}>
+                    {result.recipe[0].title}
+                  </h4>
                 </Col>
 
                 <Col xs={6}>
@@ -214,26 +221,26 @@ function FavoritesCard({ result, onClick, userName }) {
 
             {/* Right side */}
             <Col md={5}>
-               <Row style={{ padding: '5px 0px' }}>
-              <Col xs={4}>
+              <Row style={{ padding: '5px 0px' }}>
+                <Col xs={4}>
                   <img
-                     src={userInfo.profile_picture}
-                     alt="user-icon"
-                     className="userImg"
-                     onClick={() => {
-                       history.push(`/profile/${userInfo.username}`);
-                   }}
+                    src={userInfo.profile_picture}
+                    alt="user-icon"
+                    className="userImg"
+                    onClick={() => {
+                      history.push(`/profile/${userInfo.username}`);
+                    }}
                   />
-                 </Col>
-                 <Col xs={8}>
-                   <h5>{userInfo.username}</h5>
-                 </Col>
-               </Row>
-               <Row>Description:</Row>
-               <Row>
-                 <ScrollableParagraph text={result.recipe[0].description} />
-               </Row>
-             </Col> 
+                </Col>
+                <Col xs={8}>
+                  <h5>{userInfo.username}</h5>
+                </Col>
+              </Row>
+              <Row>Description:</Row>
+              <Row>
+                <ScrollableParagraph text={result.recipe[0].description} />
+              </Row>
+            </Col>
           </Row>
         </Container>
         <ToastContainer />

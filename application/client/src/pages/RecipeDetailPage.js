@@ -77,11 +77,11 @@ const RecipeDetailPage = (props) => {
     fetchComments();
   }, [fetchComments]);
 
-  // delete comment 
+  // delete comment
   const handleCommentDeleted = () => {
     fetchComments();
-  }
-  
+  };
+
   // save recipe
   const handleSaveRecipe = async () => {
     if (isSavedRecipe) {
@@ -92,10 +92,12 @@ const RecipeDetailPage = (props) => {
     }
     console.log('Clicked save button!');
     try {
-      console.log("in try");
-      console.log('this is postID: ' , postId);
+      console.log('in try');
+      console.log('this is postID: ', postId);
       // Make an HTTP POST request to the save recipe route
-      const response = await fetch( `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${postId}`, {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${postId}`,
+        {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -176,11 +178,12 @@ const RecipeDetailPage = (props) => {
   //   // Perform actions that rely on updated recipeDetails here
   // }, [recipeDetails]);
 
-
   // check if recipe is already in users favorites
   const checkIfInFavorites = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}`,{
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}`,
+        {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -189,25 +192,24 @@ const RecipeDetailPage = (props) => {
       );
 
       const data = await response.json();
-      
+
       if (!response) {
         console.log('bad response in get favorites.');
       }
 
-      for (let i=0; i < data.savedRecipes.length; i++){
-        console.log('here is data in recipeDetails: ', data.savedRecipes[0].recipe);
-
+      for (let i = 0; i < data.savedRecipes.length; i++) {
+        console.log(
+          'here is data in recipeDetails: ',
+          data.savedRecipes[0].recipe
+        );
       }
-
     } catch (err) {
       console.log(err.message);
     }
-  }
+  };
   useEffect(() => {
     checkIfInFavorites();
   }, []);
-
-
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -251,11 +253,23 @@ const RecipeDetailPage = (props) => {
               }}
               onClick={handleSaveRecipe}
             >
-              Save
+              Save to favorites
             </Button>
             {/* detail row */}
             <Row>
               <Col md={7}>
+                {/* description */}
+
+                <h4
+                  style={{
+                    fontWeight: '700',
+                    padding: '10px',
+                  }}
+                >
+                  Description:
+                </h4>
+                <h4>{recipeDetails.description}</h4>
+
                 {/* cooking time */}
                 <div className="d-flex align-items-center">
                   <div className="d-flex align-items-center">
@@ -286,12 +300,6 @@ const RecipeDetailPage = (props) => {
                     </div>
                   );
                 })}
-
-                {/* description */}
-                <h4 style={{ fontWeight: '700', padding: '10px' }}>
-                  Description:
-                </h4>
-                <h4>{recipeDetails.description}</h4>
               </Col>
 
               <Col md={5}>
