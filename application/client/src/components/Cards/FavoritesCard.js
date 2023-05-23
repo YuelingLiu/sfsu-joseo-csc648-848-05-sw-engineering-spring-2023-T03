@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../categories/PopularDishes.css';
 import { FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
@@ -17,26 +17,21 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function CategoryCard({ result, onClick, userName }) {
+function FavoritesCard({ result, onClick, userName }) {
   const history = useHistory();
-  let name = localStorage.getItem('name');
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
-  const [deletePost, setDeletePost] = useState(false);
-  const [authorName, setAuthorName] = useState('');
-  console.log("Here is result in DashboardCard: ",result);
-  console.log(" in DashboardCard: ",result.savedRecipes);
+  const [userInfo, setUserInfo] = useState([]);
 
-
-  const handleDeletePost = async () => {
-    console.log('triggered delete post button');
-
+  // handle delete on favorite
+  const handleDeletePost = async (recipeID) => {
+    console.log('triggered delete from favorites button');
+    let theRecipeId = recipeID
     try {
-      // Make the API call to delete the post
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/recipe/${result.id}`,
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userInfo.id}/${theRecipeId}`,
         {
           method: 'DELETE',
           headers: {
@@ -46,24 +41,19 @@ function CategoryCard({ result, onClick, userName }) {
       );
 
       if (response.ok) {
-        // Deletion successful
-        toast.success('Deleted recipe successfully 🚀👏', {
+        toast.success('Deleted recipe from favorites successfully 🚀👏', {
           position: toast.POSITION.TOP_CENTER,
         });
 
-        console.log('recipe deleted successfully');
-        // Update the state or perform any other necessary actions
-        setDeletePost(true);
+        console.log('recipe deleted from favorites successfully');
       } else {
-        // Handle errors if the deletion was not successful
-        toast.error('Failed to delete the recipe!', {
+        toast.error('Failed to delete the recipe from favorites!', {
           position: toast.POSITION.TOP_CENTER,
         });
-        console.error('Failed to delete the recipe');
+        console.error('Failed to delete the recipe from favorites');
       }
     } catch (error) {
-      // Handle any network or other errors
-      console.error('Error occurred while deleting the post:', error);
+      console.error('Error occurred while deleting the post from favorites:', error);
     }
   };
 
@@ -92,6 +82,33 @@ function CategoryCard({ result, onClick, userName }) {
     setSameUser(true);
   }
 
+  // fetch for user with Id to get username and their profile_pic
+  const getUserInfo = async () => {
+    try {
+        let response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${result.recipe[0].user_id}`,   {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        let data = await response.json()
+
+        if (!response) {
+            console.log('bad response');
+        } else {
+            setUserInfo(data)
+        }
+
+    } catch (err) {
+        console.log(err.message);
+    }
+  }
+  useEffect(() => {
+    getUserInfo();
+    console.log('result.recipe[0].id', result.recipe[0].id);
+  }, [result.recipe[0].user_id]);
+
   return (
     <>
       <Card
@@ -107,15 +124,17 @@ function CategoryCard({ result, onClick, userName }) {
             <Col md={7}>
               <Row>
                 <img
-                  src={result.recipe_photo_url}
+                  src={result.recipe[0].photo_url}
                   alt="pic"
                   className="cardImg"
-                  onClick={onClick}
+                  onClick={() => {
+                    history.push(`/post/${result.recipe[0].id}`);
+                }}
                 />
               </Row>
               <Row>
                 <Col xs={6}>
-                  <h4 style={{ textAlign: 'left' }}>{result.recipe_title}</h4>
+                  <h4 style={{ textAlign: 'left' }}>{result.recipe[0].title}</h4>
                 </Col>
 
                 <Col xs={6}>
@@ -154,8 +173,7 @@ function CategoryCard({ result, onClick, userName }) {
                         marginRight: 'auto',
                         marginBottom: '10px',
                       }}
-                      // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.id)}
+                      onClick={() => handleDeletePost(result.recipe[0].id)}
                     >
                       <FaTrash />
                     </Button>
@@ -185,8 +203,7 @@ function CategoryCard({ result, onClick, userName }) {
                         marginRight: 'auto',
                         marginBottom: '10px',
                       }}
-                      // onClick={handleDeletePost(result.recipe_id)}
-                      onClick={() => handleDeletePost(result.recipe_title)}
+                      onClick={() => handleDeletePost(result.recipe[0].id)}
                     >
                       <FaTrash />
                     </Button>
@@ -197,26 +214,26 @@ function CategoryCard({ result, onClick, userName }) {
 
             {/* Right side */}
             <Col md={5}>
-              <Row style={{ padding: '5px 0px' }}>
-                <Col xs={4}>
+               <Row style={{ padding: '5px 0px' }}>
+              <Col xs={4}>
                   <img
-                    src={result.user_profile_picture}
-                    alt="user-icon"
-                    className="userImg"
-                    onClick={() => {
-                      history.push(`/profile`);
-                    }}
+                     src={userInfo.profile_picture}
+                     alt="user-icon"
+                     className="userImg"
+                     onClick={() => {
+                       history.push(`/profile/${userInfo.username}`);
+                   }}
                   />
-                </Col>
-                <Col xs={8}>
-                  <h5>{result.username}</h5>
-                </Col>
-              </Row>
-              <Row>Description:</Row>
-              <Row>
-                <ScrollableParagraph text={result.recipe_description} />
-              </Row>
-            </Col>
+                 </Col>
+                 <Col xs={8}>
+                   <h5>{userInfo.username}</h5>
+                 </Col>
+               </Row>
+               <Row>Description:</Row>
+               <Row>
+                 <ScrollableParagraph text={result.recipe[0].description} />
+               </Row>
+             </Col> 
           </Row>
         </Container>
         <ToastContainer />
@@ -225,4 +242,4 @@ function CategoryCard({ result, onClick, userName }) {
   );
 }
 
-export default CategoryCard;
+export default FavoritesCard;

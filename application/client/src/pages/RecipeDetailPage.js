@@ -29,7 +29,6 @@ const RecipeDetailPage = (props) => {
   const [recipeImg, setRecipeImg] = useState('image7');
   const [isSavedRecipe, setIsSavedRecipe] = useState(false);
   let userID = localStorage.getItem('userId');
-  const [userProfilePicture, setUserProfilePicture] = useState();
   userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
 
   // for clickable favorite heart button
@@ -94,18 +93,19 @@ const RecipeDetailPage = (props) => {
     console.log('Clicked save button!');
     try {
       console.log("in try");
+      console.log('this is postID: ' , postId);
       // Make an HTTP POST request to the save recipe route
       const response = await fetch( `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${postId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ userID: postId }),
+          body: JSON.stringify({ userID: userID }),
         }
       );
       const savedRecipe = await response.json();
       console.log('this is savedRecipe: ', savedRecipe);
-      if (!response.ok) {
+      if (response.ok) {
         console.log('response ok');
         setIsSavedRecipe(true);
         console.log('saved to recipe');
@@ -123,49 +123,6 @@ const RecipeDetailPage = (props) => {
       console.log(error.message);
     }
   };
-
-  
-  // const handleSaveRecipe = useCallback(async () => {
-  //   if (isSavedRecipe) {
-  //     toast.error('Yay! You already saved this!', {
-  //       position: toast.POSITION.TOP_CENTER,
-  //     });
-  //     return;
-  //   }
-  //   console.log('Clicked save button!');
-  //   try {
-  //     console.log("in try");
-  //     // Make an HTTP POST request to the save recipe route
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${postId}`,
-  //       {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({ userID: postId }),
-  //       }
-  //     );
-  //     const { savedRecipe } = await response.json();
-
-  //     if (response.ok) {
-  //       console.log('response ok');
-  //       setIsSavedRecipe(true);
-  //       console.log('saved to recipe');
-  //       setSaveRecipes(savedRecipe); // Update with 'savedRecipe' instead of 'data.data'
-  //       // Recipe saved successfully
-  //       console.log('Recipe saved!');
-  //       toast.success('Yay! You saved this recipe! 🚀👏', {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //     } else {
-  //       // Error saving the recipe
-  //       console.log('Failed to save the recipe.');
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }, [isSavedRecipe, postId, setSaveRecipes, setIsSavedRecipe]);
 
   //fetching Recipe details
   const getRecipeDetails = async () => {
@@ -214,10 +171,43 @@ const RecipeDetailPage = (props) => {
     getRecipeDetails();
   }, [postId]);
   // using sepearate single dependency array
+  // useEffect(() => {
+  //   console.log('recipe details have been updated:', recipeDetails);
+  //   // Perform actions that rely on updated recipeDetails here
+  // }, [recipeDetails]);
+
+
+  // check if recipe is already in users favorites
+  const checkIfInFavorites = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}`,{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = await response.json();
+      
+      if (!response) {
+        console.log('bad response in get favorites.');
+      }
+
+      for (let i=0; i < data.savedRecipes.length; i++){
+        console.log('here is data in recipeDetails: ', data.savedRecipes[0].recipe);
+
+      }
+
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
   useEffect(() => {
-    console.log('recipe details have been updated:', recipeDetails);
-    // Perform actions that rely on updated recipeDetails here
-  }, [recipeDetails]);
+    checkIfInFavorites();
+  }, []);
+
+
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

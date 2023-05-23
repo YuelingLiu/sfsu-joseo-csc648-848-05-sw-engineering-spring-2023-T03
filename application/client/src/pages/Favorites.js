@@ -3,9 +3,8 @@ import { Typography } from '@mui/material';
 import { PostsData } from '../PostsData';
 import { useHistory } from 'react-router-dom';
 
-import DashboardCard from '../components/Cards/DashboardCard';
 import FilterbarStatic from '../components/filterbar/FilterbarStatic';
-
+import FavoritesCard from '../components/Cards/FavoritesCard';
 // boostrap
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -18,13 +17,13 @@ const Favorites = () => {
 
   const name = { recipe_title: 'Favorites' };
   let userID = localStorage.getItem('userId');
-  userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
-
+  // userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
+  console.log('userID: ', userID);
   // get all saved recipes
   const getAllSavedRecipes = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/${userID}/savedrecipes`,
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}`,
         {
           method: 'GET',
           headers: {
@@ -32,15 +31,16 @@ const Favorites = () => {
           },
         }
       );
-      const { savedRecipes } = await response.json();
+      const savedRecipes = await response.json();
       console.log('checking data in favorites:', savedRecipes);
       if (!response) {
         throw new Error(savedRecipes.error);
       } else {
-        setSavedRecipes(savedRecipes);
+        console.log('in success');
+        setSavedRecipes(savedRecipes.savedRecipes);
       }
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   };
 
@@ -60,12 +60,22 @@ const Favorites = () => {
             justifyContent: 'center',
           }}
         >
-          {PostsData.map((data) => (
-            <DashboardCard
-              result={savedRecipes}
+        
+        {savedRecipes.length > 0 ? (
+        <> 
+           {savedRecipes.map((data) => (
+            <FavoritesCard
+              result={data}
               onClick={() => history.push(`post/${data.id}`)}
             />
           ))}
+        </>
+        ) : (
+          <>
+            <p style={{textAlign: 'center'}}>No results found.</p>
+          </>
+        )}
+        
         </Row>
       </Container>
     </>

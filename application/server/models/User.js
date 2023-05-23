@@ -76,6 +76,14 @@ class User {
       return savedRecipes
   }
 
+  static async removeSavedRecipe(userID, recipeID) {
+    return await knex('user_favorite_recipes')
+      .where('user_id', userID)
+      .where('recipe_id', recipeID)
+      .del();
+  }
+
+
   static async getByUsername(username) {
     return await knex('users').where({ username }).first();
   }

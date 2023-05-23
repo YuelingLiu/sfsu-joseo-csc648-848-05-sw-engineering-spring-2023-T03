@@ -333,13 +333,27 @@ router.post('/save/recipe/:id', async (req, res) => {
   }
 });
 
-router.get('/savedrecipes', async (req, res) => {
+router.get('/saved-recipes/:userID', async (req, res) => {
   try {
-    const savedRecipes = await User.getSavedRecipes(req.body.userID);
+    console.log('req.body.userID', req.params.userID);
+    const savedRecipes = await User.getSavedRecipes(req.params.userID);
     console.log('in saved recipe...', { savedRecipes });
     res.status(200).json({ savedRecipes });
   } catch (err) {
     console.log(err.message);
+  }
+});
+
+router.delete('/saved-recipes/:userId/:recipeId', async (req, res) => {
+  try {
+      const { userId, recipeId } = req.params;
+      console.log('userId route: ', userId);
+      console.log('recipeId route: ', recipeId);
+      
+      await User.removeSavedRecipe(userId, recipeId);
+      res.status(200).json({ message: 'Recipe removed from favorites' });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 
