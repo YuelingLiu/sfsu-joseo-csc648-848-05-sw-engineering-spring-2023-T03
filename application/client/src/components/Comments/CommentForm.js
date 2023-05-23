@@ -23,9 +23,9 @@ const CommentForm = ({  token, postId, fetchComments }) => {
       const result = await response.json();
 
       if (result.status === 'success') {
-        // refresh comment section 
         console.log('Success to post comment');
-        fetchComments(); // <-- here
+        fetchComments(); 
+        setText(''); 
       } else {
         console.error(result.message);
       }

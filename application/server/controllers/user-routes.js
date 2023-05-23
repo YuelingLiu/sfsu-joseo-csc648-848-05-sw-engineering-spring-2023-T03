@@ -268,6 +268,38 @@ router.get('/post/:postId/comments', async (req, res) => {
   }
 });
 
+router.delete('/post/comment/:commentId', async (req, res) => {
+  try {
+    const commentId = req.params.commentId;
+
+    // Delete the comment
+    const deletedComment = await Comment.delete(commentId);
+    
+    // If the delete method doesn't throw an error but doesn't return a truthy value,
+    // it means the comment was not found
+    if (!deletedComment) {
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Comment not found',
+      });
+    }
+    
+    console.log('Comment deleted');
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Comment deleted successfully',
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      status: 'failure',
+      message: 'An error occurred while deleting the comment',
+    });
+  }
+});
+
+
 router.post('/follow/:followID', async (req, res) => {
   try {
     console.log('in follow');

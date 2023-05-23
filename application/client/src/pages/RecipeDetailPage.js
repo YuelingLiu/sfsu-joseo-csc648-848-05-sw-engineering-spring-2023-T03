@@ -78,6 +78,11 @@ const RecipeDetailPage = (props) => {
     fetchComments();
   }, [fetchComments]);
 
+  // delete comment 
+  const handleCommentDeleted = () => {
+    fetchComments();
+  }
+  
   // save recipe
   const handleSaveRecipe = async () => {
     if (isSavedRecipe) {
@@ -415,9 +420,12 @@ const RecipeDetailPage = (props) => {
               {Comments.map((data, index) => (
                 <Comment
                   key={index}
+                  commentId={data.id}
                   author={data.username}
                   date={data.username}
                   text={data.comment}
+                  userID={data.user_id}
+                  onCommentDeleted={handleCommentDeleted}
                 />
               ))}
             </Row>
