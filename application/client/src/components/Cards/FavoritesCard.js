@@ -158,66 +158,20 @@ function FavoritesCard({ result, onClick, userName,getAllSavedRecipes }) {
               </Row>
 
               <Row>
-                {favorite ? (
-                  <div className="d-flex align-items-center">
-                    <div onClick={() => handleDeletePost(result.recipe[0].id)}>
-                      <FavoriteIcon
-                        className="float-start"
-                        style={{
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        color="error"
-                      />{' '}
-                      4
-                    </div>
-                    {/* <Button
-                      variant="dark"
+                <div className="d-flex align-items-center">
+                  <div onClick={() => handleDeletePost(result.recipe[0].id)}>
+                    <FavoriteIcon
+                      className="float-start"
                       style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
                         marginLeft: 0,
                         marginRight: 'auto',
                         marginBottom: '10px',
                       }}
-                      onClick={() => handleDeletePost(result.recipe[0].id)}
-                    >
-                      <FaTrash />
-                    </Button> */}
+                      color="error"
+                    />{' '}
+                    4
                   </div>
-                ) : (
-                  <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToTrue}>
-                      <FavoriteBorderIcon
-                        className="float-start"
-                        style={{
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        color="error"
-                      />{' '}
-                      3
-                    </div>
-
-                    <Button
-                      variant="dark"
-                      style={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        color: 'hsl(0, 83%, 39%)',
-                        marginLeft: 0,
-                        marginRight: 'auto',
-                        marginBottom: '10px',
-                      }}
-                      onClick={() => handleDeletePost(result.recipe[0].id)}
-                    >
-                      <FaTrash />
-                    </Button>
-                  </div>
-                )}
+                </div>
               </Row>
             </Col>
 

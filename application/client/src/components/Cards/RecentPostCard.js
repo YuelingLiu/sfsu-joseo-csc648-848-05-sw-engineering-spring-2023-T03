@@ -103,7 +103,7 @@ function RecentPostCard({ result, onClick, userIDs}) {
     console.log("userIDs", userIDs);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userIDs}/${theRecipeId}`,
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${loggedInUserID}/${theRecipeId}`,
         {
           method: 'DELETE',
           headers: {
@@ -144,7 +144,7 @@ function RecentPostCard({ result, onClick, userIDs}) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ userID: userIDs }),
+          body: JSON.stringify({ userID: loggedInUserID }),
         }
       );
       const savedRecipe = await response.json();
@@ -214,7 +214,7 @@ function RecentPostCard({ result, onClick, userIDs}) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToFalse}>
+                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToFalse}>
                       <FavoriteIcon
                         className="float-start"
                         style={{
@@ -224,12 +224,12 @@ function RecentPostCard({ result, onClick, userIDs}) {
                         }}
                         color="error"
                       />{' '}
-                      4
+                      
                     </div>
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToTrue}>
+                    <div style={{cursor: 'pointer'}} onClick={FavoriteToTrue}>
                       <FavoriteBorderIcon
                         className="float-start"
                         style={{
@@ -239,7 +239,7 @@ function RecentPostCard({ result, onClick, userIDs}) {
                         }}
                         color="error"
                       />{' '}
-                      3
+                      
                     </div>
                   </div>
                 )}

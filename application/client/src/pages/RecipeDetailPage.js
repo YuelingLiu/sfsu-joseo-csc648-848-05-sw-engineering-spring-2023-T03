@@ -39,7 +39,7 @@ const RecipeDetailPage = (props) => {
   };
   const FavoriteToFalse = () => {
     setFavorite(false);
-    // handleDeletePost();
+    handleDeletePost();
   };
 
   // all for comments
@@ -158,7 +158,7 @@ const RecipeDetailPage = (props) => {
   };
   useEffect(() => {
     getRecipeDetails();
-  }, [postId]);
+  }, []);
   // using sepearate single dependency array
   // useEffect(() => {
   //   console.log('recipe details have been updated:', recipeDetails);

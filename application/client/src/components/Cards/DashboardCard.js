@@ -132,7 +132,7 @@ function CategoryCard({ result, onClick, userName }) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToFalse}>
+                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToFalse}>
                       <FavoriteIcon
                         className="float-start"
                         style={{
@@ -162,7 +162,7 @@ function CategoryCard({ result, onClick, userName }) {
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToTrue}>
+                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToTrue}>
                       <FavoriteBorderIcon
                         className="float-start"
                         style={{
