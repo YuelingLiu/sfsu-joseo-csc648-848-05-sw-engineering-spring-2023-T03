@@ -17,10 +17,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function FavoritesCard({ result, onClick, userName }) {
+function FavoritesCard({ result, onClick, userName,getAllSavedRecipes }) {
   const history = useHistory();
   const [value, setValue] = React.useState(2);
-  const [favorite, setFavorite] = React.useState(false);
+  const [favorite, setFavorite] = React.useState(true);
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
@@ -41,6 +41,7 @@ function FavoritesCard({ result, onClick, userName }) {
       );
 
       if (response.ok) {
+        getAllSavedRecipes();
         toast.success('Removed recipe from favorites successfully 🚀👏', {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -114,6 +115,7 @@ function FavoritesCard({ result, onClick, userName }) {
     console.log('result.recipe[0].id', result.recipe[0].id);
   }, [result.recipe[0].user_id]);
 
+  
   return (
     <>
       <Card
@@ -158,7 +160,7 @@ function FavoritesCard({ result, onClick, userName }) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToFalse}>
+                    <div onClick={() => handleDeletePost(result.recipe[0].id)}>
                       <FavoriteIcon
                         className="float-start"
                         style={{
@@ -170,7 +172,7 @@ function FavoritesCard({ result, onClick, userName }) {
                       />{' '}
                       4
                     </div>
-                    <Button
+                    {/* <Button
                       variant="dark"
                       style={{
                         backgroundColor: 'transparent',
@@ -183,7 +185,7 @@ function FavoritesCard({ result, onClick, userName }) {
                       onClick={() => handleDeletePost(result.recipe[0].id)}
                     >
                       <FaTrash />
-                    </Button>
+                    </Button> */}
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">

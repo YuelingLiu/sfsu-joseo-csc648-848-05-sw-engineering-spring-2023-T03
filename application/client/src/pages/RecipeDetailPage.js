@@ -27,7 +27,7 @@ const RecipeDetailPage = (props) => {
   const [ingredientsDetails, setIngredientsDetails] = useState([]);
   const [savedRecipes, setSaveRecipes] = useState([]);
   const [recipeImg, setRecipeImg] = useState('image7');
-  const [isSavedRecipe, setIsSavedRecipe] = useState(false);
+  // const [isSavedRecipe, setIsSavedRecipe] = useState(false);
   let userID = localStorage.getItem('userId');
   userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
 
@@ -35,9 +35,11 @@ const RecipeDetailPage = (props) => {
   const [favorite, setFavorite] = React.useState(false);
   const FavoriteToTrue = () => {
     setFavorite(true);
+    handleSaveRecipe();
   };
   const FavoriteToFalse = () => {
     setFavorite(false);
+    // handleDeletePost();
   };
 
   // all for comments
@@ -84,13 +86,6 @@ const RecipeDetailPage = (props) => {
 
   // save recipe
   const handleSaveRecipe = async () => {
-    if (isSavedRecipe) {
-      toast.error('Yay! You already saved this!', {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      return;
-    }
-    console.log('Clicked save button!');
     try {
       console.log('in try');
       console.log('this is postID: ', postId);
@@ -107,12 +102,8 @@ const RecipeDetailPage = (props) => {
       );
       const savedRecipe = await response.json();
       console.log('this is savedRecipe: ', savedRecipe);
+      
       if (response.ok) {
-        console.log('response ok');
-        setIsSavedRecipe(true);
-        console.log('saved to recipe');
-        setSaveRecipes(savedRecipe); // Update with 'savedRecipe' instead of 'data.data'
-        // Recipe saved successfully
         console.log('Recipe saved!');
         toast.success('Yay! You saved this recipe! 🚀👏', {
           position: toast.POSITION.TOP_CENTER,
@@ -143,11 +134,7 @@ const RecipeDetailPage = (props) => {
 
       if (response.ok) {
         console.log('recipe details okay');
-        // console.log(JSON.stringify(data));
-        console.log(
-          'checking what is user id in post detials page,',
-          data.recipe.user_id
-        );
+        
         setRecipeDetails(data.recipe);
         console.log(
           'checking recipe details now ',
@@ -197,12 +184,20 @@ const RecipeDetailPage = (props) => {
         console.log('bad response in get favorites.');
       }
 
+      // checks to see if recipe is already in favorites 
+      // turns Heart red if in favorites
       for (let i = 0; i < data.savedRecipes.length; i++) {
-        console.log(
-          'here is data in recipeDetails: ',
-          data.savedRecipes[0].recipe
-        );
-      }
+        console.log('here is data in data.savedRecipes[i]: ', data.savedRecipes[i]);
+        for (let j = 0; j < data.savedRecipes[i].recipe.length; j++) {
+          if (postId == data.savedRecipes[i].recipe[j].id){
+            console.log('same post');
+            setFavorite(true);
+          }
+          console.log("in for loop postID: " + postId);
+          console.log('here is data in data.savedRecipes[i].recipe[j]: ', data.savedRecipes[i].recipe[j].id);
+        }
+    }
+    
     } catch (err) {
       console.log(err.message);
     }
@@ -228,6 +223,42 @@ const RecipeDetailPage = (props) => {
   }
   const formattedTime = convertToHoursAndMinutes(recipeDetails.cooking_time);
 
+  // handle delete of favorite
+  const handleDeletePost = async (recipeID) => {
+    console.log('triggered delete from favorites button');
+    let theRecipeId = recipeDetails.id;
+    
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}/${theRecipeId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        toast.success('Removed recipe from favorites successfully 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+
+        console.log('recipe deleted from favorites successfully');
+      } else {
+        toast.error('Failed to delete the recipe from favorites!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.error('Failed to delete the recipe from favorites');
+      }
+    } catch (error) {
+      console.error(
+        'Error occurred while deleting the post from favorites:',
+        error
+      );
+    }
+  };
+  
   return (
     <>
       <Container>
@@ -243,7 +274,7 @@ const RecipeDetailPage = (props) => {
             </Row>
 
             {/* save isn't working yet */}
-            <Button
+            {/* <Button
               style={{
                 color: 'white',
                 backgroundColor: 'hsl(0, 83%, 39%)',
@@ -254,7 +285,7 @@ const RecipeDetailPage = (props) => {
               onClick={handleSaveRecipe}
             >
               Save to favorites
-            </Button>
+            </Button> */}
             {/* detail row */}
             <Row>
               <Col md={7}>

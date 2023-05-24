@@ -47,6 +47,7 @@ const Favorites = () => {
   useEffect(() => {
     getAllSavedRecipes();
   }, []);
+  
 
   return (
     <>
@@ -67,6 +68,7 @@ const Favorites = () => {
             <FavoritesCard
               result={data}
               onClick={() => history.push(`post/${data.id}`)}
+              getAllSavedRecipes={getAllSavedRecipes}
             />
           ))}
         </>
