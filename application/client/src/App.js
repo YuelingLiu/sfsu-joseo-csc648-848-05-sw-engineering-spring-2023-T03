@@ -11,7 +11,7 @@ import Navbar from './components/Nav/Navbarmenu';
 import Search from './pages/Search';
 import RecipeDetailPage from './pages/RecipeDetailPage';
 import Follows from './pages/Follows';
-import TopRated from './pages/TopRated';
+// import TopRated from './pages/TopRated';
 import Favorites from './pages/Favorites';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
           <Route exact path="/post-recipe" component={PostRecipe} />
           <Route exact path="/search" component={Search} />
           <Route exact path="/following/:userID" component={Follows} />
-          <Route exact path="/top-rated" component={TopRated} />
+          {/* <Route exact path="/top-rated" component={TopRated} /> */}
           <Route exact path="/favorites" component={Favorites} />
         </Switch>
       </Router>

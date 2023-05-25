@@ -52,7 +52,7 @@ const RecentPost = () => {
   return (
     <div>
       {/* send recent post to card to render */}
-      <Container style={{ maxWidth: '80%' }}>
+      <Container style={{ maxWidth: '100%' }}>
         <Row>
             <Col xl={12}>
               <h2 className='title'>Recent Dishes</h2>

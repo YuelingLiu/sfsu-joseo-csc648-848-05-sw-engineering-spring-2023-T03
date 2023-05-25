@@ -177,7 +177,7 @@ function RecentPostCard({ result, onClick, userIDs}) {
     <>
       <Card
         style={{
-          width: '33rem',
+          width: '43rem',
           margin: '20px 20px 15px 22px',
           padding: '0px',
         }}
