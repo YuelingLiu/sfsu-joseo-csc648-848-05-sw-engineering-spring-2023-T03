@@ -26,9 +26,8 @@ function CategoryCard({ result, onClick, userName }) {
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
   const [authorName, setAuthorName] = useState('');
-  console.log("Here is result in DashboardCard: ",result);
-  console.log(" in DashboardCard: ",result.savedRecipes);
-
+  console.log('Here is result in DashboardCard: ', result);
+  console.log(' in DashboardCard: ', result.savedRecipes);
 
   const handleDeletePost = async () => {
     console.log('triggered delete post button');
@@ -132,7 +131,10 @@ function CategoryCard({ result, onClick, userName }) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToFalse}>
+                    <div
+                      style={{ cursor: 'pointer' }}
+                      onClick={FavoriteToFalse}
+                    >
                       <FavoriteIcon
                         className="float-start"
                         style={{
@@ -142,9 +144,8 @@ function CategoryCard({ result, onClick, userName }) {
                         }}
                         color="error"
                       />{' '}
-                      
                     </div>
-                    <Button
+                    {/* <Button
                       variant="dark"
                       style={{
                         backgroundColor: 'transparent',
@@ -158,11 +159,11 @@ function CategoryCard({ result, onClick, userName }) {
                       onClick={() => handleDeletePost(result.id)}
                     >
                       <FaTrash />
-                    </Button>
+                    </Button> */}
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
-                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToTrue}>
+                    <div style={{ cursor: 'pointer' }} onClick={FavoriteToTrue}>
                       <FavoriteBorderIcon
                         className="float-start"
                         style={{
@@ -172,10 +173,9 @@ function CategoryCard({ result, onClick, userName }) {
                         }}
                         color="error"
                       />{' '}
-                      
                     </div>
 
-                    <Button
+                    {/* <Button
                       variant="dark"
                       style={{
                         backgroundColor: 'transparent',
@@ -189,7 +189,7 @@ function CategoryCard({ result, onClick, userName }) {
                       onClick={() => handleDeletePost(result.recipe_title)}
                     >
                       <FaTrash />
-                    </Button>
+                    </Button> */}
                   </div>
                 )}
               </Row>
