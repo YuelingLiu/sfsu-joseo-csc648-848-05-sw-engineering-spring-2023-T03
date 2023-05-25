@@ -389,7 +389,6 @@ const RecipeDetailPage = (props) => {
                         style={{ marginRight: '5px', fontSize: '2rem' }}
                         color="error"
                       />
-                      <h3 style={{ fontWeight: 'bold' }}>4</h3>
                     </div>
                   </div>
                 ) : (
@@ -403,9 +402,6 @@ const RecipeDetailPage = (props) => {
                         style={{ marginRight: '5px', fontSize: '2rem' }}
                         color="error"
                       />
-                      <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}>
-                        3
-                      </h3>
                     </div>
                   </div>
                 )}

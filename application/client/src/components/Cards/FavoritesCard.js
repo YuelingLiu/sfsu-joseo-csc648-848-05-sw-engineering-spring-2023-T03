@@ -120,7 +120,7 @@ function FavoritesCard({ result, onClick, userName,getAllSavedRecipes }) {
     <>
       <Card
         style={{
-          width: '33rem',
+          width: '45rem',
           margin: '20px 20px 15px 22px',
           padding: '0px',
         }}
@@ -169,7 +169,7 @@ function FavoritesCard({ result, onClick, userName,getAllSavedRecipes }) {
                       }}
                       color="error"
                     />{' '}
-                    4
+                   
                   </div>
                 </div>
               </Row>

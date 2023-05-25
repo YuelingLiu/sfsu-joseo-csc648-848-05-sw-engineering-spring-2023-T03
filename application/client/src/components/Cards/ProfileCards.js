@@ -162,18 +162,6 @@ function ProfileCards({ result, onClick }) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToFalse}>
-                      <FavoriteIcon
-                        className="float-start"
-                        style={{
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        color="error"
-                      />{' '}
-                      4
-                    </div>
                     {sameUser && (
                       <Button
                         variant="dark"
@@ -194,18 +182,6 @@ function ProfileCards({ result, onClick }) {
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToTrue}>
-                      <FavoriteBorderIcon
-                        className="float-start"
-                        style={{
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        color="error"
-                      />{' '}
-                      3
-                    </div>
                     {sameUser && (
                       <Button
                         variant="dark"

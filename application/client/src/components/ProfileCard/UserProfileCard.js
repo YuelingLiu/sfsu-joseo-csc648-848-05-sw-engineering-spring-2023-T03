@@ -131,8 +131,8 @@ function UserProfileCard({ user_id }) {
           </Typography>
           <>
             <div className="d-flex items-center justify-content-evenly">
-              <Typography variant="subtitle1">## Followers</Typography>
-              <Typography variant="subtitle1">## Following</Typography>
+              <Typography variant="subtitle1">Followers</Typography>
+              <Typography variant="subtitle1">Following</Typography>
             </div>
           </>
         </CardContent>

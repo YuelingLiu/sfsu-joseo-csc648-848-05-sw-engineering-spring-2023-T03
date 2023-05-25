@@ -200,7 +200,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
             <Button variant="subtitle1" onClick={seeFollowerHandler}>
               Followers
             </Button>
-            <Typography variant="subtitle1">## Following</Typography>
+            <Typography variant="subtitle1">Following</Typography>
           </div>
 
           {/* if true we dont want the follow button */}

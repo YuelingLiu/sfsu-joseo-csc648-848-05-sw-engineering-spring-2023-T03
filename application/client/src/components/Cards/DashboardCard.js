@@ -142,7 +142,7 @@ function CategoryCard({ result, onClick, userName }) {
                         }}
                         color="error"
                       />{' '}
-                      4
+                      
                     </div>
                     <Button
                       variant="dark"
@@ -172,7 +172,7 @@ function CategoryCard({ result, onClick, userName }) {
                         }}
                         color="error"
                       />{' '}
-                      3
+                      
                     </div>
 
                     <Button
