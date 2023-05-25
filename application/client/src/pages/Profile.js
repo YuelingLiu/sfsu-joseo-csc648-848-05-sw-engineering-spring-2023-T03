@@ -105,9 +105,13 @@ const Profile = () => {
             justifyContent: 'center',
           }}
         >
-          {profileData.map((data) => (
-            <ProfileCards result={data} />
-          ))}
+           {profileData.length > 0 ? (
+              profileData.map((data) => (
+                <ProfileCards result={data} />
+              ))
+            ) : (
+              <p style={{textAlign: 'center', marginTop: '20px'}}>No recipes found.</p>
+            )}
         </Row>
       </Container>
     </>
