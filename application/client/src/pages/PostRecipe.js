@@ -202,6 +202,7 @@ const PostRecipe = () => {
     const file = e.target.files[0];
     console.log(file.name);
     setRecipeImage(file);
+    setSelectedFile(file.name);
     setRecipeImageName(file.name);
   };
 
