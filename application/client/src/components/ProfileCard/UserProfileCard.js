@@ -82,7 +82,7 @@ function UserProfileCard({ user_id }) {
       }
     };
 
-    // getUserfollowers()
+    getUserfollowers()
   }, [user_id]);
 
   //FOLLOWING
@@ -105,6 +105,14 @@ function UserProfileCard({ user_id }) {
           console.error('Failed fetch recipe for profile');
         } else {
           setFollowingData(data);
+          // for (let i = 0; i < data.savedRecipes.length; i++) {
+          //   for (let j = 0; j < data.savedRecipes[i].recipe.length; j++) {
+          //     if (result.recipe.id == data.savedRecipes[i].recipe[j].id){
+          //       console.log('same post');
+          //       setFavorite(true);
+          //     }
+          //   }
+          // }
         }
       } catch (err) {
         console.log(err.message);
@@ -112,6 +120,7 @@ function UserProfileCard({ user_id }) {
     };
   }, [user_id]);
 
+  console.log("followingData" ,followingData);
   // need to make an if for if the user is following show unFOLLOW
   return (
     <>

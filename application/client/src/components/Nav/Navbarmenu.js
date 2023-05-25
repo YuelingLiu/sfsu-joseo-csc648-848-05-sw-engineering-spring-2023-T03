@@ -104,6 +104,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function Navbar() {
   let name = localStorage.getItem('name');
+  let userId = localStorage.getItem('userId');
   // for drop downs
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -669,7 +670,7 @@ function Navbar() {
                               </ListItem>
                             </Link>
                             <Link
-                              to="/following/1"
+                              to={`/following/${userId}`}
                               style={{ textDecoration: 'none' }}
                               onClick={handleCloseUserMenu}
                             >
@@ -1274,7 +1275,7 @@ function Navbar() {
                               </Link>
 
                               <Link
-                                to="/following"
+                                to={`/following/${userId}`}
                                 style={{ textDecoration: 'none' }}
                                 onClick={handleCloseUserMenu}
                               >

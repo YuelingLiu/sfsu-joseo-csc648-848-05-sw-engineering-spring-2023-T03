@@ -61,13 +61,6 @@ function FavoritesCard({ result, onClick, userName,getAllSavedRecipes }) {
     }
   };
 
-  const FavoriteToTrue = () => {
-    setFavorite(true);
-  };
-  const FavoriteToFalse = () => {
-    setFavorite(false);
-  };
-
   // for description
   function ScrollableParagraph({ text }) {
     return (

@@ -44,14 +44,14 @@ class User {
 
   static async getFollowers(userID) {
     return await knex('following')
-      .select('users.id', 'users.username')
+      .select('users.id', 'users.username', 'users.profile_picture')
       .join('users', 'following.user_id', 'users.id')
       .where('following_id', userID);
   }
 
   static async getFollowing(userID) {
     return await knex('following')
-      .select('users.id', 'users.username')
+      .select('users.id', 'users.username','users.profile_picture')
       .join('users', 'following.following_id', 'users.id')
       .where('user_id', userID);
   }

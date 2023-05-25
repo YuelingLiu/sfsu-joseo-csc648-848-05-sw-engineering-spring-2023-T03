@@ -11,23 +11,13 @@ import { AuthContext } from '../../AuthContext';
 
 function ProfileCard({ showDetails, userDetails: { user_id } }) {
   const history = useHistory();
-
-  // console.log('what is ser details', userDetails);
-  // for same user checking
-
   const [sameUser, setSameUser] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [profileUsername, setProfileUsername] = useState('');
-
+  const [followingUser, setFollowingUser] = useState(false);
+  // logged in users id
   let userID = localStorage.getItem('userId');
-  userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
-  // console.log(
-  //   'checking what is userID that is logged in user from local storage',
-  //   userID
-  // );
-  // console.log('checking what is passed in  here in profileCard', userID);
-  // console.log('user_id passed in profileCARd,', user_id);
-  // get current user page from URL
+
   let splitURL = window.location.href.split('/');
   let currentUser = splitURL[splitURL.length - 1];
   const { loggedIn, setLoggedIn } = useContext(AuthContext);
@@ -35,8 +25,6 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
   useEffect(() => {
     setSameUser(userID === user_id);
   }, [userID, user_id]);
-
-  // console.log(sameUser);
 
   // this is just too get user profile_picture and username
   useEffect(() => {
@@ -71,14 +59,9 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
     history.push(`/following/${userID}`);
   };
 
+
+  // Follow the user card
   const handleFollowUser = async () => {
-    // if (!sameUser) {
-    //   toast.error(`Oops, you cannot follow yourself! !♨`, {
-    //     position: toast.POSITION.TOP_CENTER,
-    //     duration: 3000, // 3s
-    //   });
-    //   return;
-    // }
     if (!loggedIn) {
       toast.error(`Must login to  follow others! !♨`, {
         position: toast.POSITION.TOP_CENTER,
@@ -89,6 +72,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
     }
     try {
       const response = await fetch(
+        // send the person you want to follow id
         `${process.env.REACT_APP_REQ_URL}/user/follow/${user_id}`,
         {
           method: 'POST',
@@ -97,7 +81,7 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
           },
           // Send the currently logged in userID
           body: JSON.stringify({
-            userID: user_id,
+            userID: userID,
           }),
         }
       );
@@ -108,75 +92,56 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
         throw new Error('Response ERROR');
       }
       console.log('DATA: ', data);
-      toast.success(`Hurray!you followed  ${profileUsername}! 🍾🎉♨`, {
+      toast.success(`Hurray! you followed  ${profileUsername}! 🍾🎉`, {
         position: toast.POSITION.TOP_CENTER,
         duration: 3000, // 3s
       });
+      getUserfollowing()
     } catch (error) {
       console.log('Error message: ' + error.message);
     }
   };
 
-  // FOLLOWERS
-  const [FollowerData, setFollowerData] = useState([]);
-  useEffect(() => {
-    const getUserfollowers = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_REQ_URL}/user/followers `,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
+   //FOLLOWING
+   const [followingData, setFollowingData] = useState([]);
+   const getUserfollowing = async () => {
+     console.log('user_id', user_id);
+     try {
+       const response = await fetch(
+         `${process.env.REACT_APP_REQ_URL}/user/following/${userID}`,
+         {
+           method: 'GET',
+           headers: {
+             'Content-Type': 'application/json',
             },
           }
-        );
-        const data = await response.json();
-        console.log('getUserfollowers data', data);
-
-        if (!response) {
-          console.error('Failed fetch recipe for profile');
-        } else {
-          setFollowerData(data);
-        }
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-
-    // getUserfollowers()
-  }, [user_id]);
-
-  //FOLLOWING
-  const [followingData, setFollowingData] = useState([]);
-  useEffect(() => {
-    const getUserfollowing = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_REQ_URL}/user/following`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+          );
+          const data = await response.json();
+          
+          if (!response) {
+            console.error('Failed fetch recipe for profile');
+          } else {
+            setFollowingData(data);
+            
+            for (let i = 0; i < data.users.length; i++) {
+              console.log("data.users[i].id" , data.users[i].id);
+              if (user_id == data.users[i].id){
+                  console.log('following user!');
+                  setFollowingUser(true);
+                }
+              }
+              console.log('data in profile: ', JSON.stringify(data));
+            }
+          } catch (err) {
+            console.log(err.message);
           }
-        );
-        const data = await response.json();
-        console.log('following data', data);
-
-        if (!response) {
-          console.error('Failed fetch recipe for profile');
-        } else {
-          setFollowingData(data);
-        }
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-
-    // getUserfollowing()
-  }, [user_id]);
-
+        };
+      useEffect(() => {
+        getUserfollowing()
+      }, [user_id]);
+      
+      //  console.log("followingData" ,followingData);
+  
   // need to make an if for if the user is following show unFOLLOW
   return (
     <>
@@ -204,16 +169,17 @@ function ProfileCard({ showDetails, userDetails: { user_id } }) {
           </div>
 
           {/* if true we dont want the follow button */}
-          {sameUser ? null : (
-            <div className="d-flex justify-content-center mt-2">
-              <Button variant="contained" onClick={handleFollowUser}>
-                Follow
-              </Button>
-            </div>
-          )}
-
-          {/* </> */}
-          {/* ) : null} */}
+          {sameUser 
+              ? null 
+              : (
+                <div className="d-flex justify-content-center mt-2">
+                    {followingUser 
+                      ?<Button variant="contained" onClick={handleFollowUser} style={{ backgroundColor: 'red', color: 'white' }}>Unfollow</Button>
+                      : <Button variant="contained" onClick={handleFollowUser}>Follow</Button>
+                    }
+                </div>
+              )
+          }
         </CardContent>
       </Card>
       <ToastContainer />

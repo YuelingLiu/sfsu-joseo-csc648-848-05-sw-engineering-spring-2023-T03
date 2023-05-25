@@ -40,8 +40,8 @@ const s3 = new S3({
   region: process.env.AWS_DEFAULT_REGION,
 });
 
-router.get('/followers', async (req, res) => {
-  const userID = req.body.userID;
+router.get('/followers/:ID', async (req, res) => {
+  const userID = req.params.ID;
   if (!userID) {
     res.status(400).json({ error: 'Missing user ID.' });
     return;
@@ -56,8 +56,10 @@ router.get('/followers', async (req, res) => {
     });
 });
 
-router.get('/following', async (req, res) => {
-  const userID = req.body.userID;
+router.get('/following/:ID', async (req, res) => {
+  const userID = req.params.ID;
+  console.log("in route: ", userID);
+
   if (!userID) {
     res.status(400).json({ error: 'Missing user ID.' });
     return;

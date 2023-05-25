@@ -44,7 +44,6 @@ const RecipeDetailPage = (props) => {
 
   // all for comments
   const postId = props.match.params.postId;
-  console.log('chekcing whast is postIDi n recipeDetailPage,', postId);
   const { token } = useContext(AuthContext);
   const [Comments, setComments] = useState([]);
   //fetching comments
