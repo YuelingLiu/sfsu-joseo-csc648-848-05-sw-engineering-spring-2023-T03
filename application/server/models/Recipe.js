@@ -67,34 +67,65 @@ class Recipe {
     return await knex('recipes').where({ id }).delete();
   }
 
-  static async search(query) {
-    const searchQuery = `
-    WITH search_result AS (
-      SELECT DISTINCT r."id" AS recipe_id, r."title" AS recipe_title, r."description" AS recipe_description, r."created_at" AS recipe_CreateAt, u."username" AS userName
-      FROM public.recipes r
-      JOIN public.users u ON r."user_id" = u."id"
-      LEFT JOIN public.categories_to_recipe ctr ON r."id" = ctr."recipe_id"
-      LEFT JOIN public.categories c ON ctr."category_id" = c."id"
-      LEFT JOIN public.comments cm ON r."id" = cm."recipe_id"
-      LEFT JOIN public.ingredients i ON r."id" = i."recipe_id"
-      LEFT JOIN public.instructions ins ON r."id" = ins."recipe_id"
-      LEFT JOIN public.ratings rt ON r."id" = rt."recipe_id"
-      WHERE (
-          r.title ILIKE '%${query}%' 
-          OR r.description ILIKE '%${query}%' 
-          OR c.category ILIKE '%${query}%' 
-          OR u.username ILIKE '%${query}%' 
-          OR cm.comment ILIKE '%${query}%' 
-          OR i.ingredient ILIKE '%${query}%' 
-          OR ins.instruction ILIKE '%${query}%'
-      )
+//   static async search(query) {
+//     const searchQuery = `
+//     WITH search_result AS (
+//       SELECT DISTINCT r."id" AS recipe_id, r."title" AS recipe_title, r."description" AS recipe_description, r."created_at" AS recipe_CreateAt, u."username" AS userName
+//       FROM public.recipes r
+//       JOIN public.users u ON r."user_id" = u."id"
+//       LEFT JOIN public.categories_to_recipe ctr ON r."id" = ctr."recipe_id"
+//       LEFT JOIN public.categories c ON ctr."category_id" = c."id"
+//       LEFT JOIN public.comments cm ON r."id" = cm."recipe_id"
+//       LEFT JOIN public.ingredients i ON r."id" = i."recipe_id"
+//       LEFT JOIN public.instructions ins ON r."id" = ins."recipe_id"
+//       LEFT JOIN public.ratings rt ON r."id" = rt."recipe_id"
+//       WHERE (
+//           r.title ILIKE '%${query}%' 
+//           OR r.description ILIKE '%${query}%' 
+//           OR c.category ILIKE '%${query}%' 
+//           OR u.username ILIKE '%${query}%' 
+//           OR cm.comment ILIKE '%${query}%' 
+//           OR i.ingredient ILIKE '%${query}%' 
+//           OR ins.instruction ILIKE '%${query}%'
+//       )
+//     )
+//     SELECT * FROM search_result
+//     ORDER BY recipe_id ASC;
+// `;
+//     const { rows } = await client.query(searchQuery);
+//     return rows;
+//   }
+static async search(query) {
+  const searchQuery = `
+  WITH search_result AS (
+    SELECT DISTINCT r."id" AS recipe_id, r."title" AS recipe_title, r."description" AS recipe_description, r."created_at" AS recipe_CreateAt, u."username" AS userName, r."photo_url" AS recipe_photo_url, u."profile_picture" AS user_profile_picture
+    FROM public.recipes r
+    JOIN public.users u ON r."user_id" = u."id"
+    LEFT JOIN public.categories_to_recipe ctr ON r."id" = ctr."recipe_id"
+    LEFT JOIN public.categories c ON ctr."category_id" = c."id"
+    LEFT JOIN public.comments cm ON r."id" = cm."recipe_id"
+    LEFT JOIN public.ingredients i ON r."id" = i."recipe_id"
+    LEFT JOIN public.instructions ins ON r."id" = ins."recipe_id"
+    LEFT JOIN public.ratings rt ON r."id" = rt."recipe_id"
+    WHERE (
+        r.title ILIKE '%${query}%' 
+        OR r.description ILIKE '%${query}%' 
+        OR c.category ILIKE '%${query}%' 
+        OR u.username ILIKE '%${query}%' 
+        OR cm.comment ILIKE '%${query}%' 
+        OR i.ingredient ILIKE '%${query}%' 
+        OR ins.instruction ILIKE '%${query}%'
     )
-    SELECT * FROM search_result
-    ORDER BY recipe_id ASC;
+  )
+  SELECT * FROM search_result
+  ORDER BY recipe_id ASC;
 `;
-    const { rows } = await client.query(searchQuery);
-    return rows;
-  }
+  const { rows } = await client.query(searchQuery);
+  return rows;
+}
+
+
+
 
   static async rate(userID, recipeID, rating){
     return await knex('ratings').insert({user_id: userID, recipe_id: recipeID, rating: rating}).returning('*');

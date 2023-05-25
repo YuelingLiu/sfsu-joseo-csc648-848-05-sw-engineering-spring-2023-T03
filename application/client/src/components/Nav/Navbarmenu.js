@@ -104,6 +104,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function Navbar() {
   let name = localStorage.getItem('name');
+  let userId = localStorage.getItem('userId');
   // for drop downs
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -264,7 +265,7 @@ function Navbar() {
                               </ListItem>
                             </Link>
 
-                            <Link
+                            {/* <Link
                               to="/categories"
                               style={{ textDecoration: 'none' }}
                               onClick={handleCloseNavMenu}
@@ -277,9 +278,8 @@ function Navbar() {
                                   <ListItemText primary="Categories" />
                                 </ListItemButton>
                               </ListItem>
-                            </Link>
-
-                            <Link
+                            </Link> */}
+                            {/* <Link
                               to="/top-rated"
                               style={{ textDecoration: 'none' }}
                               onClick={handleCloseNavMenu}
@@ -292,14 +292,14 @@ function Navbar() {
                                   <ListItemText primary="Top Rated" />
                                 </ListItemButton>
                               </ListItem>
-                            </Link>
+                            </Link> */}
                           </List>
                         </nav>
                       </Box>
                     </>
                   ) : (
                     <>
-                      <Box
+                      {/* <Box
                         sx={{
                           width: '100%',
                           maxWidth: 360,
@@ -324,7 +324,7 @@ function Navbar() {
                               </ListItem>
                             </Link>
 
-                            <Link
+                             <Link
                               to="/top-rated"
                               style={{ textDecoration: 'none' }}
                               onClick={handleCloseNavMenu}
@@ -337,10 +337,10 @@ function Navbar() {
                                   <ListItemText primary="Top Rated" />
                                 </ListItemButton>
                               </ListItem>
-                            </Link>
+                            </Link> 
                           </List>
                         </nav>
-                      </Box>
+                      </Box> */}
                     </>
                   )}
                 </Menu>
@@ -371,20 +371,20 @@ function Navbar() {
                 {loggedIn ? (
                   <>
                     <Toolbar>
-                      <Button
+                      {/* <Button
                         sx={{ my: 2, color: 'black', display: 'block' }}
                         onClick={handleCategoryMenu}
                       >
                         Categories
                         <KeyboardArrowDownIcon />
                       </Button>
-                      <Link to="/top-rated" style={{ textDecoration: 'none' }}>
+                     <Link to="/top-rated" style={{ textDecoration: 'none' }}>
                         <Button
                           sx={{ my: 2, color: 'black', display: 'block' }}
                         >
                           Top Rated
                         </Button>
-                      </Link>
+                      </Link>  */}
                       <Link
                         to="/post-recipe"
                         style={{ textDecoration: 'none' }}
@@ -492,7 +492,7 @@ function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Toolbar>
+                    {/* <Toolbar>
                       <Button
                         sx={{ my: 2, color: 'black', display: 'block' }}
                         onClick={handleCategoryMenu}
@@ -506,10 +506,10 @@ function Navbar() {
                         >
                           Top Rated
                         </Button>
-                      </Link>
-                    </Toolbar>
+                      </Link> 
+                    </Toolbar> */}
 
-                    <Menu
+                    {/* <Menu
                       sx={{ mt: '45px' }}
                       id="menu-appbar"
                       anchorEl={anchorElCategory}
@@ -599,7 +599,7 @@ function Navbar() {
                           </Container1>
                         </Box>
                       </>
-                    </Menu>
+                    </Menu> */}
                   </>
                 )}
               </Box>
@@ -670,7 +670,7 @@ function Navbar() {
                               </ListItem>
                             </Link>
                             <Link
-                              to="/following/1"
+                              to={`/following/${userId}`}
                               style={{ textDecoration: 'none' }}
                               onClick={handleCloseUserMenu}
                             >
@@ -863,7 +863,7 @@ function Navbar() {
                                 </ListItem>
                               </Link>
 
-                              <Link
+                              {/* <Link
                                 to="/categories"
                                 style={{ textDecoration: 'none' }}
                                 onClick={handleCloseNavMenu}
@@ -876,9 +876,9 @@ function Navbar() {
                                     <ListItemText primary="Categories" />
                                   </ListItemButton>
                                 </ListItem>
-                              </Link>
+                              </Link> */}
 
-                              <Link
+                              {/* <Link
                                 to="/top-rated"
                                 style={{ textDecoration: 'none' }}
                                 onClick={handleCloseNavMenu}
@@ -891,7 +891,7 @@ function Navbar() {
                                     <ListItemText primary="Top Rated" />
                                   </ListItemButton>
                                 </ListItem>
-                              </Link>
+                              </Link> */}
                             </List>
                           </nav>
                         </Box>
@@ -906,7 +906,7 @@ function Navbar() {
                             bgcolor: 'background.paper',
                           }}
                         >
-                          <nav aria-label="main mailbox folders">
+                          {/* <nav aria-label="main mailbox folders">
                             <List>
                               <Link
                                 to="/categories"
@@ -936,9 +936,9 @@ function Navbar() {
                                     <ListItemText primary="Top Rated" />
                                   </ListItemButton>
                                 </ListItem>
-                              </Link>
+                              </Link> 
                             </List>
-                          </nav>
+                          </nav> */}
                         </Box>
                       </>
                     )}
@@ -970,14 +970,14 @@ function Navbar() {
                   {loggedIn ? (
                     <>
                       <Toolbar>
-                        <Button
+                        {/* <Button
                           sx={{ my: 2, color: 'black', display: 'block' }}
                           onClick={handleCategoryMenu}
                         >
                           Categories
                           <KeyboardArrowDownIcon />
-                        </Button>
-                        <Link
+                        </Button> */}
+                        {/* <Link
                           to="/top-rated"
                           style={{ textDecoration: 'none' }}
                         >
@@ -986,7 +986,7 @@ function Navbar() {
                           >
                             Top Rated
                           </Button>
-                        </Link>
+                        </Link> */}
                         <Link
                           to="/post-recipe"
                           style={{ textDecoration: 'none' }}
@@ -1093,14 +1093,14 @@ function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Toolbar>
+                      {/* <Toolbar>
                         <Button
                           sx={{ my: 2, color: 'black', display: 'block' }}
                           onClick={handleCategoryMenu}
                         >
                           Categories
                           <KeyboardArrowDownIcon />
-                        </Button>
+                        </Button> 
                         <Link
                           to="/top-rated"
                           style={{ textDecoration: 'none' }}
@@ -1110,7 +1110,7 @@ function Navbar() {
                           >
                             Top Rated
                           </Button>
-                        </Link>
+                        </Link> 
                       </Toolbar>
 
                       <Menu
@@ -1203,7 +1203,7 @@ function Navbar() {
                             </Container1>
                           </Box>
                         </>
-                      </Menu>
+                      </Menu> */}
                     </>
                   )}
                 </Box>
@@ -1275,7 +1275,7 @@ function Navbar() {
                               </Link>
 
                               <Link
-                                to="/following"
+                                to={`/following/${userId}`}
                                 style={{ textDecoration: 'none' }}
                                 onClick={handleCloseUserMenu}
                               >

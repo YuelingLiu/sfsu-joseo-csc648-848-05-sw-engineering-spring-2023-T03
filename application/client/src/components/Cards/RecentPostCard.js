@@ -18,20 +18,18 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import { useMediaQuery } from '@mui/material';
 
-function RecentPostCard({ result, onClick, userIDs, setCount }) {
+function RecentPostCard({ result, onClick, userIDs}) {
   const history = useHistory();
-  // let name = localStorage.getItem('name');
   const [value, setValue] = React.useState(2);
   const [favorite, setFavorite] = React.useState(false);
-  // for same user checking
-  const [sameUser, setSameUser] = useState(false);
 
-  const userId = localStorage.getItem('userId');
   const [userNameRecent, setUsernameRecent] = useState('');
   const [userImg, setUserImg] = useState('');
+  const loggedInUserID = localStorage.getItem('userId')
 
+  // for getting user info
   useEffect(() => {
-    console.log('this is userID ', userIDs);
+    // console.log('this is userID ', userIDs);
     const fetchUserName = async () => {
       // const userId = localStorage.getItem('userId');
       const response = await fetch(
@@ -41,8 +39,8 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
         console.log('Failed to fetch user');
       } else {
         const user = await response.json();
-        console.log('on recent card', user.username);
-        console.log('on recent card, ', user.profile_picture);
+        // console.log('on recent card', user.username);
+        // console.log('on recent card, ', user.profile_picture);
         setUsernameRecent(user.username);
         setUserImg(user.profile_picture);
       }
@@ -52,9 +50,118 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
 
   const FavoriteToTrue = () => {
     setFavorite(true);
+    handleSaveRecipe();
   };
   const FavoriteToFalse = () => {
     setFavorite(false);
+    handleDeletePost();
+  };
+
+ // check if recipe is already in users favorites
+   const checkIfInFavorites = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${loggedInUserID}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response) {
+        console.log('bad response in get favorites.');
+      }
+
+      // checks to see if recipe is already in favorites 
+      // turns Heart red if in favorites
+      for (let i = 0; i < data.savedRecipes.length; i++) {
+        for (let j = 0; j < data.savedRecipes[i].recipe.length; j++) {
+          if (result.recipe.id == data.savedRecipes[i].recipe[j].id){
+            console.log('same post');
+            setFavorite(true);
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+  useEffect(() => {
+    checkIfInFavorites();
+  }, []);
+
+
+  // handle delete on favorite
+  const handleDeletePost = async () => {
+    console.log('triggered delete from favorites button');
+    let theRecipeId = result.recipe.id;
+    console.log('theRecipeId: ',theRecipeId);
+    console.log("userIDs", userIDs);
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${loggedInUserID}/${theRecipeId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        toast.success('Removed recipe from favorites successfully 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+
+        console.log('recipe deleted from favorites successfully');
+      } else {
+        toast.error('Failed to delete the recipe from favorites!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.error('Failed to delete the recipe from favorites');
+      }
+    } catch (error) {
+      console.error(
+        'Error occurred while deleting the post from favorites:',
+        error
+      );
+    }
+  };
+
+  // save recipe
+  const handleSaveRecipe = async () => {
+    try {
+      let theRecipeId = result.recipe.id;
+      // Make an HTTP POST request to the save recipe route
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${theRecipeId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userID: loggedInUserID }),
+        }
+      );
+      const savedRecipe = await response.json();
+      console.log('this is savedRecipe: ', savedRecipe);
+      
+      if (response.ok) {
+        console.log('Recipe saved!');
+        toast.success('Yay! You saved this recipe! 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      } else {
+        // Error saving the recipe
+        console.log('Failed to save the recipe.');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   // for description
@@ -70,7 +177,7 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
     <>
       <Card
         style={{
-          width: '33rem',
+          width: '45rem',
           margin: '20px 20px 15px 22px',
           padding: '0px',
         }}
@@ -107,7 +214,7 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToFalse}>
+                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToFalse}>
                       <FavoriteIcon
                         className="float-start"
                         style={{
@@ -117,29 +224,12 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
                         }}
                         color="error"
                       />{' '}
-                      4
+                      
                     </div>
-                    {/* {sameUser && (
-                      <Button
-                        variant="dark"
-                        style={{
-                          backgroundColor: 'transparent',
-                          borderColor: 'transparent',
-                          color: 'hsl(0, 83%, 39%)',
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        // onClick={handleDeletePost(result.recipe_id)}
-                        onClick={() => handleDeletePost(result.recipe.title)}
-                      >
-                        <FaTrash />
-                      </Button>
-                    )} */}
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToTrue}>
+                    <div style={{cursor: 'pointer'}} onClick={FavoriteToTrue}>
                       <FavoriteBorderIcon
                         className="float-start"
                         style={{
@@ -149,7 +239,7 @@ function RecentPostCard({ result, onClick, userIDs, setCount }) {
                         }}
                         color="error"
                       />{' '}
-                      3
+                      
                     </div>
                   </div>
                 )}

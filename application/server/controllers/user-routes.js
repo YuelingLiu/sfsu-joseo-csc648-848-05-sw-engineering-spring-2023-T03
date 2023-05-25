@@ -1,32 +1,32 @@
-const router = require("express").Router();
-const jwt = require("jsonwebtoken");
+const router = require('express').Router();
+const jwt = require('jsonwebtoken');
 
 // Amazon stuff
-const { Upload } = require("@aws-sdk/lib-storage"),
-{ S3 } = require("@aws-sdk/client-s3");
-const { v4: uuidv4 } = require("uuid");
-const { client } = require("../db/db");
+const { Upload } = require('@aws-sdk/lib-storage'),
+  { S3 } = require('@aws-sdk/client-s3');
+const { v4: uuidv4 } = require('uuid');
+const { client } = require('../db/db');
 const bodyParser = require('body-parser');
 
 // MODELS
-const User = require("../models/User");
+const User = require('../models/User');
 const Comment = require('../models/Comment'); // Make sure to import the Comment model with the correct path
 
 // Use body-parser middleware to parse JSON request bodies
 router.use(bodyParser.json());
 // password hashing
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 // image storing
-const multer = require("multer");
-const path = require("path");
-const { route } = require("./recipe-routes");
+const multer = require('multer');
+const path = require('path');
+const { route } = require('./recipe-routes');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./uploads/");
+    cb(null, './uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    cb(null, Date.now() + '-' + file.originalname);
   },
 });
 // Initialize Multer with the storage options
@@ -37,15 +37,13 @@ const upload = multer({ storage: multer.memoryStorage() });
 const s3 = new S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_DEFAULT_REGION
+  region: process.env.AWS_DEFAULT_REGION,
 });
 
-
-
-router.get("/followers", async (req, res) => {
-  const userID = req.body.userID;
-    if (!userID) {
-    res.status(400).json({ error: "Missing user ID." });
+router.get('/followers/:ID', async (req, res) => {
+  const userID = req.params.ID;
+  if (!userID) {
+    res.status(400).json({ error: 'Missing user ID.' });
     return;
   }
 
@@ -58,10 +56,12 @@ router.get("/followers", async (req, res) => {
     });
 });
 
-router.get("/following", async (req, res) => {
-  const userID = req.body.userID;
-    if (!userID) {
-    res.status(400).json({ error: "Missing user ID." });
+router.get('/following/:ID', async (req, res) => {
+  const userID = req.params.ID;
+  console.log("in route: ", userID);
+
+  if (!userID) {
+    res.status(400).json({ error: 'Missing user ID.' });
     return;
   }
 
@@ -75,7 +75,7 @@ router.get("/following", async (req, res) => {
 });
 
 // register route
-router.post("/register", upload.single("profile_picture"), async (req, res) => {
+router.post('/register', upload.single('profile_picture'), async (req, res) => {
   try {
     var newUser;
 
@@ -93,7 +93,7 @@ router.post("/register", upload.single("profile_picture"), async (req, res) => {
       console.log('user existed');
       return res
         .status(409)
-        .json({ message: "A user with this email already exists" });
+        .json({ message: 'A user with this email already exists' });
     }
 
     if (!usernameRegex.test(username)) {
@@ -125,9 +125,9 @@ router.post("/register", upload.single("profile_picture"), async (req, res) => {
       const file = req.file;
       const uploadParams = {
         Bucket: process.env.AWS_BUCKET_NAME,
-        Key: uuidv4() + "-" + file.originalname,
+        Key: uuidv4() + '-' + file.originalname,
         Body: file.buffer,
-        ContentEncoding: "base64",
+        ContentEncoding: 'base64',
         ContentType: file.mimetype,
       };
       const imgURL = (
@@ -142,32 +142,30 @@ router.post("/register", upload.single("profile_picture"), async (req, res) => {
         password: hashedPassword,
         profile_picture: imgURL,
       });
-    } else{
+    } else {
       newUser = await User.create({
         username: username,
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
       });
-
     }
     res
       .status(201)
-      .json({ message: "User created successfully", user: newUser });
+      .json({ message: 'User created successfully', user: newUser });
 
     // res.redirect("/");
-
   } catch (err) {
     console.error(err);
     console.log(err.message);
     res.status(500).json({
-      message: "An error occurred during register.",
+      message: 'An error occurred during register.',
       error: err.message,
     });
   }
 });
 
 // login route
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     // take inputs
     const email = req.body.email;
@@ -176,7 +174,7 @@ router.post("/login", async (req, res) => {
     // check if email is in db
     const dbUserData = await User.getByEmail(email);
     if (!dbUserData) {
-      res.status(400).json({ message: "No user with that email address!" });
+      res.status(400).json({ message: 'No user with that email address!' });
       return;
     }
 
@@ -184,7 +182,7 @@ router.post("/login", async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, dbUserData.password);
 
     if (!passwordMatch) {
-      res.status(400).json({ message: "Incorrect password!" });
+      res.status(400).json({ message: 'Incorrect password!' });
       return;
     }
 
@@ -197,26 +195,25 @@ router.post("/login", async (req, res) => {
         {
           userId: dbUserData.id,
         },
-          process.env.JWT_SECRET,
+        process.env.JWT_SECRET,
         {
-          expiresIn: "24h",
+          expiresIn: '24h',
         }
       );
 
       res.json({
         success: true,
-        message: "Authentication successful!",
+        message: 'Authentication successful!',
         token,
         name,
-        user: dbUserData
+        user: dbUserData,
       });
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ message: "An error occurred during login." });
+    res.status(500).json({ message: 'An error occurred during login.' });
   }
 });
-
 
 // Comments
 router.post('/post/:postId/comment', async (req, res) => {
@@ -225,11 +222,11 @@ router.post('/post/:postId/comment', async (req, res) => {
     console.log('req.body:', req.body);
 
     const postId = req.params.postId;
-    console.log("this is postID: " + postId);
+    console.log('this is postID: ' + postId);
 
     // Verify and decode the JWT token to get the user ID
     const { userId } = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("this is userID: " + userId);
+    console.log('this is userID: ' + userId);
 
     // Create the comment
     const commentData = {
@@ -253,7 +250,6 @@ router.post('/post/:postId/comment', async (req, res) => {
   }
 });
 
-
 router.get('/post/:postId/comments', async (req, res) => {
   try {
     const postId = req.params.postId;
@@ -262,82 +258,134 @@ router.get('/post/:postId/comments', async (req, res) => {
     const comments = await Comment.getCommentsForRecipe(postId);
     // console.log(JSON.stringify(comments));
 
-    res.status(201).json({ 
+    res.status(201).json({
       status: 'success',
-      data: comments 
+      data: comments,
     });
   } catch (err) {
-    console.log(err.message)
-    res.status(500).json({ error: 'An error occurred while fetching comments.' });
+    console.log(err.message);
+    res
+      .status(500)
+      .json({ error: 'An error occurred while fetching comments.' });
   }
 });
 
+router.delete('/post/comment/:commentId', async (req, res) => {
+  try {
+    const commentId = req.params.commentId;
+
+    // Delete the comment
+    const deletedComment = await Comment.delete(commentId);
+    
+    // If the delete method doesn't throw an error but doesn't return a truthy value,
+    // it means the comment was not found
+    if (!deletedComment) {
+      return res.status(404).json({
+        status: 'failure',
+        message: 'Comment not found',
+      });
+    }
+    
+    console.log('Comment deleted');
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Comment deleted successfully',
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      status: 'failure',
+      message: 'An error occurred while deleting the comment',
+    });
+  }
+});
+
+
 router.post('/follow/:followID', async (req, res) => {
-  try{
+  try {
     console.log('in follow');
     const follows = await User.follow(req.body.userID, req.params.followID);
-    res.status(201).json({follows});
-  } catch(err){
-    console.log(err.message)
+    res.status(201).json({ follows });
+  } catch (err) {
+    console.log(err.message);
   }
-})
+});
 
 router.delete('/unfollow/:followID', async (req, res) => {
-  try{
-    const unfollowed = await User.unfollow(req.body.userID, req.params.followID);
-    res.status(200).json({unfollowed})
-  } catch(err){
-    console.log(err.message)
+  try {
+    const unfollowed = await User.unfollow(
+      req.body.userID,
+      req.params.followID
+    );
+    res.status(200).json({ unfollowed });
+  } catch (err) {
+    console.log(err.message);
   }
-})
+});
 
-router.post('/save/recipe/:id', async(req, res) =>{
-  try{
+router.post('/save/recipe/:id', async (req, res) => {
+  console.log('in route req.body.userID: ', req.body.userID);
+  console.log('in route req.params.id: ', req.params.id);
+  try {
     const savedRecipe = await User.saveRecipe(req.body.userID, req.params.id);
-    res.status(201).json({savedRecipe})
-  }catch(err){
-    console.log(err.message)
+    res.status(201).json({ savedRecipe });
+  } catch (err) {
+    console.log(err.message);
   }
-})
+});
 
-router.get('/savedrecipes', async(req, res) => {
-  try{
-    const savedRecipes = await User.getSavedRecipes(req.body.userID);
-    res.status(400).json({savedRecipes})
-  }catch(err){
-    console.log(err.message)
+router.get('/saved-recipes/:userID', async (req, res) => {
+  try {
+    console.log('req.body.userID', req.params.userID);
+    const savedRecipes = await User.getSavedRecipes(req.params.userID);
+    console.log('in saved recipe...', { savedRecipes });
+    res.status(200).json({ savedRecipes });
+  } catch (err) {
+    console.log(err.message);
   }
-})
+});
 
+router.delete('/saved-recipes/:userId/:recipeId', async (req, res) => {
+  try {
+      const { userId, recipeId } = req.params;
+      console.log('userId route: ', userId);
+      console.log('recipeId route: ', recipeId);
+      
+      await User.removeSavedRecipe(userId, recipeId);
+      res.status(200).json({ message: 'Recipe removed from favorites' });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
 
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.getById(req.params.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
     return res.status(200).json(user);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "An error occurred while fetching the user" });
+    return res
+      .status(500)
+      .json({ message: 'An error occurred while fetching the user' });
   }
 });
 
 router.get('username/:username', async (req, res) => {
-  try{
+  try {
     const user = await User.getByUsername(req.params.username);
     if (!user) {
-      res.status(404).json({message: 'User not found'});
+      res.status(404).json({ message: 'User not found' });
     } else {
       res.status(200).json(user);
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err);
-    res.status(500).json({message: 'Server error'});
+    res.status(500).json({ message: 'Server error' });
   }
 });
-
-
-
 
 module.exports = router;

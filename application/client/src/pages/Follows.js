@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { spacing } from '@mui/system';
 
 import UserFollowsCard from "../components/Cards/UserFollowsCard";
-
+import ProfileCard from '../components/ProfileCard/ProfileCard';
 // import components
 
 
@@ -21,38 +21,27 @@ function Follows() {
     useEffect(() => {
         const fetchResults = async () => {
           try {
-            const followersRes = await fetch(`${process.env.REACT_APP_REQ_URL}/user/followers?id=${userID}`);
-            const followingRes = await fetch(`${process.env.REACT_APP_REQ_URL}/user/following?id=${userID}`);
+            const followersRes = await fetch(`${process.env.REACT_APP_REQ_URL}/user/followers/${userID}`);
+            const followingRes = await fetch(`${process.env.REACT_APP_REQ_URL}/user/following/${userID}`);
+
             const followersData = await followersRes.json();
             const followingData = await followingRes.json();
     
-            if (followersRes.ok && followingRes.ok) {
-            //   console.log("response" + response.json);
-              setFollowersRes(followersData);
-              setFollowingRes(followingData);
-              setGottenData(true);
-            } else {
-              
-            }
+            if (followingRes.ok && followingRes.ok) {
+                setFollowingRes(followingData);
+                setFollowersRes(followersData);
+                console.log("followersData " +JSON.stringify(followingData.users));
+                setGottenData(true);
+              } else {
+                console.log('bad request');
+              }
           } catch (err) {
-            console.error(err);
+            console.error(err.message);
           }
         };
     
         fetchResults();
       }, [userID]);
-
-      function createFollowingCards(){
-        return followingRes.users.map((user) => {
-            return <UserFollowsCard/>
-        })
-      }
-
-      function createFollowersCards(){
-        return followersRes.users.map((user) => {
-            return <UserFollowsCard/>
-        })
-      }
 
       function TabPanel(props) {
         const { children, value, index, ...other } = props;
@@ -88,20 +77,39 @@ function Follows() {
   return (
     <>
       <Box>
-        <UserFollowsCard/>
+        {/* <UserFollowsCard/> */}
+        {/* <ProfileCard /> */}
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-around'}}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Followers" {...a11yProps(0)} />
               <Tab label="Following" {...a11yProps(1)} />
+              <Tab label="Followers" {...a11yProps(0)} />
             </Tabs>
           </Box>
           <Box sx={{ ml: '20%', mr: '20%'}}>
-            <TabPanel value={value} index={0}>
-              {gottenData?createFollowersCards(): <h6>loading</h6> }
-            </TabPanel>
             <TabPanel value={value} index={1}>
-              {gottenData?createFollowingCards(): <h6>loading</h6>}
+              {/* followers */}
+              {followersRes ?
+                  <>
+                    <UserFollowsCard data={followersRes}/>
+                  </>
+                : 
+                  <>
+                    <h4>You are not following any users.</h4>
+                  </>
+              }
+            </TabPanel>
+            <TabPanel value={value} index={0}>
+              {/* following */}
+              {followingRes ?
+                  <>
+                    <UserFollowsCard data={followingRes}/>
+                  </>
+                : 
+                  <>
+                    <h4>You are not following any users.</h4>
+                  </>
+              }
             </TabPanel>
           </Box>
         </Box>

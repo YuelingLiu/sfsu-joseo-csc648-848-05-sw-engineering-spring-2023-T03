@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 import ProfileCard from '../components/ProfileCard/ProfileCard';
 import { AuthContext } from '../AuthContext';
@@ -8,6 +9,7 @@ import CommentForm from '../components/Comments/CommentForm';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/esm/Button';
 
 // MUI
 import Box from '@mui/material/Box';
@@ -15,7 +17,7 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-const PostDetailsPage = (props) => {
+const RecipeDetailPage = (props) => {
   // for dummy star rating
   const [value, setValue] = React.useState(2);
   // login status
@@ -23,15 +25,21 @@ const PostDetailsPage = (props) => {
   const [recipeDetails, setRecipeDetails] = useState({});
   const [instructionDetails, setInstructionDetails] = useState([]);
   const [ingredientsDetails, setIngredientsDetails] = useState([]);
+  const [savedRecipes, setSaveRecipes] = useState([]);
   const [recipeImg, setRecipeImg] = useState('image7');
+  // const [isSavedRecipe, setIsSavedRecipe] = useState(false);
+  let userID = localStorage.getItem('userId');
+  userID = parseInt(userID, 10); // convert to integer then we can do comparisoon
 
   // for clickable favorite heart button
   const [favorite, setFavorite] = React.useState(false);
   const FavoriteToTrue = () => {
     setFavorite(true);
+    handleSaveRecipe();
   };
   const FavoriteToFalse = () => {
     setFavorite(false);
+    handleDeletePost();
   };
 
   // all for comments
@@ -70,6 +78,44 @@ const PostDetailsPage = (props) => {
     fetchComments();
   }, [fetchComments]);
 
+  // delete comment
+  const handleCommentDeleted = () => {
+    fetchComments();
+  };
+
+  // save recipe
+  const handleSaveRecipe = async () => {
+    try {
+      console.log('in try');
+      console.log('this is postID: ', postId);
+      // Make an HTTP POST request to the save recipe route
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/save/recipe/${postId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userID: userID }),
+        }
+      );
+      const savedRecipe = await response.json();
+      console.log('this is savedRecipe: ', savedRecipe);
+      
+      if (response.ok) {
+        console.log('Recipe saved!');
+        toast.success('Yay! You saved this recipe! 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      } else {
+        // Error saving the recipe
+        console.log('Failed to save the recipe.');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   //fetching Recipe details
   const getRecipeDetails = async () => {
     try {
@@ -87,11 +133,7 @@ const PostDetailsPage = (props) => {
 
       if (response.ok) {
         console.log('recipe details okay');
-        console.log(JSON.stringify(data));
-        console.log(
-          'checking what is user id in post detials page,',
-          data.recipe.user_id
-        );
+        
         setRecipeDetails(data.recipe);
         console.log(
           'checking recipe details now ',
@@ -102,8 +144,6 @@ const PostDetailsPage = (props) => {
 
         if (data.recipe.photo_url) {
           setRecipeImg(data.recipe.photo_url);
-        } else {
-          setRecipeImg('image7.png');
         }
       } else {
         console.log('response was not okay');
@@ -117,12 +157,53 @@ const PostDetailsPage = (props) => {
   };
   useEffect(() => {
     getRecipeDetails();
-  }, [postId]);
+  }, []);
   // using sepearate single dependency array
+  // useEffect(() => {
+  //   console.log('recipe details have been updated:', recipeDetails);
+  //   // Perform actions that rely on updated recipeDetails here
+  // }, [recipeDetails]);
+
+  // check if recipe is already in users favorites
+  const checkIfInFavorites = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response) {
+        console.log('bad response in get favorites.');
+      }
+
+      // checks to see if recipe is already in favorites 
+      // turns Heart red if in favorites
+      for (let i = 0; i < data.savedRecipes.length; i++) {
+        console.log('here is data in data.savedRecipes[i]: ', data.savedRecipes[i]);
+        for (let j = 0; j < data.savedRecipes[i].recipe.length; j++) {
+          if (postId == data.savedRecipes[i].recipe[j].id){
+            console.log('same post');
+            setFavorite(true);
+          }
+          console.log("in for loop postID: " + postId);
+          console.log('here is data in data.savedRecipes[i].recipe[j]: ', data.savedRecipes[i].recipe[j].id);
+        }
+    }
+    
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   useEffect(() => {
-    console.log('recipe details have been updated:', recipeDetails);
-    // Perform actions that rely on updated recipeDetails here
-  }, [recipeDetails]);
+    checkIfInFavorites();
+  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -141,6 +222,42 @@ const PostDetailsPage = (props) => {
   }
   const formattedTime = convertToHoursAndMinutes(recipeDetails.cooking_time);
 
+  // handle delete of favorite
+  const handleDeletePost = async (recipeID) => {
+    console.log('triggered delete from favorites button');
+    let theRecipeId = recipeDetails.id;
+    
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/saved-recipes/${userID}/${theRecipeId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.ok) {
+        toast.success('Removed recipe from favorites successfully 🚀👏', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+
+        console.log('recipe deleted from favorites successfully');
+      } else {
+        toast.error('Failed to delete the recipe from favorites!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.error('Failed to delete the recipe from favorites');
+      }
+    } catch (error) {
+      console.error(
+        'Error occurred while deleting the post from favorites:',
+        error
+      );
+    }
+  };
+  
   return (
     <>
       <Container>
@@ -155,9 +272,34 @@ const PostDetailsPage = (props) => {
               )}
             </Row>
 
+            {/* save isn't working yet */}
+            {/* <Button
+              style={{
+                color: 'white',
+                backgroundColor: 'hsl(0, 83%, 39%)',
+                width: '30%',
+                marginTop: '2px',
+                textTransform: 'uppercase',
+              }}
+              onClick={handleSaveRecipe}
+            >
+              Save to favorites
+            </Button> */}
             {/* detail row */}
             <Row>
               <Col md={7}>
+                {/* description */}
+
+                <h4
+                  style={{
+                    fontWeight: '700',
+                    padding: '10px',
+                  }}
+                >
+                  Description:
+                </h4>
+                <h4>{recipeDetails.description}</h4>
+
                 {/* cooking time */}
                 <div className="d-flex align-items-center">
                   <div className="d-flex align-items-center">
@@ -183,18 +325,11 @@ const PostDetailsPage = (props) => {
                   return (
                     <div key={index}>
                       <p>
-                        - {ingredientDetail.amount}{' '}
-                        {ingredientDetail.ingredient}
+                        {ingredientDetail.amount} {ingredientDetail.ingredient}
                       </p>
                     </div>
                   );
                 })}
-
-                {/* description */}
-                <h4 style={{ fontWeight: '700', padding: '10px' }}>
-                  Description:
-                </h4>
-                <h4>{recipeDetails.description}</h4>
               </Col>
 
               <Col md={5}>
@@ -253,7 +388,6 @@ const PostDetailsPage = (props) => {
                         style={{ marginRight: '5px', fontSize: '2rem' }}
                         color="error"
                       />
-                      <h3 style={{ fontWeight: 'bold' }}>4</h3>
                     </div>
                   </div>
                 ) : (
@@ -267,9 +401,6 @@ const PostDetailsPage = (props) => {
                         style={{ marginRight: '5px', fontSize: '2rem' }}
                         color="error"
                       />
-                      <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}>
-                        3
-                      </h3>
                     </div>
                   </div>
                 )}
@@ -313,17 +444,21 @@ const PostDetailsPage = (props) => {
               {Comments.map((data, index) => (
                 <Comment
                   key={index}
+                  commentId={data.id}
                   author={data.username}
                   date={data.username}
                   text={data.comment}
+                  userID={data.user_id}
+                  onCommentDeleted={handleCommentDeleted}
                 />
               ))}
             </Row>
           </Col>
         </Row>
       </Container>
+      <ToastContainer />
     </>
   );
 };
 
-export default PostDetailsPage;
+export default RecipeDetailPage;

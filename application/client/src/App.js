@@ -9,11 +9,10 @@ import Recipe from './pages/Recipe';
 import PostRecipe from './pages/PostRecipe';
 import Navbar from './components/Nav/Navbarmenu';
 import Search from './pages/Search';
-import PostDetails from './pages/PostDetails';
+import RecipeDetailPage from './pages/RecipeDetailPage';
 import Follows from './pages/Follows';
-import TopRated from './pages/TopRated';
+// import TopRated from './pages/TopRated';
 import Favorites from './pages/Favorites';
-import UserPostDetails from './pages/UserPostDetails';
 
 function App() {
   return (
@@ -25,17 +24,13 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/recipes" component={Recipe} />
-          <Route
-            exact
-            path="/profile/:userID/:postId"
-            component={UserPostDetails}
-          />
+
           <Route exact path="/profile/:userID" component={Profile} />
-          <Route exact path="/post/:postId" component={PostDetails} />
+          <Route exact path="/post/:postId" component={RecipeDetailPage} />
           <Route exact path="/post-recipe" component={PostRecipe} />
           <Route exact path="/search" component={Search} />
           <Route exact path="/following/:userID" component={Follows} />
-          <Route exact path="/top-rated" component={TopRated} />
+          {/* <Route exact path="/top-rated" component={TopRated} /> */}
           <Route exact path="/favorites" component={Favorites} />
         </Switch>
       </Router>

@@ -50,26 +50,26 @@ const Profile = () => {
     getUserPost();
   }, [user_id]);
 
-  // What does this do?
-  const [userData, setUserData] = useState(null);
-  useEffect(() => {
-    const fetchUser = async () => {
-      const username = window.location.pathname.split('/').pop();
-      const response = await fetch(
-        `${process.env.REACT_APP_REQ_URL}/user/username/${username}`
-      );
+  // // What does this do?
+  // const [userData, setUserData] = useState(null);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const username = window.location.pathname.split('/').pop();
+  //     const response = await fetch(
+  //       `${process.env.REACT_APP_REQ_URL}/user/username/${username}`
+  //     );
 
-      if (response.ok) {
-        const user = await response.json();
-        console.log(JSON.stringify(user));
-        setUserData(user);
-      } else {
-        console.error('Failed to fetch user');
-      }
-    };
+  //     if (response.ok) {
+  //       const user = await response.json();
+  //       console.log(JSON.stringify(user));
+  //       setUserData(user);
+  //     } else {
+  //       console.error('Failed to fetch user');
+  //     }
+  //   };
 
-    fetchUser();
-  }, []);
+  //   fetchUser();
+  // }, []);
 
   return (
     <>
@@ -105,9 +105,13 @@ const Profile = () => {
             justifyContent: 'center',
           }}
         >
-          {profileData.map((data) => (
-            <ProfileCards result={data} />
-          ))}
+           {profileData.length > 0 ? (
+              profileData.map((data) => (
+                <ProfileCards result={data} />
+              ))
+            ) : (
+              <p style={{textAlign: 'center', marginTop: '20px'}}>No recipes found.</p>
+            )}
         </Row>
       </Container>
     </>

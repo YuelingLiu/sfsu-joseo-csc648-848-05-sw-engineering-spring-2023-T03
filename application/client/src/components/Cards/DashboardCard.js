@@ -25,9 +25,12 @@ function CategoryCard({ result, onClick, userName }) {
   // for same user checking
   const [sameUser, setSameUser] = useState(false);
   const [deletePost, setDeletePost] = useState(false);
+  const [authorName, setAuthorName] = useState('');
+  console.log("Here is result in DashboardCard: ",result);
+  console.log(" in DashboardCard: ",result.savedRecipes);
+
 
   const handleDeletePost = async () => {
-    console.log('Deleting post with ID:');
     console.log('triggered delete post button');
 
     try {
@@ -89,8 +92,6 @@ function CategoryCard({ result, onClick, userName }) {
     setSameUser(true);
   }
 
-  console.log("results in dashboard card: " + JSON.stringify(result.title));
-
   return (
     <>
       <Card
@@ -106,7 +107,7 @@ function CategoryCard({ result, onClick, userName }) {
             <Col md={7}>
               <Row>
                 <img
-                  src="hero.jpg"
+                  src={result.recipe_photo_url}
                   alt="pic"
                   className="cardImg"
                   onClick={onClick}
@@ -131,7 +132,7 @@ function CategoryCard({ result, onClick, userName }) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToFalse}>
+                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToFalse}>
                       <FavoriteIcon
                         className="float-start"
                         style={{
@@ -141,7 +142,7 @@ function CategoryCard({ result, onClick, userName }) {
                         }}
                         color="error"
                       />{' '}
-                      4
+                      
                     </div>
                     <Button
                       variant="dark"
@@ -161,7 +162,7 @@ function CategoryCard({ result, onClick, userName }) {
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToTrue}>
+                    <div style={{cursor: 'pointer'}}  onClick={FavoriteToTrue}>
                       <FavoriteBorderIcon
                         className="float-start"
                         style={{
@@ -171,7 +172,7 @@ function CategoryCard({ result, onClick, userName }) {
                         }}
                         color="error"
                       />{' '}
-                      3
+                      
                     </div>
 
                     <Button
@@ -199,7 +200,7 @@ function CategoryCard({ result, onClick, userName }) {
               <Row style={{ padding: '5px 0px' }}>
                 <Col xs={4}>
                   <img
-                    src="user.ico"
+                    src={result.user_profile_picture}
                     alt="user-icon"
                     className="userImg"
                     onClick={() => {
@@ -208,7 +209,7 @@ function CategoryCard({ result, onClick, userName }) {
                   />
                 </Col>
                 <Col xs={8}>
-                  <h5>{name}</h5>
+                  <h5>{result.username}</h5>
                 </Col>
               </Row>
               <Row>Description:</Row>
@@ -220,7 +221,6 @@ function CategoryCard({ result, onClick, userName }) {
         </Container>
         <ToastContainer />
       </Card>
-      {/* <ToastContainer /> */}
     </>
   );
 }

@@ -6,41 +6,42 @@ import Typography from '@mui/material/Typography';
 import { spacing } from '@mui/system';
 import Box from '@mui/material/Box';
 import { palette } from '@mui/system';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
-
-function UserFollowsCard() {
-    //dummy data, leter we will go into session to get this object
-    const user =  {
-        "user_id": 2,
-        "following_user": 1,
-        "id": 1,
-        "username": "nate",
-        "email": "nate@email.com",
-        "password": "$2b$10$q5yXtDVCra0b8qfJlC8CCuNph4jIFFvvQAqpoTRftoc6s9lY25DYi",
-        "profile_picture": "https://recipereel.s3.us-west-1.amazonaws.com/pig.png",
-        "following": 3,
-        "followers": 3
-    }
+function UserFollowsCard({data}) {
+    console.log('in userfollowingCard: ', data)    
 
     return (
        <>
-       <Box sx={{ width: '100%', pt: 0.5, bgcolor: '#D9D9D9', color: '#000000'}}>
-            <Box sx={{ ml: '5%', pt: 0.5}}>
-                <Avatar  style={{ display: 'inline-block' }} alt="Profile Picture" src= {user.profile_picture}/>
-                <Box sx={{ display: 'inline-flex', ml: '1%' }}>
-                    <Typography> {user.username} </Typography>
-                </Box>
-                <div>
-                    <Box sx={{ display: 'inline-block' }}>
-                        <Typography> {user.followers + " Followers"} </Typography>
-                    </Box>
-                    <Box sx={{ display: 'inline-block', ml: 2}}>
-                        <Typography> {user.following + " Following"} </Typography>
-                    </Box>
-                </div>
-            </Box>
-        </Box>
+            <Container style={{ maxWidth: '80%' }}> 
+                <Row style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> 
+                    {data?.users?.map(user => (
+                        <Col> 
+                            <Card
+                                style={{
+                                    width: '100%',
+                                    margin: '20px 0',
+                                    padding: '0px',
+                                }}
+                            >
+                                <Row style={{ padding: '20px' }}>
+                                    {/* Title and number of hearts */}
+                                    <Col xs={7} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Avatar alt='profile_picture' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} src={user.profile_picture}/>
+                                    </Col>
+                                    <Col md={5} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Typography style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{user.username}</Typography>
+                                    </Col>
+                                </Row>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
        </>
     );
 }
+
 export default UserFollowsCard;

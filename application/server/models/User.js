@@ -44,14 +44,14 @@ class User {
 
   static async getFollowers(userID) {
     return await knex('following')
-      .select('users.id', 'users.username')
+      .select('users.id', 'users.username', 'users.profile_picture')
       .join('users', 'following.user_id', 'users.id')
       .where('following_id', userID);
   }
 
   static async getFollowing(userID) {
     return await knex('following')
-      .select('users.id', 'users.username')
+      .select('users.id', 'users.username','users.profile_picture')
       .join('users', 'following.following_id', 'users.id')
       .where('user_id', userID);
   }
@@ -65,10 +65,24 @@ class User {
   }
 
   static async getSavedRecipes(userID) {
-    return await knex('user_favorite_recipes')
-      // .join('recipes', 'user_favorite_recipes.recipe_id', 'recipes.id')
+    const savedRecipeIDs = await knex('user_favorite_recipes')
       .where('user_favorite_recipes.user_id', userID);
+      const savedRecipes = await Promise.all(savedRecipeIDs.map(async (recipeData) => {
+        const recipe = await await knex('recipes').where('id', recipeData.recipe_id)
+        const ingredients = await knex('ingredients').where('ingredients.recipe_id', recipeData.recipe_id);
+        const instructions = await knex('instructions').where('instructions.recipe_id', recipeData.recipe_id);
+        return {recipe, ingredients, instructions}
+       }))
+      return savedRecipes
   }
+
+  static async removeSavedRecipe(userID, recipeID) {
+    return await knex('user_favorite_recipes')
+      .where('user_id', userID)
+      .where('recipe_id', recipeID)
+      .del();
+  }
+
 
   static async getByUsername(username) {
     return await knex('users').where({ username }).first();

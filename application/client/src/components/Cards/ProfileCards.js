@@ -17,51 +17,52 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 
-function ProfileCards({ result, onClick}) {
-    const history = useHistory();
-    // for rating
-    const [value, setValue] = React.useState(2);
-    // for favorites
-    const [favorite, setFavorite] = React.useState(false);
-    // for same user checking
-    const [sameUser, setSameUser] = useState(false);
-    // for deleting 
-    const [deletePost, setDeletePost] = useState(false);
-    // get userID
-    let userID = localStorage.getItem('userId');
+function ProfileCards({ result, onClick }) {
+  const history = useHistory();
+  // for rating
+  const [value, setValue] = React.useState(2);
+  // for favorites
+  const [favorite, setFavorite] = React.useState(false);
+  // for same user checking
+  const [sameUser, setSameUser] = useState(false);
+  // for deleting
+  const [deletePost, setDeletePost] = useState(false);
+  // get userID
+  let userID = localStorage.getItem('userId');
 
-    // set user info
-    const [userNameState, setUserName] = useState('');
-    const [userProfile, setUserImage] = useState()
-    // console.log(userID);
+  // set user info
+  const [userNameState, setUserName] = useState('');
+  const [userProfile, setUserImage] = useState();
+  // console.log(userID);
 
-    // get the user name and image 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            const response = await fetch(`${process.env.REACT_APP_REQ_URL}/user/${userID}`);
-            
-            if (!response.ok) {
-                console.error('Failed to fetch user');
-            } else {
-                const user = await response.json();
-                setUserName(user.username);
-                setUserImage(user.profile_picture)
-            }
-        };
-        fetchUserInfo();
-    }, []);
+  // get the user name and image
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_REQ_URL}/user/${userID}`
+      );
 
-    //   check if same user of owner of profile
-    useEffect(() => {
-        if (userID == result.recipe.user_id) {
-            setSameUser(true);
-        } else {
-            setSameUser(false);
-        }
-    }, [userID, result.recipe.user_id]);
+      if (!response.ok) {
+        console.error('Failed to fetch user');
+      } else {
+        const user = await response.json();
+        setUserName(user.username);
+        setUserImage(user.profile_picture);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
+  //   check if same user of owner of profile
+  useEffect(() => {
+    if (userID == result.recipe.user_id) {
+      setSameUser(true);
+    } else {
+      setSameUser(false);
+    }
+  }, [userID, result.recipe.user_id]);
 
-  // to delete post 
+  // to delete post
   const handleDeletePost = async () => {
     console.log('Deleting post with ID:');
 
@@ -75,7 +76,7 @@ function ProfileCards({ result, onClick}) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userID: userID
+            userID: userID,
           }),
         }
       );
@@ -89,7 +90,6 @@ function ProfileCards({ result, onClick}) {
         console.log('recipe deleted successfully');
         // Update the state or perform any other necessary actions
         setDeletePost(true);
-    
       } else {
         // Handle errors if the deletion was not successful
         toast.error('Failed to delete the recipe!', {
@@ -137,7 +137,9 @@ function ProfileCards({ result, onClick}) {
                   src={result.recipe.photo_url}
                   alt="pic"
                   className="cardImg"
-                  onClick={onClick}
+                  onClick={() => {
+                    history.push(`/post/${result.recipe.id}`);
+                  }}
                 />
               </Row>
               <Row>
@@ -149,7 +151,7 @@ function ProfileCards({ result, onClick}) {
                   <Box
                     sx={{
                       '& > legend': { mt: 2 },
-                      mt: '10px'
+                      mt: '10px',
                     }}
                   >
                     <Rating name="read-only" value={value} readOnly />
@@ -160,18 +162,6 @@ function ProfileCards({ result, onClick}) {
               <Row>
                 {favorite ? (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToFalse}>
-                      <FavoriteIcon
-                        className="float-start"
-                        style={{
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        color="error"
-                      />{' '}
-                      4
-                    </div>
                     {sameUser && (
                       <Button
                         variant="dark"
@@ -192,18 +182,6 @@ function ProfileCards({ result, onClick}) {
                   </div>
                 ) : (
                   <div className="d-flex align-items-center">
-                    <div onClick={FavoriteToTrue}>
-                      <FavoriteBorderIcon
-                        className="float-start"
-                        style={{
-                          marginLeft: 0,
-                          marginRight: 'auto',
-                          marginBottom: '10px',
-                        }}
-                        color="error"
-                      />{' '}
-                      3
-                    </div>
                     {sameUser && (
                       <Button
                         variant="dark"
