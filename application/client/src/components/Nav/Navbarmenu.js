@@ -622,7 +622,10 @@ function Navbar() {
                   </form>
                   <Tooltip title="Account">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar alt="" src="/static/images/avatar/2.jpg" />
+                      <Avatar
+                        alt="avatar"
+                        src="https://recipereel.s3.us-west-1.amazonaws.com/profile.jff.png"
+                      />
                     </IconButton>
                   </Tooltip>
                 </Toolbar>
@@ -1226,7 +1229,10 @@ function Navbar() {
                     </form>
                     <Tooltip title="Account">
                       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="" src="/static/images/avatar/2.jpg" />
+                        <Avatar
+                          alt="avatar"
+                          src="https://recipereel.s3.us-west-1.amazonaws.com/profile.jff.png"
+                        />
                       </IconButton>
                     </Tooltip>
                   </Toolbar>
